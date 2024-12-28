@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "A chromium extension boilerplate",
     "license": "MIT",
+    "private": true,
     "repository": {
         "type": "git",
         "url": "https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate.git"
