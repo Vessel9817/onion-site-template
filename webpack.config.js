@@ -35,16 +35,17 @@ if (fileSystem.existsSync(secretsPath)) {
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
+/** @type {webpack.Configuration} */
 var options = {
     mode: process.env.NODE_ENV || 'development',
     entry: {
-        newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.jsx'),
-        options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
-        popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
-        background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
-        contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
-        devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
-        panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
+        newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.tsx'),
+        options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
+        popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.tsx'),
+        background: path.join(__dirname, 'src', 'pages', 'Background', 'index.ts'),
+        contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.ts'),
+        devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.ts'),
+        panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.tsx'),
     },
     chromeExtensionBoilerplate: {
         notHotReload: ['background', 'contentScript', 'devtools'],
@@ -130,7 +131,10 @@ var options = {
         alias: alias,
         extensions: fileExtensions
             .map((extension) => '.' + extension)
-            .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
+            .concat([
+                '.js', '.jsx', // JS(X) must come before TS(X)
+                '.ts', '.tsx',
+                '.css']),
     },
     plugins: [
         isDevelopment && new ReactRefreshWebpackPlugin(),

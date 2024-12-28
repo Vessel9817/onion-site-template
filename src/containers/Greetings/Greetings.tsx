@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import icon from '../../assets/img/icon-128.png';
 
-class GreetingComponent extends Component {
+interface GreetingState {
+    readonly name: string;
+}
+
+class GreetingComponent extends PureComponent<{}, GreetingState> {
     state = {
-        name: 'dev',
+        name: 'dev'
     };
 
     render() {
