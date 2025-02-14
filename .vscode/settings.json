@@ -1,3 +1,9 @@
 {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "search.exclude": {
+        "**/*.bundle.js": true,
+        "**/node_modules": true,
+        "**/bower_components": true
+    }
 }

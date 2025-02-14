@@ -1,6 +1,6 @@
-<img src="src/assets/img/icon-128.png" width="64"/>
-
 # Chrome Extension (MV3) Boilerplate with React 18 and Webpack 5
+
+<img src="src/assets/img/icon-128.png" width="64" alt="Project icon"/>
 
 [![npm](https://img.shields.io/npm/v/chrome-extension-boilerplate-react)](https://www.npmjs.com/package/chrome-extension-boilerplate-react)
 [![npm-download](https://img.shields.io/npm/dw/chrome-extension-boilerplate-react)](https://www.npmjs.com/package/chrome-extension-boilerplate-react)
@@ -8,13 +8,13 @@
 
 ## Announcements
 
-- Recently updated from **[React](https://reactjs.org)** ~~17~~ to **18**!
-- **_This boilerplate adopts [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)!_**
-  - For V2 users, please check out the [manifest-v2](https://github.com/lxieyang/chrome-extension-boilerplate-react/tree/manifest-v2) branch, or use version [3.x](https://www.npmjs.com/package/chrome-extension-boilerplate-react/v/3.3.0).
-  - Check out the [Manifest V3 Migration Guide](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/).
-- Recently added [devtools](https://developer.chrome.com/docs/extensions/mv3/devtools/) Support! Thanks [GeekaholicLin](https://github.com/lxieyang/chrome-extension-boilerplate-react/issues/17)!
-- Recently updated from **[Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)** ~~3.x~~ to **4.x** and **[Webpack](https://webpack.js.org/)** ~~4~~ to **5**!
-- Recently added [TypeScript](https://www.typescriptlang.org/) Support!
+-   Recently updated from **[React](https://reactjs.org)** ~~17~~ to **18**!
+-   **_This boilerplate adopts [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)!_**
+    -   For V2 users, please check out the [manifest-v2](https://github.com/lxieyang/chrome-extension-boilerplate-react/tree/manifest-v2) branch, or use version [3.x](https://www.npmjs.com/package/chrome-extension-boilerplate-react/v/3.3.0).
+    -   Check out the [Manifest V3 Migration Guide](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/).
+-   Recently added [devtools](https://developer.chrome.com/docs/extensions/mv3/devtools/) Support! Thanks [GeekaholicLin](https://github.com/lxieyang/chrome-extension-boilerplate-react/issues/17)!
+-   Recently updated from **[Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)** ~~3.x~~ to **4.x** and **[Webpack](https://webpack.js.org/)** ~~4~~ to **5**!
+-   Recently added [TypeScript](https://www.typescriptlang.org/) Support!
 
 ## Features
 
@@ -22,15 +22,15 @@ This is a basic Chrome Extensions boilerplate to help you write modular and mode
 
 This boilerplate is updated with:
 
-- [Chrome Extension Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)
-- [React 18](https://reactjs.org)
-- [Webpack 5](https://webpack.js.org/)
-- [Webpack Dev Server 4](https://webpack.js.org/configuration/dev-server/)
-- [React Refresh](https://www.npmjs.com/package/react-refresh)
-- [react-refresh-webpack-plugin](https://github.com/pmmmwh/react-refresh-webpack-plugin)
-- [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app)
-- [Prettier](https://prettier.io/)
-- [TypeScript](https://www.typescriptlang.org/)
+-   [Chrome Extension Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)
+-   [React 18](https://reactjs.org)
+-   [Webpack 5](https://webpack.js.org/)
+-   [Webpack Dev Server 4](https://webpack.js.org/configuration/dev-server/)
+-   [React Refresh](https://www.npmjs.com/package/react-refresh)
+-   [react-refresh-webpack-plugin](https://github.com/pmmmwh/react-refresh-webpack-plugin)
+-   [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app)
+-   [Prettier](https://prettier.io/)
+-   [TypeScript](https://www.typescriptlang.org/)
 
 This boilerplate is heavily inspired by and adapted from [https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate), with additional support for React 18 features, Webpack 5, and Webpack Dev Server 4.
 
@@ -47,10 +47,10 @@ Please open up an issue to nudge me to keep the npm packages up-to-date. FYI, it
 5. Run `npm install` to install the dependencies.
 6. Run `npm start`
 7. Load your extension on Chrome following:
-   1. Access `chrome://extensions/`
-   2. Check `Developer mode`
-   3. Click on `Load unpacked extension`
-   4. Select the `build` folder.
+    1. Access `chrome://extensions/`
+    2. Check `Developer mode`
+    3. Click on `Load unpacked extension`
+    4. Select the `build` folder.
 8. Happy hacking.
 
 ## Structure
@@ -70,14 +70,14 @@ To make your workflow much more efficient this boilerplate uses the [webpack ser
 You can run the dev mode on other port if you want. Just specify the env var `port` like this:
 
 ```
-$ PORT=6002 npm run start
+$ PORT=6002 && npm run start
 ```
 
 ## Content Scripts
 
-Although this boilerplate uses the webpack dev server, it's also prepared to write all your bundles files on the disk at every code change, so you can point, on your extension manifest, to your bundles that you want to use as [content scripts](https://developer.chrome.com/extensions/content_scripts), but you need to exclude these entry points from hot reloading [(why?)](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate/issues/4#issuecomment-261788690). To do so you need to expose which entry points are content scripts on the `webpack.config.js` using the `chromeExtensionBoilerplate -> notHotReload` config. Look the example below.
+Although this boilerplate uses the webpack dev server, it's also prepared to write all your bundles files on the disk at every code change, so you can point, on your extension manifest, to your bundles that you want to use as [content scripts](https://developer.chrome.com/extensions/content_scripts), but you need to exclude these entry points from hot reloading [(why?)](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate/issues/4#issuecomment-261788690). To do so you need to expose which entry points are content scripts on the `webpack.config.ts` using the `chromeExtensionBoilerplate -> notHotReload` config. Look the example below.
 
-Let's say that you want use the `myContentScript` entry point as content script, so on your `webpack.config.js` you will configure the entry point and exclude it from hot reloading, like this:
+Let's say that you want use the `myContentScript` entry point as content script, so on your `webpack.config.ts` you will configure the entry point and exclude it from hot reloading, like this:
 
 ```js
 {
@@ -96,12 +96,12 @@ and on your `src/manifest.json`:
 
 ```json
 {
-  "content_scripts": [
-    {
-      "matches": ["https://www.google.com/*"],
-      "js": ["myContentScript.bundle.js"]
-    }
-  ]
+    "content_scripts": [
+        {
+            "matches": ["https://www.google.com/*"],
+            "js": ["myContentScript.bundle.js"]
+        }
+    ]
 }
 ```
 
@@ -142,8 +142,8 @@ ApiCall({ key: secrets.key });
 
 ## Resources:
 
-- [Webpack documentation](https://webpack.js.org/concepts/)
-- [Chrome Extension documentation](https://developer.chrome.com/extensions/getstarted)
+-   [Webpack documentation](https://webpack.js.org/concepts/)
+-   [Chrome Extension documentation](https://developer.chrome.com/extensions/getstarted)
 
 ---
 

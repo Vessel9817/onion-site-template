@@ -1,22 +1,20 @@
-const webpack = require('webpack');
-const path = require('path');
-const fileSystem = require('fs-extra');
-const env = require('./utils/env');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const ReactRefreshTypeScript = require('react-refresh-typescript');
+import webpack from 'webpack';
+import path from 'path';
+import fileSystem from 'fs-extra';
+import { NODE_ENV, ASSET_PATH } from './utils/env';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ReactRefreshTypeScript from 'react-refresh-typescript';
 
-const ASSET_PATH = process.env.ASSET_PATH || '/';
-
-var alias = {};
+let alias: { [key: string]: string } = {};
 
 // load the secrets
-var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
+let secretsPath = path.join(__dirname, 'secrets.' + NODE_ENV + '.js');
 
-var fileExtensions = [
+let fileExtensions = [
     'jpg',
     'jpeg',
     'png',
@@ -26,61 +24,72 @@ var fileExtensions = [
     'svg',
     'ttf',
     'woff',
-    'woff2',
+    'woff2'
 ];
 
 if (fileSystem.existsSync(secretsPath)) {
     alias['secrets'] = secretsPath;
 }
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const IS_DEV_MODE = process.env.NODE_ENV !== 'production';
 
-/** @type {webpack.Configuration} */
-var options = {
-    mode: process.env.NODE_ENV || 'development',
+let options: webpack.Configuration = {
+    mode: IS_DEV_MODE ? 'development' : 'production',
     entry: {
         newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.tsx'),
         options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
         popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.tsx'),
-        background: path.join(__dirname, 'src', 'pages', 'Background', 'index.ts'),
-        contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.ts'),
+        background: path.join(
+            __dirname,
+            'src',
+            'pages',
+            'Background',
+            'index.ts'
+        ),
+        contentScript: path.join(
+            __dirname,
+            'src',
+            'pages',
+            'Content',
+            'index.ts'
+        ),
         devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.ts'),
-        panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.tsx'),
+        panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.tsx')
     },
+    // @ts-expect-error TODO
     chromeExtensionBoilerplate: {
-        notHotReload: ['background', 'contentScript', 'devtools'],
+        notHotReload: ['background', 'contentScript', 'devtools']
     },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'build'),
         clean: true,
-        publicPath: ASSET_PATH,
+        publicPath: ASSET_PATH
     },
     module: {
         rules: [
             {
-                // look for .css or .scss files
+                // look for .css or .scss files in the `src` directory
                 test: /\.(css|scss)$/,
-                // in the `src` directory
                 use: [
                     {
-                        loader: 'style-loader',
+                        loader: 'style-loader'
                     },
                     {
-                        loader: 'css-loader',
+                        loader: 'css-loader'
                     },
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: true,
-                        },
-                    },
-                ],
+                            sourceMap: true
+                        }
+                    }
+                ]
             },
             {
                 test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
                 type: 'asset/resource',
-                exclude: /node_modules/,
+                exclude: /node_modules/
                 // loader: 'file-loader',
                 // options: {
                 //   name: '[name].[ext]',
@@ -89,7 +98,7 @@ var options = {
             {
                 test: /\.html$/,
                 loader: 'html-loader',
-                exclude: /node_modules/,
+                exclude: /node_modules/
             },
             {
                 test: /\.(ts|tsx)$/,
@@ -100,44 +109,48 @@ var options = {
                         options: {
                             getCustomTransformers: () => ({
                                 before: [
-                                    isDevelopment && ReactRefreshTypeScript()
-                                ].filter(Boolean),
+                                    IS_DEV_MODE && ReactRefreshTypeScript()
+                                ].filter(Boolean)
                             }),
-                            transpileOnly: isDevelopment,
-                        },
-                    },
-                ],
+                            transpileOnly: IS_DEV_MODE
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(js|jsx)$/,
                 use: [
                     {
-                        loader: 'source-map-loader',
+                        loader: 'source-map-loader'
                     },
                     {
                         loader: require.resolve('babel-loader'),
                         options: {
                             plugins: [
-                                isDevelopment && require.resolve('react-refresh/babel'),
-                            ].filter(Boolean),
-                        },
-                    },
+                                IS_DEV_MODE &&
+                                    require.resolve('react-refresh/babel')
+                            ].filter(Boolean)
+                        }
+                    }
                 ],
-                exclude: /node_modules/,
-            },
-        ],
+                exclude: /node_modules/
+            }
+        ]
     },
     resolve: {
         alias: alias,
         extensions: fileExtensions
             .map((extension) => '.' + extension)
             .concat([
-                '.js', '.jsx', // JS(X) must come before TS(X)
-                '.ts', '.tsx',
-                '.css']),
+                '.js',
+                '.jsx', // JS(X) must come before TS(X)
+                '.ts',
+                '.tsx',
+                '.css'
+            ])
     },
     plugins: [
-        isDevelopment && new ReactRefreshWebpackPlugin(),
+        IS_DEV_MODE && new ReactRefreshWebpackPlugin(),
         new CleanWebpackPlugin({ verbose: false }),
         new webpack.ProgressPlugin(),
         // expose and write the allowed env vars on the compiled bundle
@@ -153,88 +166,118 @@ var options = {
                         return Buffer.from(
                             JSON.stringify({
                                 ...JSON.parse(content.toString()),
-                                description: process.env.npm_package_description,
-                                version: process.env.npm_package_version,
+                                description:
+                                    process.env.npm_package_description,
+                                version: process.env.npm_package_version
                             })
                         );
-                    },
-                },
-            ],
+                    }
+                }
+            ]
         }),
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: 'src/pages/Content/content.styles.css',
                     to: path.join(__dirname, 'build'),
-                    force: true,
-                },
-            ],
+                    force: true
+                }
+            ]
         }),
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: 'src/assets/img/icon-128.png',
                     to: path.join(__dirname, 'build'),
-                    force: true,
-                },
-            ],
+                    force: true
+                }
+            ]
         }),
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: 'src/assets/img/icon-34.png',
                     to: path.join(__dirname, 'build'),
-                    force: true,
-                },
-            ],
+                    force: true
+                }
+            ]
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.html'),
+            template: path.join(
+                __dirname,
+                'src',
+                'pages',
+                'Newtab',
+                'index.html'
+            ),
             filename: 'newtab.html',
             chunks: ['newtab'],
-            cache: false,
+            cache: false
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
+            template: path.join(
+                __dirname,
+                'src',
+                'pages',
+                'Options',
+                'index.html'
+            ),
             filename: 'options.html',
             chunks: ['options'],
-            cache: false,
+            cache: false
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),
+            template: path.join(
+                __dirname,
+                'src',
+                'pages',
+                'Popup',
+                'index.html'
+            ),
             filename: 'popup.html',
             chunks: ['popup'],
-            cache: false,
+            cache: false
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.html'),
+            template: path.join(
+                __dirname,
+                'src',
+                'pages',
+                'Devtools',
+                'index.html'
+            ),
             filename: 'devtools.html',
             chunks: ['devtools'],
-            cache: false,
+            cache: false
         }),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'pages', 'Panel', 'index.html'),
+            template: path.join(
+                __dirname,
+                'src',
+                'pages',
+                'Panel',
+                'index.html'
+            ),
             filename: 'panel.html',
             chunks: ['panel'],
-            cache: false,
-        }),
+            cache: false
+        })
     ].filter(Boolean),
     infrastructureLogging: {
-        level: 'info',
-    },
+        level: 'info'
+    }
 };
 
-if (env.NODE_ENV === 'development') {
+if (NODE_ENV === 'development') {
     options.devtool = 'cheap-module-source-map';
-}
-else {
+} else {
     options.optimization = {
         minimize: true,
         minimizer: [
             new TerserPlugin({
-                extractComments: false,
-            }),
-        ],
+                extractComments: false
+            })
+        ]
     };
 }
 

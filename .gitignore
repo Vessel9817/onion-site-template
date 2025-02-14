@@ -8,17 +8,13 @@
 
 # production
 /build
-
-# zip
+/dist
 /zip
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.history
-
 # secrets
+.DS_Store
+.env
+.env.*
+.history
+secrets.js
 secrets.*.js
