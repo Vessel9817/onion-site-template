@@ -23,6 +23,7 @@ const entry = (config.entry = (config.entry || {}) as {
 
 for (let entryName in entry) {
     if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
+        // TODO Wait, this is already in our webpack config!
         config.entry[entryName] = [
             'webpack/hot/dev-server',
             `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`
