@@ -1,14 +1,13 @@
-import webpack from 'webpack';
-import path from 'path';
-import fileSystem from 'fs-extra';
-import { NODE_ENV, ASSET_PATH } from './utils/env';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import fileSystem from 'fs-extra';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
 import ReactRefreshTypeScript from 'react-refresh-typescript';
-import { PORT } from './utils/env';
+import TerserPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
+import { ASSET_PATH, NODE_ENV, PORT } from './utils/env';
 
 let alias: { [key: string]: string } = {};
 
