@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "ES5",
         "lib": [
             // General JS
             "ESNext",
+            
             // Web interfaces
             "dom",
             "dom.iterable",
+            
             // Asynchronocity and promises
             "ES2020.Promise",
             "ESNext.asynciterable"
@@ -27,7 +29,7 @@
         "typeRoots": ["./node_modules/@types"]
     },
     "include": ["**/*"],
-    "exclude": ["build", "node_modules", "zip"],
+    "exclude": ["build", "dist", "node_modules", "zip"],
     "ts-node": {
         "compilerOptions": {
             "module": "CommonJS"
