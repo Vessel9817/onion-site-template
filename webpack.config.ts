@@ -11,8 +11,12 @@ import { ASSET_PATH, NODE_ENV, PORT } from './utils/env';
 
 let alias: { [key: string]: string } = {};
 
-// load the secrets
+// Loading env secrets
 let secretsPath = path.join(__dirname, 'secrets.' + NODE_ENV + '.js');
+
+if (fileSystem.existsSync(secretsPath)) {
+    alias['secrets'] = secretsPath;
+}
 
 let fileExtensions = [
     'jpg',
@@ -27,14 +31,19 @@ let fileExtensions = [
     'woff2'
 ];
 
-if (fileSystem.existsSync(secretsPath)) {
-    alias['secrets'] = secretsPath;
-}
-
 const IS_DEV_MODE = process.env.NODE_ENV !== 'production';
 
 let options: webpack.Configuration = {
     mode: IS_DEV_MODE ? 'development' : 'production',
+    devtool: IS_DEV_MODE ? 'cheap-module-source-map' : undefined,
+    optimization: IS_DEV_MODE ? undefined : {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                extractComments: false
+            })
+        ]
+    },
     entry: {
         // Required for hot module reloading
         hmr: `webpack-dev-server/client?http://localhost:${PORT}`,
@@ -105,6 +114,7 @@ let options: webpack.Configuration = {
                 exclude: /node_modules/
             },
             {
+                // TS/TSX must come before JS/JSX
                 test: /\.(ts|tsx)$/,
                 exclude: /node_modules/,
                 use: [
@@ -146,10 +156,10 @@ let options: webpack.Configuration = {
         extensions: fileExtensions
             .map((extension) => '.' + extension)
             .concat([
-                '.js',
-                '.jsx', // JS(X) must come before TS(X)
                 '.ts',
-                '.tsx',
+                '.tsx', // TS(X) must come before JS(X)
+                '.js',
+                '.jsx',
                 '.css'
             ])
     },
@@ -166,6 +176,7 @@ let options: webpack.Configuration = {
                     to: path.join(__dirname, 'build'),
                     force: true,
                     transform: function (content, _path) {
+                        // TODO Description is missing
                         // generates the manifest file using the package.json informations
                         return Buffer.from(
                             JSON.stringify({
@@ -281,17 +292,8 @@ let options: webpack.Configuration = {
     }
 };
 
-if (NODE_ENV === 'development') {
-    options.devtool = 'cheap-module-source-map';
-} else {
-    options.optimization = {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                extractComments: false
-            })
-        ]
-    };
-}
+// Exported config must not be mutable
+const CONFIG = options;
 
-module.exports = options;
+// Webpack >= 2.0.0 no longer allows custom properties in configuration
+module.exports = CONFIG;

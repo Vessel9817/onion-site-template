@@ -1,6 +1,6 @@
 {
     "name": "chromium-extension-boilerplate",
-    "version": "1.0.0",
+    "version": "1.0.0.0",
     "description": "A Chromium extension boilerplate",
     "license": "MIT",
     "private": true,
