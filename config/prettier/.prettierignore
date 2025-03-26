@@ -1,5 +1,3 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
 # Dependencies
 **/node_modules
 
@@ -7,6 +5,7 @@
 /coverage
 /test
 /testing
+**/package-lock.json
 
 # Deployment
 /build
@@ -21,8 +20,6 @@
 **/*.env
 **/*.env.*
 **/.history
-**/secrets.js
-**/secrets.*.js
 
 # Temporary files
 **/tmp
@@ -30,3 +27,8 @@
 **/backup
 **/cache
 **/logs
+
+# Licenses
+**/LICENSE
+**/LICENSE.md
+**/*.license

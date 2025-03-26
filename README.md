@@ -10,7 +10,7 @@
 
 - For Manifest v2 users, check out the [MV3 Migration Guide](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/).
 - For V2 compatibility, the forked repo has a [manifest-v2](https://github.com/lxieyang/chrome-extension-boilerplate-react/tree/manifest-v2)
-branch they recommend using.
+  branch they recommend using.
 
 ## Features
 
@@ -33,10 +33,9 @@ This boilerplate is updated with:
 - [markdownlint](https://github.com/DavidAnson/markdownlint)
 
 This boilerplate is heavily inspired by and adapted from
-[https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate](
-  https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate),
-  with additional support for React 18 features, Webpack 5,
-  and Webpack Dev Server 4.
+[https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate),
+with additional support for React 18 features, Webpack 5,
+and Webpack Dev Server 4.
 
 ## Installing and Running
 
@@ -49,10 +48,10 @@ This boilerplate is heavily inspired by and adapted from
 5. Run `npm install` to install the dependencies.
 6. Run `npm start`
 7. Load your extension on Chrome following:
-    1. Access `chrome://extensions/`
-    2. Check `Developer mode`
-    3. Click on `Load unpacked extension`
-    4. Select the `build` folder.
+   1. Access `chrome://extensions/`
+   2. Check `Developer mode`
+   3. Click on `Load unpacked extension`
+   4. Select the `build` folder.
 8. Happy hacking.
 
 ## Structure
@@ -112,29 +111,33 @@ Let's say that you want use the `myContentScript` entry point as content script,
 so in your `webpack.config.ts` you will configure the entry point and exclude it
 from hot reloading, like so:
 
-```js
+<!-- prettier-ignore -->
+```jsonc
 {
-    …
-    entry: {
-      myContentScript: "./src/js/myContentScript.js"
+    // …
+    "entry": {
+        "myContentScript": "./src/js/myContentScript.js"
     },
-    chromeExtensionBoilerplate: {
-      notHotReload: ["myContentScript"]
+    "chromeExtensionBoilerplate": {
+        "notHotReload": ["myContentScript"]
     }
-    …
+    // …
 }
 ```
 
 and in your `src/manifest.json`:
 
-```json
+<!-- prettier-ignore -->
+```jsonc
 {
+    // ...
     "content_scripts": [
         {
             "matches": ["https://www.google.com/*"],
             "js": ["myContentScript.bundle.js"]
         }
     ]
+    // ...
 }
 ```
 
@@ -186,7 +189,7 @@ CallAPI({ key: KEY });
 ## Credits
 
 - Michael Xieyang Liu | [Original repo](https://github.com/lxieyang/chrome-extension-boilerplate-react)
-| [Website](https://lxieyang.github.io)
+  | [Website](https://lxieyang.github.io)
 
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT

@@ -36,14 +36,16 @@ const IS_DEV_MODE = process.env.NODE_ENV !== 'production';
 let options: webpack.Configuration = {
     mode: IS_DEV_MODE ? 'development' : 'production',
     devtool: IS_DEV_MODE ? 'cheap-module-source-map' : undefined,
-    optimization: IS_DEV_MODE ? undefined : {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                extractComments: false
-            })
-        ]
-    },
+    optimization: IS_DEV_MODE
+        ? undefined
+        : {
+              minimize: true,
+              minimizer: [
+                  new TerserPlugin({
+                      extractComments: false
+                  })
+              ]
+          },
     entry: {
         // Required for hot module reloading
         hmr: `webpack-dev-server/client?http://localhost:${PORT}`,

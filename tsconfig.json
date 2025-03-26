@@ -4,11 +4,11 @@
         "lib": [
             // General JS
             "ESNext",
-            
+
             // Web interfaces
             "dom",
             "dom.iterable",
-            
+
             // Asynchronocity and promises
             "ES2020.Promise",
             "ESNext.asynciterable"
@@ -29,7 +29,7 @@
         "typeRoots": ["./node_modules/@types"]
     },
     "include": ["**/*"],
-    "exclude": ["build", "dist", "node_modules", "zip"],
+    "exclude": ["build", "dist", "node_modules", "zip", "config"],
     "ts-node": {
         "compilerOptions": {
             "module": "CommonJS"

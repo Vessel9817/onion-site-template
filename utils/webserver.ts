@@ -8,7 +8,9 @@ process.env.NODE_ENV = 'development';
 process.env.ASSET_PATH = '/';
 
 // Temporarily extending webpack config
-type WebpackConfig = webpack.Configuration & { chromeExtensionBoilerplate?: { notHotReload?: string[] } };
+type WebpackConfig = webpack.Configuration & {
+    chromeExtensionBoilerplate?: { notHotReload?: string[] };
+};
 
 // Env-dependent imports
 const config: WebpackConfig = require('../webpack.config');

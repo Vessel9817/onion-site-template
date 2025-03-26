@@ -14,7 +14,7 @@ class GreetingComponent extends PureComponent<{}, GreetingState> {
         return (
             <div>
                 <p>Hello, {this.state.name}!</p>
-                <img src={icon} alt="extension icon" />
+                <img src={icon} alt='extension icon' />
             </div>
         );
     }
