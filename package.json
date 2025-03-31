@@ -43,7 +43,7 @@
         "@eslint/json": "^0.11.0",
         "@stylistic/eslint-plugin": "^4.2.0",
         "@typescript-eslint/utils": "^8.28.0",
-        "babel-loader": "^9.1.2",
+        "babel-loader": "^10.0.0",
         "babel-preset-react-app": "^10.0.1",
         "css-loader": "^6.7.3",
         "eslint": "^9.23.0",
