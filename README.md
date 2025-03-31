@@ -18,6 +18,11 @@
 - /kafka/.env
   - CLIENT_ID="`...`"
 
+## Credits
+
+- [onionscan](https://github.com/harr1424/onionscan)
+- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate)
+
 ## Contribution
 
 See the [TODOs](TODO.md)
