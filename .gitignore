@@ -1,3 +1,5 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
 # Dependencies
 **/node_modules
 **/bower_components
@@ -15,17 +17,31 @@ hostname.txt
 **/secrets.json
 **/secrets.*.json
 
-# Build
-/build
-/dist
-**/*.bundle.js
-**/*.map
-**/*.min.*
-
-# Debug
+# Development
 /onionscan
 /coverage
-/logs
-**/*.log
+**/test
+**/testing
+
+# Deployment
+**/build
+**/dist
+**/*.min.*
+**/*.bundle.*
+**/*.map.js
+
+# Secrets
+**/.DS_Store
+**/*.env
+**/*.env.*
+**/.history
+**/secrets.js
+**/secrets.*.js
+
+# Temporary files
 **/tmp
 **/temp
+**/backup
+**/cache
+**/logs
+**/*.log

@@ -4,11 +4,12 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'node:path';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
+import { ASSET_PATH, NODE_ENV, PORT } from './utils/env';
 
 // Loading secrets
-let secretsPath = path.join(__dirname, `secrets.${process.env.NODE_ENV}.js'`);
+const SECRETS_PATH = path.join(__dirname, `secrets.${NODE_ENV}.js'`);
 
-let fileExtensions = [
+const FILE_EXTS = [
     'jpg',
     'jpeg',
     'png',
@@ -23,17 +24,28 @@ let fileExtensions = [
 
 const IS_DEV_MODE = process.env.NODE_ENV !== 'production';
 
-let config: webpack.Configuration = {
+const CONFIG: webpack.Configuration = {
     mode: IS_DEV_MODE ? 'development' : 'production',
+    devtool: IS_DEV_MODE ? 'cheap-module-source-map' : undefined,
+    optimization: IS_DEV_MODE
+        ? undefined
+        : {
+              minimize: true,
+              minimizer: [
+                  new TerserPlugin({
+                      extractComments: false
+                  })
+              ]
+          },
     entry: {
-        // TODO No entry point yet
-        popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.tsx')
+        // Required for hot module reloading
+        hmr: `webpack-dev-server/client?http://localhost:${PORT}`
     },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'build'),
         clean: true,
-        publicPath: process.env.ASSET_PATH
+        publicPath: ASSET_PATH
     },
     module: {
         rules: [
@@ -55,9 +67,9 @@ let config: webpack.Configuration = {
                 ]
             },
             {
-                test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
-                exclude: /node_modules/,
-                type: 'asset/resource'
+                test: new RegExp('.(' + FILE_EXTS.join('|') + ')$'),
+                type: 'asset/resource',
+                exclude: /node_modules/
                 // loader: 'file-loader',
                 // options: {
                 //   name: '[name].[ext]',
@@ -69,7 +81,7 @@ let config: webpack.Configuration = {
                 loader: 'html-loader'
             },
             {
-                // TS(X) must come before JS(X)
+                // TS/TSX must come before JS/JSX
                 test: /\.(ts|tsx)$/,
                 exclude: /node_modules/,
                 use: [
@@ -97,42 +109,25 @@ let config: webpack.Configuration = {
     },
     resolve: {
         alias: {
-            secrets: secretsPath
+            secrets: SECRETS_PATH
         },
-        extensions: fileExtensions
-            .map((extension) => '.' + extension)
-            .concat([
-                '.ts',
-                '.tsx', // TS(X) must come before JS(X)
-                '.js',
-                '.jsx',
-                '.css'
-            ])
+        extensions: FILE_EXTS.map((extension) => '.' + extension).concat([
+            '.ts',
+            '.tsx', // TS(X) must come before JS(X)
+            '.js',
+            '.jsx',
+            '.css'
+        ])
     },
     plugins: [
         new CleanWebpackPlugin({ verbose: false }),
         new webpack.ProgressPlugin(),
-        // expose and write the allowed env vars on the compiled bundle
-        new webpack.EnvironmentPlugin(['NODE_ENV'])
+        new webpack.EnvironmentPlugin(['NODE_ENV']) // Writes env vars to the build
     ],
     infrastructureLogging: {
         level: 'info'
     }
 };
 
-if (IS_DEV_MODE) {
-    config.devtool = 'cheap-module-source-map';
-} else {
-    config.optimization = {
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                extractComments: false
-            })
-        ]
-    };
-}
-
-const FINAL_CONFIG = config;
-
-module.exports = FINAL_CONFIG;
+// Webpack >= 2.0.0 no longer allows custom properties in configuration
+module.exports = CONFIG;

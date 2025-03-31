@@ -1,0 +1,52 @@
+# Development
+/onionscan
+**/coverage
+**/test
+**/testing
+**/package-lock.json
+**/logs
+**/*.log
+
+# Deployment
+**/build
+**/dist
+**/*.min.*
+**/*.bundle.*
+**/*.map.js
+**/backup
+
+# Temporary files
+**/tmp
+**/temp
+**/cache
+
+# Licenses
+**/LICENSE
+**/LICENSE.md
+**/*.license
+**/licenses
+
+# Dependencies
+**/node_modules
+**/bower_components
+
+# Secrets
+hostname.txt
+**/.DS_Store
+**/.history
+**/.git
+**/*.env
+**/*.env.*
+**/secrets.js
+**/secrets.*.js
+**/secrets.ts
+**/secrets.*.ts
+**/secrets.json
+**/secrets.*.json
+**/secrets
+
+# Miscellaneous
+**/.svn
+**/.hg
+**/*.cmd
+**/*.bat
