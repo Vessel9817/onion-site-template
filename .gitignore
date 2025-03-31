@@ -1,0 +1,31 @@
+# Dependencies
+**/node_modules
+**/bower_components
+
+# Secrets
+hostname.txt
+**/.git
+**/*.env
+**/*.env.*
+**/secrets
+**/secrets.js
+**/secrets.*.js
+**/secrets.ts
+**/secrets.*.ts
+**/secrets.json
+**/secrets.*.json
+
+# Build
+/build
+/dist
+**/*.bundle.js
+**/*.map
+**/*.min.*
+
+# Debug
+/onionscan
+/coverage
+/logs
+**/*.log
+**/tmp
+**/temp

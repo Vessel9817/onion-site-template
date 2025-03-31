@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "lib": [
+            // General JS
+            "ESNext",
+            // Web interfaces
+            "dom",
+            "dom.iterable",
+            // Asynchronicity and promises
+            "ES2020.Promise",
+            "ESNext.asynciterable"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "noEmit": false,
+        "jsx": "react",
+        "typeRoots": ["./node_modules/@types"]
+    },
+    "include": [
+        "secrets.development.ts",
+        "secrets.production.ts",
+        "webpack.config.ts",
+        "utils/**/*",
+        "src/**/*"
+    ],
+    "ts-node": {
+        "compilerOptions": {
+            "module": "CommonJS" // Required for npx ts-node
+        }
+    }
+}
