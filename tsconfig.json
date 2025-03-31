@@ -4,9 +4,11 @@
         "lib": [
             // General JS
             "ESNext",
+
             // Web interfaces
             "dom",
             "dom.iterable",
+
             // Asynchronicity and promises
             "ES2020.Promise",
             "ESNext.asynciterable"
@@ -23,14 +25,22 @@
         "resolveJsonModule": true,
         "noEmit": false,
         "jsx": "react",
-        "typeRoots": ["./node_modules/@types"]
+        "typeRoots": ["./node_modules/@types"],
+        "downlevelIteration": true,
+        "importHelpers": true,
+        "newLine": "lf",
+        "stripInternal": true
     },
-    "include": [
-        "secrets.development.ts",
-        "secrets.production.ts",
-        "webpack.config.ts",
-        "utils/**/*",
-        "src/**/*"
+    "include": ["**/*"],
+    "exclude": [
+        "**/config/eslint/**",
+        "**/coverage/**",
+        "**/licenses/**",
+        "**/logs/**",
+        "**/node_modules/**",
+        "**/secrets/**",
+        "**/temp/**",
+        "**/tmp/**"
     ],
     "ts-node": {
         "compilerOptions": {
