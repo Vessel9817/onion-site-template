@@ -17,3 +17,11 @@ services:
       CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+  tor:
+    hostname: tor
+    container_name: tor
+    build:
+      context: './config/tor'
+      dockerfile: './Dockerfile'
+    # networks:
+    #   - nginx-network

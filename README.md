@@ -34,10 +34,11 @@ Then, in no particular order, and as many times as you want:
 
 ## Secrets
 
-- /hostname.txt
+- ./hostname.txt
   - `...`.onion
-- /kafka/.env
+- ./kafka/.env
   - CLIENT_ID="`...`"
+- ./config/tor/secrets
 
 ## Licenses
 
