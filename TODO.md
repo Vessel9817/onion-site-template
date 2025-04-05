@@ -1,15 +1,27 @@
 # TODOs
 
+- Configure Dependabot for Docker
+- Configure Docker containers
+  - Fix NGINX support for IPv6
+  - Fix Tor connection to NGINX
+  - Migrate from apt to apt-get for CLI stability
+  - Migrate from copying files to mounting read-only volumes
+  - Run Tor as user instead of root
+  - Connect NGINX to Kafka
+  - Connect Kafka to Express
+  - Connect Express to database
+  - Define an Express entry point for Webpack
 - Move `/utils/kafka/` to `/config/kafka/`
 - Configure repo security settings
 - Update README
   - Add usage instructions for each npm command
   - Add reference to getting an onion hostname and associated keys
+  - Add updating section
+- Add .dockerignore file
 - Validate environment variables in onionscan.cmd
 - Fix onionscan.cmd:
   - `-timeout 1` doesn't prevent hanging after results are output
   - Replace with an OS-agnostic solution
-- Define an ExpressJS entry point for Webpack
 - Remove unused npm dependencies
 - Integrate code coverage tool
 - Move Webpack config to /config

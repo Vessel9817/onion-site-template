@@ -1,10 +1,13 @@
 services:
   kafka:
-    image: apache/kafka:3.8.0
-    hostname: broker
-    container_name: broker
+    image: 'apache/kafka:3.8.0'
+    hostname: 'broker'
+    container_name: 'broker'
     ports:
       - '9092:9092'
+    # networks:
+    #   - 'kafka'
+    #   - 'express'
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -18,10 +21,60 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   tor:
-    hostname: tor
-    container_name: tor
+    hostname: 'tor'
+    container_name: 'tor'
+    depends_on:
+      - 'nginx'
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
-    # networks:
-    #   - nginx-network
+    networks:
+      - 'nginx'
+  nginx:
+    hostname: 'nginx'
+    container_name: 'nginx'
+    build:
+      context: './config/nginx'
+      dockerfile: './Dockerfile'
+    ports:
+      # HTTP
+      - '80:80'
+      - '[::1]:80:80'
+      # HTTPS
+      - '443:443'
+      - '[::1]:443:443'
+    networks:
+      - 'nginx'
+      # - 'kafka'
+#   express:
+#     hostname: 'express'
+#     container_name: 'express'
+#     # depends_on:
+#     #   - 'kafka'
+#     build:
+#       context: './config/express'
+#       dockerfile: './Dockerfile'
+#     networks:
+#       - 'express'
+networks:
+  nginx:
+    driver: 'bridge'
+    enable_ipv4: true
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: '127.0.0.1'
+      com.docker.network.bridge.host_binding_ipv6: '::1'
+  # kafka:
+  #   driver: 'bridge'
+  #   enable_ipv4: true
+  #   enable_ipv6: true
+  #   driver_opts:
+  #     com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+  #     com.docker.network.bridge.host_binding_ipv6: '::1'
+  # express:
+  #   driver: 'bridge'
+  #   enable_ipv4: true
+  #   enable_ipv6: true
+  #   driver_opts:
+  #     com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+  #     com.docker.network.bridge.host_binding_ipv6: '::1'

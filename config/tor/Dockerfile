@@ -3,9 +3,8 @@
 # https://wiki.debian.org/LTS
 FROM debian:bookworm-slim
 RUN \
-    # Updating OS and installing dependencies
+    # Installing tor
     apt update && \
-    apt upgrade -y && \
     apt install -y tor && \
     apt clean
 
