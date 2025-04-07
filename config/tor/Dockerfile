@@ -5,7 +5,7 @@ FROM debian:bookworm-slim
 RUN \
     # Installing tor
     apt update && \
-    apt install -y tor && \
+    apt-get install -y tor && \
     apt clean
 
 # Configuring Tor
