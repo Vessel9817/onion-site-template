@@ -1,9 +1,8 @@
 # TODOs
 
+- Expose NGINX port to host for local development
 - Configure Dependabot for Docker
 - Configure Docker containers
-  - Fix NGINX support for IPv6
-  - Fix Tor connection to NGINX
   - Migrate from apt to apt-get for CLI stability
   - Migrate from copying files to mounting read-only volumes
   - Run Tor as user instead of root

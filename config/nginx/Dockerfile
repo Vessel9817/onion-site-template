@@ -30,7 +30,7 @@ RUN set -x \
     NGINX_GPGKEY_PATH=/etc/apt/keyrings/nginx-archive-keyring.gpg; \
     export GNUPGHOME="$(mktemp -d)"; \
     found=''; \
-    for NGINX_GPGKEY in "$NGINX_GPGKEYS"; do \
+    for NGINX_GPGKEY in $NGINX_GPGKEYS; do \
     for server in \
         hkp://keyserver.ubuntu.com:80 \
         pgp.mit.edu \
@@ -94,9 +94,9 @@ RUN set -x \
                 && cd pkg-oss-${REVISION} \
                 && cd debian \
                 && for target in base module-geoip module-image-filter module-njs module-xslt; do \
-                    make rules-"$target"; \
+                    make rules-$target; \
                     mk-build-deps --install --tool="apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes" \
-                        debuild-"$target"/nginx-"$NGINX_VERSION"/debian/control; \
+                        debuild-$target/nginx-$NGINX_VERSION/debian/control; \
                 done \
                 && make base module-geoip module-image-filter module-njs module-xslt \
             ) \
@@ -105,7 +105,7 @@ RUN set -x \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
 # (which is done after we install the built packages so we don't have to redownload any overlapping dependencies)
             && apt-mark showmanual | xargs apt-mark auto > /dev/null \
-            && { [ -z "$savedAptMark" ] || apt-mark manual "$savedAptMark"; } \
+            && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; } \
             \
 # create a temporary local APT repo to install from (so that dependency resolution can be handled by APT, as it should be)
             && ls -lAFh "$tempDir" \
@@ -121,7 +121,7 @@ RUN set -x \
     esac \
     \
     && apt-get install --no-install-recommends --no-install-suggests -y \
-                        "$nginxPackages" \
+                        $nginxPackages \
                         gettext-base \
                         curl \
     && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/nginx.list \

@@ -33,10 +33,8 @@ services:
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
-    ports:
-      - '80:80' # HTTP
-      - '443:443' # HTTPS
     networks:
+      - 'tor'
       - 'nginx'
   nginx:
     hostname: 'nginx'
@@ -45,8 +43,8 @@ services:
       context: './config/nginx'
       dockerfile: './Dockerfile'
     # ports:
-    #   - '0:80' # HTTP
-    #   - '0:443' # HTTPS
+    #   - '80:80' # HTTP
+    #   - '443:443' # HTTPS
     networks:
       'nginx':
         ipv4_address: '10.5.0.2' # ::ffff:a05:2
@@ -63,9 +61,16 @@ services:
 #       'express':
 #         ipv4_address: '10.5.2.2' # ::ffff:a05:202
 networks:
+  'tor':
+    driver: 'bridge'
+    enable_ipv4: true
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: 'nat'
+      com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
-    # internal: true
+    internal: true
     enable_ipv4: true
     enable_ipv6: false
     ipam:
@@ -74,7 +79,7 @@ networks:
           gateway: '10.5.0.1' # ::ffff:a05:1
   # 'kafka':
   #   driver: 'bridge'
-  #   # internal: true
+  #   internal: true
   #   enable_ipv4: true
   #   enable_ipv6: false
   #   ipam:
@@ -83,7 +88,7 @@ networks:
   #         gateway: '10.5.1.1' # ::ffff:a05:101
   # 'express':
   #   driver: 'bridge'
-  #   # internal: true
+  #   internal: true
   #   enable_ipv4: true
   #   enable_ipv6: false
   #   ipam:

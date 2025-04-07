@@ -9,6 +9,7 @@
     "eslint.options": {
         "overrideConfigFile": "./config/eslint/eslint.config.cjs"
     },
+    "sonarlint.analysisExcludesStandalone": "**/node_modules/**",
     "search.exclude": {
         "**/*.bundle.js": true,
         "**/node_modules": true,
