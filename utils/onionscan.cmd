@@ -1,4 +1,4 @@
-@REM @echo off
+@echo off
 setlocal EnableDelayedExpansion
 
 REM Validating command usage
@@ -6,7 +6,7 @@ if NOT "%1 " == " " (
     if "%2 " == " " (
         REM Running onionscan
         set top=%~dp0..
-        set /p hostname=<"!top!/hostname.txt"
+        set /p hostname=<"!top!/config/tor/secrets/hostname"
         set onionscan="%GOPATH%/bin/onionscan"
         set outDir=!top!/onionscan
         set db="!outDir!/db"
@@ -17,8 +17,7 @@ if NOT "%1 " == " " (
         !onionscan! -verbose -dbdir !db! -webport %1 !hostname! > !results!
 
         REM Cleaning up
-        rmdir /S /Q !db!
-        del /P !results!
+        rmdir /S !outDir!
 
         REM Terminating successfully
         endlocal

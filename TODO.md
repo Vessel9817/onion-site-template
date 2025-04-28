@@ -1,6 +1,5 @@
 # TODOs
 
-- Expose NGINX port to host for local development
 - Configure Dependabot for Docker
 - Configure Docker containers
   - Migrate from apt to apt-get for CLI stability

@@ -1,5 +1,4 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
-# For some reason, 10.0.0.0/16 seems to be used by Docker internally
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 services:
   kafka:
@@ -7,7 +6,7 @@ services:
     hostname: 'broker'
     container_name: 'broker'
     ports:
-      - '9092:9092'
+      - '127.0.0.1:9092:9092'
       - '[::1]:9092:9092'
     # networks:
     #   'kafka':
@@ -26,10 +25,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   tor:
-    hostname: 'tor'
-    container_name: 'tor'
     depends_on:
       - 'nginx'
+    profiles:
+      - 'production'
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
@@ -37,18 +36,25 @@ services:
       - 'tor'
       - 'nginx'
   nginx:
-    hostname: 'nginx'
-    container_name: 'nginx'
     build:
       context: './config/nginx'
       dockerfile: './Dockerfile'
-    # ports:
-    #   - '80:80' # HTTP
-    #   - '443:443' # HTTPS
     networks:
       'nginx':
         ipv4_address: '10.5.0.2' # ::ffff:a05:2
-      # 'kafka':
+  nginx_debug:
+    depends_on:
+      - nginx
+    profiles:
+      - 'development'
+    build:
+      context: './config/nginx/debug'
+      dockerfile: './Dockerfile'
+    ports:
+      - '127.0.0.1::80'
+    networks:
+      'nginx':
+        ipv4_address: '10.5.0.254' # ::ffff:a05:fe
 #   express:
 #     hostname: 'express'
 #     container_name: 'express'
@@ -70,7 +76,6 @@ networks:
       com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
-    internal: true
     enable_ipv4: true
     enable_ipv6: false
     ipam:
@@ -79,7 +84,6 @@ networks:
           gateway: '10.5.0.1' # ::ffff:a05:1
   # 'kafka':
   #   driver: 'bridge'
-  #   internal: true
   #   enable_ipv4: true
   #   enable_ipv6: false
   #   ipam:
@@ -88,7 +92,6 @@ networks:
   #         gateway: '10.5.1.1' # ::ffff:a05:101
   # 'express':
   #   driver: 'bridge'
-  #   internal: true
   #   enable_ipv4: true
   #   enable_ipv6: false
   #   ipam:
