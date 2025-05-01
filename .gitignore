@@ -9,7 +9,7 @@ hostname.txt
 **/.git
 **/*.env
 **/*.env.*
-**/secrets
+**/secrets/**
 **/secrets.js
 **/secrets.*.js
 **/secrets.ts

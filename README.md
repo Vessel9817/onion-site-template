@@ -13,12 +13,29 @@
 
 ## Initial Run
 
+### Kafka
+
 All in separate processes:
 
 - Run Docker
 - Run `npm run broker`
 - Run `npm run create_topic test-topic`
 - Optionally, you may now terminate the broker process
+
+### Tor
+
+If you have an existing onion domain, the public/private keys and other
+secrets can be placed in `./config/tor/secrets`.
+
+If you don't have an existing onion domain, run the Tor container.
+This will generate a domain name and related secrets in the container
+at `/var/lib/tor/website/`. To reuse this domain, as per the above steps,
+save and copy them to the host filesystem at `./config/tor/secrets`.
+
+This process would be done automatically with a bind mount if the permissions
+allowed such.
+
+<!-- If the host filesystem had the necessary permissions set, could it be done? -->
 
 ## Further runs
 
@@ -39,6 +56,11 @@ Then, in no particular order, and as many times as you want:
 - ./kafka/.env
   - CLIENT_ID="`...`"
 - ./config/tor/secrets
+
+  ```shell
+  sudo addgroup debian-tor
+  sudo chmod -R 0770 .
+  ```
 
 ## Licenses
 
