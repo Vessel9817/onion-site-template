@@ -4,14 +4,19 @@
 FROM debian:bookworm-slim
 RUN \
     # Installing tor
-    apt update && \
+    apt-get update && \
     apt-get install -y tor && \
-    apt clean
+    apt-get clean
 
 # Configuring Tor
 # https://docs.docker.com/engine/reference/builder/#copy
 COPY "./secrets/" "/var/lib/tor/website/"
-RUN chmod 700 "/var/lib/tor/website/"
 COPY "./torrc" "/etc/tor/"
+RUN \
+    chmod 700 -R "/var/lib/tor" && \
+    chown -R debian-tor:debian-tor "/var/lib/tor" && \
+    chown -R debian-tor:debian-tor "/etc/tor"
 
+# Running tor as a non-root user
+USER debian-tor
 ENTRYPOINT [ "tor" ]

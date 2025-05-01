@@ -11,7 +11,7 @@ services:
     # networks:
     #   'kafka':
     #     ipv4_address: '10.5.1.2' # ::ffff:a05:102
-    #   'express':
+    #   'webserver':
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -55,16 +55,16 @@ services:
     networks:
       'nginx':
         ipv4_address: '10.5.0.254' # ::ffff:a05:fe
-#   express:
-#     hostname: 'express'
-#     container_name: 'express'
+#   webserver:
+#     hostname: 'webserver'
+#     container_name: 'webserver'
 #     # depends_on:
 #     #   - 'kafka'
 #     build:
-#       context: './config/express'
+#       context: './config/webserver'
 #       dockerfile: './Dockerfile'
 #     networks:
-#       'express':
+#       'webserver':
 #         ipv4_address: '10.5.2.2' # ::ffff:a05:202
 networks:
   'tor':
@@ -90,7 +90,7 @@ networks:
   #     config:
   #       - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
   #         gateway: '10.5.1.1' # ::ffff:a05:101
-  # 'express':
+  # 'webserver':
   #   driver: 'bridge'
   #   enable_ipv4: true
   #   enable_ipv6: false

@@ -2,13 +2,11 @@
 
 - Configure Dependabot for Docker
 - Configure Docker containers
-  - Migrate from apt to apt-get for CLI stability
   - Migrate from copying files to mounting read-only volumes
-  - Run Tor as user instead of root
   - Connect NGINX to Kafka
-  - Connect Kafka to Express
-  - Connect Express to database
-  - Define an Express entry point for Webpack
+  - Connect Kafka to webserver
+  - Connect webserver to database
+  - Define a webserver entry point for Webpack
 - Move `/utils/kafka/` to `/config/kafka/`
 - Configure repo security settings
 - Update README
