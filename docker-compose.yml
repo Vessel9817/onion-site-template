@@ -55,17 +55,19 @@ services:
     networks:
       'nginx':
         ipv4_address: '10.5.0.254' # ::ffff:a05:fe
-#   webserver:
-#     hostname: 'webserver'
-#     container_name: 'webserver'
-#     # depends_on:
-#     #   - 'kafka'
-#     build:
-#       context: './config/webserver'
-#       dockerfile: './Dockerfile'
-#     networks:
-#       'webserver':
-#         ipv4_address: '10.5.2.2' # ::ffff:a05:202
+  express:
+    hostname: 'express'
+    container_name: 'express'
+    # depends_on:
+    #   - 'kafka'
+    build:
+      context: './config/express'
+      dockerfile: './Dockerfile'
+    env_file:
+      - './config/express/.env'
+    networks:
+      'express':
+        ipv4_address: '10.5.2.2' # ::ffff:a05:202
 networks:
   'tor':
     driver: 'bridge'
@@ -90,11 +92,11 @@ networks:
   #     config:
   #       - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
   #         gateway: '10.5.1.1' # ::ffff:a05:101
-  # 'webserver':
-  #   driver: 'bridge'
-  #   enable_ipv4: true
-  #   enable_ipv6: false
-  #   ipam:
-  #     config:
-  #       - subnet: '10.5.2.0/24' # ::ffff:a05:200/120
-  #         gateway: '10.5.2.1' # ::ffff:a05:201
+  'express':
+    driver: 'bridge'
+    enable_ipv4: true
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: '10.5.2.0/24' # ::ffff:a05:200/120
+          gateway: '10.5.2.1' # ::ffff:a05:201
