@@ -10,7 +10,6 @@
   - Connect Kafka to express
   - Connect express to MongoDB
 - Rename config folder to src
-- Configure repo security settings and make public
 - Update README:
   - Add usage instructions for each npm command
   - Add reference to getting an onion hostname and associated keys

@@ -1,4 +1,7 @@
-# Website
+# Onion Site Template
+
+This documentation, as well as the overall project, is currently
+under construction, see the Issues and Contribution section below.
 
 ## Installation
 

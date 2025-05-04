@@ -20,7 +20,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Vessel9817/website.git"
+        "url": "https://github.com/Vessel9817/onion-site-template.git"
     },
     "dependencies": {
         "@confluentinc/kafka-javascript": "^1.2.0"
