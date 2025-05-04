@@ -1,29 +1,6 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 services:
-  kafka:
-    image: 'apache/kafka:3.8.0'
-    hostname: 'broker'
-    container_name: 'broker'
-    ports:
-      - '127.0.0.1:9092:9092'
-      - '[::1]:9092:9092'
-    # networks:
-    #   'kafka':
-    #     ipv4_address: '10.5.1.2' # ::ffff:a05:102
-    #   'webserver':
-    environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://localhost:9092,PLAINTEXT://broker:19092'
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
-      KAFKA_LISTENERS: 'CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092'
-      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   tor:
     depends_on:
       - 'nginx'
@@ -55,6 +32,29 @@ services:
     networks:
       'nginx':
         ipv4_address: '10.5.0.254' # ::ffff:a05:fe
+  kafka:
+    image: 'apache/kafka:3.8.0'
+    hostname: 'broker'
+    container_name: 'broker'
+    ports:
+      - '127.0.0.1:9092:9092'
+      - '[::1]:9092:9092'
+    # networks:
+    #   'kafka':
+    #     ipv4_address: '10.5.1.2' # ::ffff:a05:102
+    #   'express':
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://localhost:9092,PLAINTEXT://broker:19092'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+      KAFKA_LISTENERS: 'CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   express:
     hostname: 'express'
     container_name: 'express'
@@ -68,6 +68,19 @@ services:
     networks:
       'express':
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
+  # express_debug:
+  #   depends_on:
+  #     - express
+  #   profiles:
+  #     - 'development'
+  #   build:
+  #     context: './config/express/debug'
+  #     dockerfile: './Dockerfile'
+  #   ports:
+  #     - '127.0.0.1::80'
+  #   networks:
+  #     'express':
+  #       ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
 networks:
   'tor':
     driver: 'bridge'

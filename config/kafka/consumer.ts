@@ -34,4 +34,7 @@ async function main() {
     await consumer.run(CONFIG);
 }
 
-main();
+// Running consumer
+(async () => {
+    await main();
+})();

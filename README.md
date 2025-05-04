@@ -13,14 +13,14 @@
 
 ## Initial Run
 
-### Kafka
+<!-- ### Kafka
 
 All in separate processes:
 
 - Run Docker
 - Run `npm run broker`
 - Run `npm run create_topic test-topic`
-- Optionally, you may now terminate the broker process
+- Optionally, you may now terminate the broker process -->
 
 ### Tor
 
@@ -39,7 +39,7 @@ allowed such.
 
 ## Further runs
 
-All in separate processes:
+<!-- All in separate processes:
 
 - Run Docker
 - Run `npm run broker`
@@ -47,24 +47,35 @@ All in separate processes:
 Then, in no particular order, and as many times as you want:
 
 - Run `npm run consumer`
-- Run `npm run producer`
+- Run `npm run producer` -->
+
+For development mode, run:
+
+```sh
+npm run start:dev
+```
+
+For production mode, run one of the following equivalent commands:
+
+```sh
+npm run start
+npm run start:prod
+```
 
 ## Secrets
 
-- ./hostname.txt
-  - `...`.onion
 - ./kafka/.env
   - CLIENT_ID="`...`"
-- ./config/tor/secrets
-
-  ```shell
-  sudo addgroup debian-tor
-  sudo chmod -R 0770 .
-  ```
+- ./config/express/.env
+  - PORT="`...`"
+- ./config/tor/secrets/
 
 ## Licenses
 
-[See more](./licenses)
+See [our license](./licenses/Vessel9817.license)
+and some of our [upstream licenses](./licenses)
+Though we can't include them all, (e.g, node modules) we try to be respectful
+of the open-source contributors whose work we've built upon.
 
 ## Credits
 
@@ -75,5 +86,10 @@ Then, in no particular order, and as many times as you want:
 
 See the [TODOs](TODO.md)
 
-- No sample website is yet implemented
-  - As a result, `npm run start:webserver` is currently useless
+- **Currently, only static website functionality is supported.**
+  We're working on it, see below.
+- Kafka is currently implemented independently
+  and requires further integration to communicate with other components
+- Express is currently implemented independently,
+  but is fully functional by exposing a port in `docker-compose.yml`.
+  A development-only container to do this is planned.

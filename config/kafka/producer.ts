@@ -25,11 +25,13 @@ async function main() {
     await producer.connect();
     await producer.send({
         topic: 'test-topic',
-        messages: [{ value: 'Hello KafkaJS junk!' }]
+        messages: [{ value: 'Hello world!' }]
     });
 
     await producer.disconnect();
 }
 
-// Starting Kafka server
-main();
+// Running producer
+(async () => {
+    await main();
+})();

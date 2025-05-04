@@ -23,6 +23,7 @@ const IGNORE_FILE_CONFIG = {
         // Development
         '/config/eslint/**',
         '/onionscan/**',
+        // '/config/onionscan'
         '**/coverage/**',
         '**/package-lock.json',
         '**/logs/**',
@@ -162,4 +163,4 @@ const CONFIG = [
     JS_CONFIG
 ];
 
-export default CONFIG;
+module.exports = CONFIG;
