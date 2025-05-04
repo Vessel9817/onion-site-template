@@ -91,5 +91,4 @@ See the [TODOs](TODO.md)
 - Kafka is currently implemented independently
   and requires further integration to communicate with other components
 - Express is currently implemented independently,
-  but is fully functional by exposing a port in `docker-compose.yml`.
-  A development-only container to do this is planned.
+  but is fully functional through the debug container

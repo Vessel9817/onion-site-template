@@ -36,6 +36,8 @@ services:
     image: 'apache/kafka:3.8.0'
     hostname: 'broker'
     container_name: 'broker'
+    # depends_on:
+    #   - 'express
     ports:
       - '127.0.0.1:9092:9092'
       - '[::1]:9092:9092'
@@ -58,8 +60,6 @@ services:
   express:
     hostname: 'express'
     container_name: 'express'
-    # depends_on:
-    #   - 'kafka'
     build:
       context: './config/express'
       dockerfile: './Dockerfile'
@@ -68,19 +68,19 @@ services:
     networks:
       'express':
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
-  # express_debug:
-  #   depends_on:
-  #     - express
-  #   profiles:
-  #     - 'development'
-  #   build:
-  #     context: './config/express/debug'
-  #     dockerfile: './Dockerfile'
-  #   ports:
-  #     - '127.0.0.1::80'
-  #   networks:
-  #     'express':
-  #       ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
+  express_debug:
+    depends_on:
+      - express
+    profiles:
+      - 'development'
+    build:
+      context: './config/express/debug'
+      dockerfile: './Dockerfile'
+    ports:
+      - '127.0.0.1::3000'
+    networks:
+      'express':
+        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
 networks:
   'tor':
     driver: 'bridge'

@@ -9,4 +9,5 @@ COPY . .
 EXPOSE 3000
 RUN chown -R node /usr/app/src
 USER node
+EXPOSE 3000
 CMD ["npm", "start"]
