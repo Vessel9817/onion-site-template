@@ -39,9 +39,7 @@
         "**/node_modules/",
         "**/secrets/",
         "**/temp/",
-        "**/tmp/",
-        "./config/eslint/", // Dev config
-        "./config/express/" // Containerized service
+        "**/tmp/"
     ],
     "ts-node": {
         "compilerOptions": {

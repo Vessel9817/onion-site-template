@@ -5,7 +5,6 @@
 **/bower_components
 
 # Secrets
-hostname.txt
 **/.git
 **/*.env
 **/*.env.*
@@ -20,8 +19,6 @@ hostname.txt
 # Development
 /onionscan
 /coverage
-**/test
-**/testing
 
 # Deployment
 **/build
@@ -34,6 +31,7 @@ hostname.txt
 **/.DS_Store
 **/*.env
 **/*.env.*
+!**/.env.example
 **/.history
 **/secrets.js
 **/secrets.*.js

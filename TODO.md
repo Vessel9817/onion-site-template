@@ -1,6 +1,7 @@
 # TODOs
 
-- Name all image volumes
+- Configure tests
+- Configure ratelimiting
 - Configure Docker images to be rebuilt upon container creation
 - Fix ESLint issues
 - Explicitly add globals to ESLint config
@@ -9,7 +10,6 @@
   - Migrate Onionscan to a container
   - Connect NGINX to Express
   - Connect Express to Kafka
-  - Connect Kafka to API
   - Connect API to MongoDB
 - Rename config folder to src
 - Update README:

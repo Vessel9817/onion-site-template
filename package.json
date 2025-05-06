@@ -5,25 +5,21 @@
     "license": "MIT",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "install-all": "npm i && npm --prefix ./config/api i && npm --prefix ./config/express i && npm --prefix ./config/kafka i",
         "start": "node --run=start:prod",
         "start:dev": "docker compose --profile development up -d",
         "start:prod": "docker compose --profile production up -d",
         "broker": "docker compose up -d kafka",
-        "producer": "ts-node ./config/kafka/producer.ts",
-        "consumer": "ts-node ./config/kafka/consumer.ts",
         "create_topic": "docker exec -i broker bash /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic",
         "onionscan": ".\\utils\\onionscan",
         "prettier": "prettier --write **/*.{js,jsx,ts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
         "eslint:fix": "npm run eslint --fix",
-        "tsc": "npx tsc --noEmit"
+        "tsc": "tsc --noEmit"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/Vessel9817/onion-site-template.git"
-    },
-    "dependencies": {
-        "@confluentinc/kafka-javascript": "^1.2.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.23.0",
@@ -31,7 +27,6 @@
         "@stylistic/eslint-plugin": "^4.2.0",
         "@types/node": "^22.13.8",
         "@typescript-eslint/utils": "^8.28.0",
-        "dotenv": "^16.4.7",
         "eslint": "^9.23.0",
         "eslint-plugin-import": "^2.27.4",
         "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -39,6 +34,7 @@
         "globals": "^16.0.0",
         "prettier": "^3.5.2",
         "ts-node": "^10.9.2",
+        "tslib": "^2.8.1",
         "typescript": "^5.8.2",
         "typescript-eslint": "^8.28.0"
     }

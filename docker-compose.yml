@@ -41,6 +41,7 @@ services:
     networks:
       'express':
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
+      'kafka':
   'express_debug':
     depends_on:
       - express
@@ -56,21 +57,16 @@ services:
         ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
   'kafka':
     image: 'apache/kafka:3.8.0'
-    hostname: 'broker'
-    container_name: 'broker'
     depends_on:
       'express':
         condition: 'service_started'
         required: true
-      # 'api':
-      #   condition: 'service_started'
-      #   required: false
-    ports:
-      - '9092:9092'
+      'api':
+        condition: 'service_started'
+        required: false
     networks:
       'kafka':
         ipv4_address: '10.5.1.2' # ::ffff:a05:102
-      'express':
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -83,12 +79,11 @@ services:
       CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  # 'api':
-  #   depends_on:
-  #     - 'mongo'
-  #   networks:
-  #     'express':
-  #       ipv4_address: '10.5.3.2'
+  'api':
+    depends_on:
+      - 'mongo'
+    networks:
+      - 'kafka'
   'mongo':
     restart: 'always'
     image: 'mongo:8.0.9'
@@ -147,19 +142,11 @@ networks:
       config:
         - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
           gateway: '10.5.1.1' # ::ffff:a05:101
-  # 'api':
-  #   driver: 'bridge'
-  #   enable_ipv4: true
-  #   enable_ipv6: false
-  #   ipam:
-  #     config:
-  #       - subnet: '10.5.3.0/24' # ::ffff:a05:300/120
-  #         gateway: '10.5.3.1' # ::ffff:a05:301
   'mongo':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.4.0/24' # ::ffff:a05:400/120
-          gateway: '10.5.4.1' # ::ffff:a05:401
+        - subnet: '10.5.3.0/24' # ::ffff:a05:300/120
+          gateway: '10.5.3.1' # ::ffff:a05:301

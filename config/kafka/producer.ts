@@ -1,34 +1,54 @@
 // KafkaJS migration guide:
 // https://github.com/confluentinc/confluent-kafka-javascript/blob/master/MIGRATION.md#kafkajs
-import { KafkaJS } from '@confluentinc/kafka-javascript';
-import { config } from 'dotenv';
+import KafkaJS, {
+    Kafka,
+    type Message,
+    type ProducerConfig,
+    type RecordMetadata
+} from '@confluentinc/kafka-javascript/types/kafkajs';
 
-const { Kafka } = KafkaJS;
-
-// Loading env
-config({ path: './.env' });
-
-const kafka = new Kafka({
-    kafkaJS: {
-        clientId: process.env.CLIENT_ID,
-        brokers: ['localhost:9092']
-    }
-});
-
-async function main() {
-    const producer = kafka.producer({
+class Producer {
+    private static readonly KAFKA = new Kafka({
         kafkaJS: {
-            acks: 1
+            brokers: ['10.5.1.2:9092']
         }
     });
 
-    await producer.connect();
-    await producer.send({
-        topic: 'test-topic',
-        messages: [{ value: 'Hello world!' }]
-    });
+    private readonly PRODUCER: KafkaJS.Producer;
 
-    await producer.disconnect();
+    constructor(config?: ProducerConfig) {
+        config = config ?? { acks: 1 };
+
+        this.PRODUCER = Producer.KAFKA.producer({ kafkaJS: config });
+    }
+
+    /**
+     * Connects the producer to the brokers
+     */
+    connect(): Promise<void> {
+        return this.PRODUCER.connect();
+    }
+
+    /**
+     * Disconnects the producer from the brokers
+     */
+    disconnect(): Promise<void> {
+        return this.PRODUCER.disconnect();
+    }
+
+    send(type: string, messages: Message[]): Promise<RecordMetadata[]> {
+        return this.PRODUCER.send({ topic: type, messages });
+    }
+}
+
+async function main() {
+    const PRODUCER = new Producer();
+
+    try {
+        await PRODUCER.send('test-topic', [{ value: 'Hello world!' }]);
+    } finally {
+        await PRODUCER.disconnect();
+    }
 }
 
 // Running producer

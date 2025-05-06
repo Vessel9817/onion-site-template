@@ -5,84 +5,75 @@ under construction, see the Issues and Contribution section below.
 
 ## Installation
 
+### Installing Dependencies
+
 - Clone this repository
-- Install the node modules by running `npm i` in both
-  the top-level directory and in `./config/express`
+- Install the node modules by running `npm run install-all`, or the equivalent
+  for your particular Node.js package manager (e.g, npm, yarn, pnpm)
 - Install Go (tested on the current latest version, 1.21.4)
   - Add Go to the PATH variable
   - Set the GOPATH environment variable
 - Install [onionscan](https://github.com/harr1424/onionscan)
   - Run `go install github.com/harr1424/onionscan@latest`
 - Install Docker or Docker Desktop
-- Configure the secrets as shown below
 
-## Initial Run
+### Configuring Secrets
 
-<!-- ### Kafka
+Remove the `.example` extension from the following files,
+renaming them all to `.env`:
+
+- [`./config/mongo/.env.example`](./config/mongo/.env.example)
+- [`./config/mongo/debug/.env.example`](./config/mongo/debug/.env.example)
+
+Although this project will work with the example credentials
+in each of these files, **for your own security, please change them.**
+
+<!--
+### Kafka
 
 All in separate processes:
 
 - Run Docker
 - Run `npm run broker`
 - Run `npm run create_topic test-topic`
-- Optionally, you may now terminate the broker process -->
+- Optionally, you may now terminate the broker process
+-->
 
-### Tor
+### Configuring Tor Secrets
 
 If you have an existing onion domain, the public/private keys and other
-secrets can be placed in `./config/tor/secrets`.
+secrets can be placed in [`./config/tor/secrets`](./config/tor/secrets).
 
 If you don't have an existing onion domain, run the Tor container.
 This will generate a domain name and related secrets in the container
 at `/var/lib/tor/website/`. To reuse this domain, as per the above steps,
-save and copy them to the host filesystem at `./config/tor/secrets`.
+save and copy them to the host filesystem at
+[`./config/tor/secrets`](./config/tor/secrets).
 
 This process would be done automatically with a bind mount if the permissions
-allowed such.
+allowed such, but unfortunately, there isn't an elegant cross-platform solution
+to this.
 
-<!-- If the host filesystem had the necessary permissions set, could it be done? -->
+## Running
 
-## Further runs
+For production mode, run one of the following equivalent commands
+in the top-level directory:
 
-<!-- All in separate processes:
+```sh
+npm start
+npm run start
+npm run start:prod
+```
 
-- Run Docker
-- Run `npm run broker`
-
-Then, in no particular order, and as many times as you want:
-
-- Run `npm run consumer`
-- Run `npm run producer` -->
-
-For development mode, run:
+To attach all debugging containers intended for development-only use,
+run the following command in the top-level directory:
 
 ```sh
 npm run start:dev
 ```
 
-For production mode, run one of the following equivalent commands:
-
-```sh
-npm run start
-npm run start:prod
-```
-
-## Secrets
-
-- ./config/tor/secrets/
-- ./config/express/.env
-  - PORT="`port`"
-- ./kafka/.env
-  - CLIENT_ID="`client ID`"
-- ./config/mongo/.env
-  - MONGO_INITDB_ROOT_USERNAME="`root username`"
-  - MONGO_INITDB_ROOT_PASSWORD="`root password`"
-- ./config/mongo/debug/.env
-  - ME_CONFIG_MONGODB_ADMINUSERNAME="`root username`"
-  - ME_CONFIG_MONGODB_ADMINPASSWORD="`root password`"
-  - ME_CONFIG_MONGODB_URL="mongodb://`root username`:`root password`@mongo:27017/"
-  - ME_CONFIG_BASICAUTH_USERNAME="`dev username`"
-  - ME_CONFIG_BASICAUTH_PASSWORD="`dev password`"
+This can be done after starting production mode,
+or it can be done to also start production mode.
 
 ## Licenses
 
