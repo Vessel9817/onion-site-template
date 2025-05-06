@@ -50,3 +50,11 @@ hostname.txt
 **/.hg
 **/*.cmd
 **/*.bat
+
+# Currently ignores overrides
+**/*.md
+**/*.yml
+**/*.yaml
+**/Dockerfile
+**/*.dockerfile
+**/mongod.conf

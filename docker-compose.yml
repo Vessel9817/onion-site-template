@@ -1,7 +1,7 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 services:
-  tor:
+  'tor':
     depends_on:
       - 'nginx'
     profiles:
@@ -12,14 +12,14 @@ services:
     networks:
       - 'tor'
       - 'nginx'
-  nginx:
+  'nginx':
     build:
       context: './config/nginx'
       dockerfile: './Dockerfile'
     networks:
       'nginx':
         ipv4_address: '10.5.0.2' # ::ffff:a05:2
-  nginx_debug:
+  'nginx_debug':
     depends_on:
       - nginx
     profiles:
@@ -28,23 +28,49 @@ services:
       context: './config/nginx/debug'
       dockerfile: './Dockerfile'
     ports:
-      - '127.0.0.1::80'
+      - ':80'
     networks:
       'nginx':
         ipv4_address: '10.5.0.254' # ::ffff:a05:fe
-  kafka:
+  'express':
+    build:
+      context: './config/express'
+      dockerfile: './Dockerfile'
+    env_file:
+      - './config/express/.env'
+    networks:
+      'express':
+        ipv4_address: '10.5.2.2' # ::ffff:a05:202
+  'express_debug':
+    depends_on:
+      - express
+    profiles:
+      - 'development'
+    build:
+      context: './config/express/debug'
+      dockerfile: './Dockerfile'
+    ports:
+      - ':3000'
+    networks:
+      'express':
+        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
+  'kafka':
     image: 'apache/kafka:3.8.0'
     hostname: 'broker'
     container_name: 'broker'
-    # depends_on:
-    #   - 'express
+    depends_on:
+      'express':
+        condition: 'service_started'
+        required: true
+      # 'api':
+      #   condition: 'service_started'
+      #   required: false
     ports:
-      - '127.0.0.1:9092:9092'
-      - '[::1]:9092:9092'
-    # networks:
-    #   'kafka':
-    #     ipv4_address: '10.5.1.2' # ::ffff:a05:102
-    #   'express':
+      - '9092:9092'
+    networks:
+      'kafka':
+        ipv4_address: '10.5.1.2' # ::ffff:a05:102
+      'express':
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -57,30 +83,38 @@ services:
       CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  express:
-    hostname: 'express'
-    container_name: 'express'
-    build:
-      context: './config/express'
-      dockerfile: './Dockerfile'
+  # 'api':
+  #   depends_on:
+  #     - 'mongo'
+  #   networks:
+  #     'express':
+  #       ipv4_address: '10.5.3.2'
+  'mongo':
+    restart: 'always'
+    image: 'mongo:8.0.9'
+    volumes:
+      - 'mongo-db:/data/db'
+      - 'mongo-configdb:/data/configdb'
     env_file:
-      - './config/express/.env'
-    networks:
-      'express':
-        ipv4_address: '10.5.2.2' # ::ffff:a05:202
-  express_debug:
+      - './config/mongo/.env'
+  'mongo_debug':
     depends_on:
-      - express
+      - 'mongo'
     profiles:
       - 'development'
-    build:
-      context: './config/express/debug'
-      dockerfile: './Dockerfile'
+    restart: 'always'
+    image: 'mongo-express:1.0.2'
     ports:
-      - '127.0.0.1::3000'
-    networks:
-      'express':
-        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
+      - ':8081'
+    env_file:
+      - './config/mongo/debug/.env'
+    environment:
+      # Theme demo:
+      # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
+      ME_CONFIG_OPTIONS_EDITORTHEME: 'tomorrow-night-bright'
+volumes:
+  'mongo-db':
+  'mongo-configdb':
 networks:
   'tor':
     driver: 'bridge'
@@ -97,14 +131,6 @@ networks:
       config:
         - subnet: '10.5.0.0/24' # ::ffff:a05:0/120
           gateway: '10.5.0.1' # ::ffff:a05:1
-  # 'kafka':
-  #   driver: 'bridge'
-  #   enable_ipv4: true
-  #   enable_ipv6: false
-  #   ipam:
-  #     config:
-  #       - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
-  #         gateway: '10.5.1.1' # ::ffff:a05:101
   'express':
     driver: 'bridge'
     enable_ipv4: true
@@ -113,3 +139,27 @@ networks:
       config:
         - subnet: '10.5.2.0/24' # ::ffff:a05:200/120
           gateway: '10.5.2.1' # ::ffff:a05:201
+  'kafka':
+    driver: 'bridge'
+    enable_ipv4: true
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
+          gateway: '10.5.1.1' # ::ffff:a05:101
+  # 'api':
+  #   driver: 'bridge'
+  #   enable_ipv4: true
+  #   enable_ipv6: false
+  #   ipam:
+  #     config:
+  #       - subnet: '10.5.3.0/24' # ::ffff:a05:300/120
+  #         gateway: '10.5.3.1' # ::ffff:a05:301
+  'mongo':
+    driver: 'bridge'
+    enable_ipv4: true
+    enable_ipv6: false
+    ipam:
+      config:
+        - subnet: '10.5.4.0/24' # ::ffff:a05:400/120
+          gateway: '10.5.4.1' # ::ffff:a05:401

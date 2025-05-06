@@ -6,6 +6,8 @@ under construction, see the Issues and Contribution section below.
 ## Installation
 
 - Clone this repository
+- Install the node modules by running `npm i` in both
+  the top-level directory and in `./config/express`
 - Install Go (tested on the current latest version, 1.21.4)
   - Add Go to the PATH variable
   - Set the GOPATH environment variable
@@ -67,11 +69,20 @@ npm run start:prod
 
 ## Secrets
 
-- ./kafka/.env
-  - CLIENT_ID="`...`"
-- ./config/express/.env
-  - PORT="`...`"
 - ./config/tor/secrets/
+- ./config/express/.env
+  - PORT="`port`"
+- ./kafka/.env
+  - CLIENT_ID="`client ID`"
+- ./config/mongo/.env
+  - MONGO_INITDB_ROOT_USERNAME="`root username`"
+  - MONGO_INITDB_ROOT_PASSWORD="`root password`"
+- ./config/mongo/debug/.env
+  - ME_CONFIG_MONGODB_ADMINUSERNAME="`root username`"
+  - ME_CONFIG_MONGODB_ADMINPASSWORD="`root password`"
+  - ME_CONFIG_MONGODB_URL="mongodb://`root username`:`root password`@mongo:27017/"
+  - ME_CONFIG_BASICAUTH_USERNAME="`dev username`"
+  - ME_CONFIG_BASICAUTH_PASSWORD="`dev password`"
 
 ## Licenses
 

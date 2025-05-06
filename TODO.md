@@ -1,14 +1,16 @@
 # TODOs
 
+- Name all image volumes
 - Configure Docker images to be rebuilt upon container creation
 - Fix ESLint issues
 - Explicitly add globals to ESLint config
 - Configure Dependabot for Docker
 - Configure Docker containers
   - Migrate Onionscan to a container
-  - Connect NGINX to Kafka
-  - Connect Kafka to express
-  - Connect express to MongoDB
+  - Connect NGINX to Express
+  - Connect Express to Kafka
+  - Connect Kafka to API
+  - Connect API to MongoDB
 - Rename config folder to src
 - Update README:
   - Add usage instructions for each npm command

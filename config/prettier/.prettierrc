@@ -11,9 +11,22 @@
     "jsxSingleQuote": true,
     "overrides": [
         {
-            "files": ["*.md", "*.yml", "*.yaml"],
+            "files": [
+                "**/*.md",
+                "**/*.yml",
+                "**/*.yaml",
+                "**/Dockerfile",
+                "**/*.dockerfile",
+                "**/mongod.conf"
+            ],
             "options": {
                 "tabWidth": 2
+            }
+        },
+        {
+            "files": ["**/mongod.conf"],
+            "options": {
+                "parser": "yaml"
             }
         }
     ]
