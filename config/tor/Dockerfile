@@ -8,7 +8,7 @@ RUN \
     apt-get install -y tor && \
     apt-get clean
 
-# Configuring Tor
+# Configuring tor
 # https://docs.docker.com/engine/reference/builder/#copy
 COPY "./secrets/" "/var/lib/tor/website/"
 COPY "./torrc" "/etc/tor/"
@@ -16,6 +16,8 @@ RUN \
     chmod 700 -R "/var/lib/tor" && \
     chown -R debian-tor:debian-tor "/var/lib/tor" && \
     chown -R debian-tor:debian-tor "/etc/tor"
+
+EXPOSE 9050
 
 # Running tor as a non-root user
 USER debian-tor

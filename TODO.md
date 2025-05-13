@@ -1,5 +1,6 @@
 # TODOs
 
+- Connect Mongo containers to the internal mongo network
 - Configure tests
 - Configure ratelimiting
 - Configure Docker images to be rebuilt upon container creation
@@ -7,18 +8,14 @@
 - Explicitly add globals to ESLint config
 - Configure Dependabot for Docker
 - Configure Docker containers
-  - Migrate Onionscan to a container
-  - Connect NGINX to Express
+  - Connect nginx to Express
   - Connect Express to Kafka
+  - Configure API Dockerfile
   - Connect API to MongoDB
 - Rename config folder to src
-- Update README:
-  - Add usage instructions for each npm command
-  - Add reference to getting an onion hostname and associated keys
+- Add usage instructions to README for each npm command
 - Add updating command
-- Fix onionscan.cmd:
+- Fix onionscan:
   - `-timeout 1` doesn't prevent hanging after results are output
   - Validate environment variables
 - Integrate code coverage tool
-- Specify React version in eslint-plugin-react
-  [settings](https://github.com/jsx-eslint/eslint-plugin-react#configuration)

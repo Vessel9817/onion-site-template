@@ -10,8 +10,22 @@ services:
       context: './config/tor'
       dockerfile: './Dockerfile'
     networks:
+      'tor':
+        ipv4_address: '10.5.4.2' # ::ffff:a05:402
+      'nginx':
+  'onionscan':
+    depends_on:
       - 'tor'
-      - 'nginx'
+    profiles:
+      - 'production' # tor requires production profile
+    build:
+      context: './config/onionscan'
+      dockerfile: './Dockerfile'
+    env_file:
+      - './config/onionscan/.env'
+    networks:
+      'tor':
+        ipv4_address: '10.5.4.254' # ::ffff:a05:04fe
   'nginx':
     build:
       context: './config/nginx'
@@ -36,8 +50,6 @@ services:
     build:
       context: './config/express'
       dockerfile: './Dockerfile'
-    env_file:
-      - './config/express/.env'
     networks:
       'express':
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
@@ -54,16 +66,16 @@ services:
       - ':3000'
     networks:
       'express':
-        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
+        ipv4_address: '10.5.2.254' # ::ffff:a05:02fe
   'kafka':
     image: 'apache/kafka:3.8.0'
     depends_on:
       'express':
         condition: 'service_started'
         required: true
-      'api':
-        condition: 'service_started'
-        required: false
+      # 'api':
+      #   condition: 'service_started'
+      #   required: false
     networks:
       'kafka':
         ipv4_address: '10.5.1.2' # ::ffff:a05:102
@@ -79,11 +91,11 @@ services:
       CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  'api':
-    depends_on:
-      - 'mongo'
-    networks:
-      - 'kafka'
+  # 'api':
+  #   depends_on:
+  #     - 'mongo'
+  #   networks:
+  #     - 'kafka'
   'mongo':
     restart: 'always'
     image: 'mongo:8.0.9'
@@ -115,9 +127,13 @@ networks:
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: true
-    driver_opts:
-      com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-      com.docker.network.bridge.gateway_mode_ipv6: 'nat'
+    ipam:
+      config:
+        - subnet: '10.5.4.0/24' # ::ffff:a05:400/120
+          gateway: '10.5.4.1' # ::ffff:a05:401
+    # driver_opts:
+    #   com.docker.network.bridge.gateway_mode_ipv4: 'nat'
+    #   com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
     enable_ipv4: true
