@@ -5,7 +5,7 @@ services:
     depends_on:
       - 'nginx'
     profiles:
-      - 'production'
+      - 'tor'
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
@@ -13,11 +13,26 @@ services:
       'tor':
         ipv4_address: '10.5.4.2' # ::ffff:a05:402
       'nginx':
-  'onionscan':
+  'onionscan-adapter':
     depends_on:
       - 'tor'
     profiles:
-      - 'production' # tor requires production profile
+      - 'development'
+      - 'tor'
+    build:
+      context: './config/onionscan/adapter'
+      dockerfile: './Dockerfile'
+    ports:
+      - '18529:80'
+    networks:
+      'tor':
+        ipv4_address: '10.5.4.253' # ::ffff:a05:04fd
+  'onionscan':
+    depends_on:
+      - 'onionscan-adapter'
+    profiles:
+      - 'development'
+      - 'tor'
     build:
       context: './config/onionscan'
       dockerfile: './Dockerfile'
@@ -131,9 +146,6 @@ networks:
       config:
         - subnet: '10.5.4.0/24' # ::ffff:a05:400/120
           gateway: '10.5.4.1' # ::ffff:a05:401
-    # driver_opts:
-    #   com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-    #   com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
     enable_ipv4: true
