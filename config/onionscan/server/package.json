@@ -1,0 +1,23 @@
+{
+    "name": "onionscan-server",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "app.ts",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "ts-node app.ts"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^5.1.0",
+        "website": "file:../../.."
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.18",
+        "@types/express": "^5.0.1",
+        "@types/node": "^22.15.17",
+        "ts-node": "^10.9.2",
+        "tslib": "^2.8.1"
+    }
+}

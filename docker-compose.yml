@@ -13,9 +13,21 @@ services:
       'tor':
         ipv4_address: '10.5.4.2' # ::ffff:a05:402
       'nginx':
-  'onionscan-adapter':
+  'onionscan-server':
     depends_on:
       - 'tor'
+    profiles:
+      - 'development'
+      - 'tor'
+    build:
+      context: './config/onionscan/server'
+      dockerfile: './Dockerfile'
+    networks:
+      'tor':
+        ipv4_address: '10.5.4.252' # ::ffff:a05:04fc
+  'onionscan-adapter':
+    depends_on:
+      - 'onionscan-server'
     profiles:
       - 'development'
       - 'tor'
@@ -23,7 +35,7 @@ services:
       context: './config/onionscan/adapter'
       dockerfile: './Dockerfile'
     ports:
-      - '18529:80'
+      - '18529:80' # TODO TESTING
     networks:
       'tor':
         ipv4_address: '10.5.4.253' # ::ffff:a05:04fd

@@ -12,7 +12,6 @@ RUN \
 
 # Copying nginx config
 COPY "./conf.d/" "/etc/nginx/conf.d/"
-COPY "./html/" "/usr/share/nginx/html/"
 
 # Running container
 RUN mkdir -p /usr/home/app
