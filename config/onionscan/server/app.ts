@@ -9,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// 501 Tor is not an HTTP Proxy
 const handler: RequestHandler = (req, res) => {
     res.statusMessage = 'Tor is not an HTTP Proxy';
     res.status(501).sendFile(path.join(__dirname, 'html', 'error.html'));

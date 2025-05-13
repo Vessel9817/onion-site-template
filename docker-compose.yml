@@ -34,8 +34,6 @@ services:
     build:
       context: './config/onionscan/adapter'
       dockerfile: './Dockerfile'
-    ports:
-      - '18529:80' # TODO TESTING
     networks:
       'tor':
         ipv4_address: '10.5.4.253' # ::ffff:a05:04fd
