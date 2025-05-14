@@ -25,21 +25,21 @@ services:
     networks:
       'tor':
         ipv4_address: '10.5.4.252' # ::ffff:a05:04fc
-  'onionscan-adapter':
+  'onionscan-proxy':
     depends_on:
       - 'onionscan-server'
     profiles:
       - 'development'
       - 'tor'
     build:
-      context: './config/onionscan/adapter'
+      context: './config/onionscan/proxy'
       dockerfile: './Dockerfile'
     networks:
       'tor':
         ipv4_address: '10.5.4.253' # ::ffff:a05:04fd
   'onionscan':
     depends_on:
-      - 'onionscan-adapter'
+      - 'onionscan-proxy'
     profiles:
       - 'development'
       - 'tor'

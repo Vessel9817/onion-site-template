@@ -17,6 +17,6 @@ COPY "./conf.d/" "/etc/nginx/conf.d/"
 RUN mkdir -p /usr/home/app
 WORKDIR /usr/home/app
 COPY "./entrypoint.sh" "./entrypoint.sh"
-EXPOSE 80 443 9150
+EXPOSE 80 443
 
 ENTRYPOINT [ "./entrypoint.sh" ]

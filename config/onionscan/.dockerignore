@@ -5,5 +5,5 @@
 **/docker-compose.yml
 **/docker-compose.yaml
 **/*.dockerfile
-adapter/
+proxy/
 server/
