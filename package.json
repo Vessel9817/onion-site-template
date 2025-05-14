@@ -11,7 +11,7 @@
         "start:prod": "docker compose --profile production up -d",
         "broker": "docker compose up -d kafka",
         "create_topic": "docker exec -i broker bash /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic",
-        "onionscan": ".\\utils\\onionscan",
+        "onionscan": "docker compose up onionscan",
         "prettier": "prettier --write **/*.{js,jsx,ts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
         "eslint:fix": "npm run eslint --fix",

@@ -13,7 +13,9 @@ services:
       'tor':
         ipv4_address: '10.5.4.2' # ::ffff:a05:402
       'nginx':
-  'onionscan-server':
+  'onionscan_server':
+    container_name: 'onionscan_server'
+    restart: 'always'
     depends_on:
       - 'tor'
     profiles:
@@ -22,24 +24,17 @@ services:
     build:
       context: './config/onionscan/server'
       dockerfile: './Dockerfile'
+    environment:
+      - 'TOR_HOST=10.5.4.2'
+      - 'TOR_HOST_PORT=9050'
     networks:
       'tor':
-        ipv4_address: '10.5.4.252' # ::ffff:a05:04fc
-  'onionscan-proxy':
-    depends_on:
-      - 'onionscan-server'
-    profiles:
-      - 'development'
-      - 'tor'
-    build:
-      context: './config/onionscan/proxy'
-      dockerfile: './Dockerfile'
-    networks:
-      'tor':
-        ipv4_address: '10.5.4.253' # ::ffff:a05:04fd
+        ipv4_address: '10.5.4.253' # ::ffff:a05:04fc
   'onionscan':
+    container_name: 'onionscan'
+    restart: 'always'
     depends_on:
-      - 'onionscan-proxy'
+      - 'onionscan_server'
     profiles:
       - 'development'
       - 'tor'
@@ -48,6 +43,8 @@ services:
       dockerfile: './Dockerfile'
     env_file:
       - './config/onionscan/.env'
+    environment:
+      - 'TOR_PROXY=10.5.4.253:9150'
     networks:
       'tor':
         ipv4_address: '10.5.4.254' # ::ffff:a05:04fe
