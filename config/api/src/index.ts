@@ -4,18 +4,17 @@ import {
     Kafka,
     type ConsumerRunConfig
 } from '@confluentinc/kafka-javascript/types/kafkajs';
+import { BROKER } from './env';
 
 const KAFKA = new Kafka({
     kafkaJS: {
-        brokers: ['10.5.1.2:9092']
+        brokers: [BROKER]
     }
 });
 
 const CONFIG: ConsumerRunConfig = {
     eachMessage: async (req) => {
-        console.log({
-            value: req.message.value?.toString()
-        });
+        console.log({ value: req.message.value?.toString() });
     }
 };
 

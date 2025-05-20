@@ -5,9 +5,9 @@
             // General JS
             "ESNext",
 
-            // // Web interfaces
-            // "dom",
-            // "dom.iterable",
+            // Web interfaces
+            "dom",
+            "dom.iterable",
 
             // Asynchronicity and promises
             "ES2020.Promise",

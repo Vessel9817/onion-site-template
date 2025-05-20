@@ -2,6 +2,7 @@
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 services:
   'tor':
+    container_name: 'tor'
     depends_on:
       - 'nginx'
     profiles:
@@ -13,6 +14,11 @@ services:
       - 'tor'
       - 'nginx'
   'nginx':
+    container_name: 'nginx'
+    depends_on:
+      'express':
+        condition: 'service_started'
+        required: false
     build:
       context: './config/nginx'
       dockerfile: './Dockerfile'
@@ -20,6 +26,7 @@ services:
       'nginx':
         ipv4_address: '10.5.0.2' # ::ffff:a05:2
   'nginx_debug':
+    container_name: 'nginx_debug'
     depends_on:
       - nginx
     profiles:
@@ -43,6 +50,7 @@ services:
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
       'kafka':
   'express_debug':
+    container_name: 'express_debug'
     depends_on:
       - express
     profiles:
@@ -56,6 +64,7 @@ services:
       'express':
         ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
   'kafka':
+    container_name: 'kafka_broker'
     image: 'apache/kafka:3.8.0'
     depends_on:
       'express':
@@ -82,10 +91,17 @@ services:
   'api':
     depends_on:
       - 'mongo'
+    build:
+      context: './config/api'
+      dockerfile: './Dockerfile'
+    env_file:
+      - './config/api/.env'
+    environment:
+      - 'BROKER=10.5.1.2:9092'
     networks:
       - 'kafka'
+      - 'mongo'
   'mongo':
-    restart: 'always'
     image: 'mongo:8.0.9'
     volumes:
       - 'mongo-db:/data/db'
@@ -93,11 +109,11 @@ services:
     env_file:
       - './config/mongo/.env'
   'mongo_debug':
+    container_name: 'mongo_debug'
     depends_on:
       - 'mongo'
     profiles:
       - 'development'
-    restart: 'always'
     image: 'mongo-express:1.0.2'
     ports:
       - ':8081'
