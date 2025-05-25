@@ -6,6 +6,7 @@
 - Add mongo user for better IAM between users and devs
 - Document [example env](./config/api/.env.example) usage
 - Rename [api](./config/api) to backend
+- Document methods and classes
 
 ## General
 

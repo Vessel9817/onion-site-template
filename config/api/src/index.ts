@@ -5,6 +5,9 @@ import {
     type ConsumerRunConfig
 } from '@confluentinc/kafka-javascript/types/kafkajs';
 import { BROKER } from './env';
+import { DbManager } from './db';
+
+const DB = new DbManager();
 
 const KAFKA = new Kafka({
     kafkaJS: {
@@ -19,6 +22,8 @@ const CONFIG: ConsumerRunConfig = {
 };
 
 async function main() {
+    await DB.connect();
+
     const consumer = KAFKA.consumer({
         kafkaJS: { groupId: 'test-group', fromBeginning: true }
     });
