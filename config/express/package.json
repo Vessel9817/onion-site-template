@@ -6,7 +6,7 @@
     "private": true,
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node --env-file-if-exists=.env -r ts-node/register ./app.ts"
+        "start": "ts-node ./app.ts"
     },
     "dependencies": {
         "cors": "^2.8.5",

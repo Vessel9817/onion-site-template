@@ -43,8 +43,6 @@ services:
     build:
       context: './config/express'
       dockerfile: './Dockerfile'
-    env_file:
-      - './config/express/.env'
     networks:
       'express':
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
