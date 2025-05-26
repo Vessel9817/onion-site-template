@@ -16,6 +16,7 @@ const KAFKA = new Kafka({
 });
 
 const CONFIG: ConsumerRunConfig = {
+    // eslint-disable-next-line @typescript-eslint/require-await
     eachMessage: async (req) => {
         console.log({ value: req.message.value?.toString() });
     }

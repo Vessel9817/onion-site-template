@@ -3,6 +3,7 @@ const pluginReact = require('eslint-plugin-react');
 const tseslint = require('typescript-eslint');
 const stylistic = require('@stylistic/eslint-plugin');
 const path = require('node:path');
+const globals = require('globals');
 
 /** @typedef {import('@typescript-eslint/utils').TSESLint.FlatConfig.Config} Config */
 
@@ -16,6 +17,12 @@ const JS_FILE_GLOBS = [
     '**/*.mts',
     ...REACT_FILE_GLOBS
 ];
+const MONGO_JS_FILE_GLOBS = [
+    '**/mongo/**/*.js',
+    '**/mongo/**/*.cjs',
+    '**/mongo/**/*.ts',
+    '**/mongo/**/*.cts'
+];
 
 /** @type {Config} */
 const IGNORE_FILE_CONFIG = {
@@ -23,7 +30,6 @@ const IGNORE_FILE_CONFIG = {
         // Development
         '/config/eslint/**',
         '/onionscan/**',
-        // '/config/onionscan'
         '**/coverage/**',
         '**/package-lock.json',
         '**/logs/**',
@@ -74,8 +80,10 @@ const DEFAULT_JS_CONFIGS = tseslint.config([
     {
         languageOptions: {
             parserOptions: {
-                projectService: true,
-                tsconfigRootDir: __dirname
+                projectService: true
+            },
+            globals: {
+                ...globals.node
             }
         }
     }
@@ -131,19 +139,28 @@ const JS_CONFIG = {
         // https://eslint.style/rules/js/comma-dangle
         '@stylistic/comma-dangle': ['off'],
         // https://eslint.style/rules/js/arrow-parens
-        '@stylistic/arrow-parens': ['warn', 'as-needed'],
+        '@stylistic/arrow-parens': ['warn'],
         // https://eslint.style/rules/js/member-delimiter-style
         '@stylistic/member-delimiter-style': [
             'error',
             {
                 singleline: {
                     delimiter: 'semi',
-                    requireLast: true
+                    requireLast: false
                 },
                 multiline: {
                     delimiter: 'semi',
                     requireLast: true
                 }
+            }
+        ],
+        // https://eslint.style/rules/js/quotes
+        '@stylistic/quotes': [
+            'warn',
+            'single',
+            {
+                avoidEscape: true,
+                allowTemplateLiterals: 'always'
             }
         ],
         // https://eslint.style/rules/js/jsx-quotes
@@ -155,12 +172,24 @@ const JS_CONFIG = {
     }
 };
 
+/** @type {Config} */
+const MONGO_JS_CONFIG = {
+    files: MONGO_JS_FILE_GLOBS,
+    languageOptions: {
+        globals: {
+            ...globals.mongo,
+            db: 'writable'
+        }
+    }
+};
+
 /** @type {Config[]} */
 const CONFIG = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
     DEFAULT_REACT_CONFIG,
-    JS_CONFIG
+    JS_CONFIG,
+    MONGO_JS_CONFIG
 ];
 
 module.exports = CONFIG;
