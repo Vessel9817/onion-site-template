@@ -2,32 +2,34 @@
 
 ## Backend branch
 
-- Connect backend to MongoDB
-- Add mongo user for better IAM between users and devs
-- Document [example env](./config/api/.env.example) usage
+- Document [example](./config/api/.env.example)
+  [env](./config/mongo/.env.example) usages
 - Rename [api](./config/api) to backend
 - Document methods and classes
+- Create the sample messages collection
+- Replace horrible install-all package.json command with workspaces,
+  as it breaks mongo by adding an evil dependency
+- Absorb model creation to assert documents match the type
+  defined in modelWrapper and schemaWrapper
 
 ## General
 
 - Store encrypted mongo passwords rather than plaintext, if and where possible
-- Replace horrible install-all package.json command with workspaces
+- Fix tsc package.json command
 - Configure tests and container health checks
+- Name Kafka broker volumes
 - Configure ratelimiting
 - Configure modified Docker images to be rebuilt upon container creation
 - Fix ESLint issues
-- Explicitly add globals to ESLint config
+- Absorb env vars into env files for clarity
 - Configure Dependabot for Docker
 - Configure Docker containers
   - Connect NGINX to Express
   - Connect Express to Kafka
   - Create debug Kafka container
-- Rename config folder to src
 - Update README:
   - Add usage instructions for each npm command
   - Add reference to getting an onion hostname and associated keys
 - Add updating command
 - Merge onionscan branch
 - Integrate code coverage tool
-- Specify React version in eslint-plugin-react
-  [settings](https://github.com/jsx-eslint/eslint-plugin-react#configuration)

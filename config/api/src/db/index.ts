@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose, { type Mongoose } from 'mongoose';
 import { MONGODB_URI } from '../env.js';
 import { CollectionManager, type UntrackedSchemaWrapper } from './collections';
 

@@ -87,6 +87,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   'api':
+    restart: always
     depends_on:
       - 'mongo'
     build:
@@ -100,7 +101,11 @@ services:
       - 'kafka'
       - 'mongo'
   'mongo':
-    image: 'mongo:8.0.9'
+    restart: always
+    container_name: 'mongo'
+    build:
+      context: './config/mongo'
+      dockerfile: './Dockerfile'
     volumes:
       - 'mongo-db:/data/db'
       - 'mongo-configdb:/data/configdb'
@@ -108,6 +113,7 @@ services:
       - './config/mongo/.env'
   'mongo_debug':
     container_name: 'mongo_debug'
+    restart: always
     depends_on:
       - 'mongo'
     profiles:

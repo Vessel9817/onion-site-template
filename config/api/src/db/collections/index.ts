@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongodb';
 import mongoose, {
     model,
     Schema,
+    Types,
     type CompileModelOptions,
     type SchemaDefinition,
     type SchemaOptions
@@ -16,7 +16,7 @@ export interface UntrackedSchemaWrapper<T extends Document> {
 
 interface TrackingSchemaWrapper<T extends Document>
     extends UntrackedSchemaWrapper<T> {
-    _id: ObjectId;
+    _id: Types.ObjectId;
 }
 
 export type SchemaAdapter<T extends Document> = WithId<
@@ -56,7 +56,7 @@ export class CollectionManager<T extends Document>
         return data.map((datum) => {
             return {
                 ...this.documentWrapper(datum),
-                _id: new ObjectId()
+                _id: new Types.ObjectId()
             };
         });
     }
@@ -74,11 +74,9 @@ export class CollectionManager<T extends Document>
         };
     }
 
-    protected static schemaWrapper<U extends SchemaDefinition>(
-        schema: U
-    ): Schema {
+    protected static schemaWrapper(schema: SchemaDefinition): Schema {
         const schemaWrapper: SchemaDefinition = {
-            _id: ObjectId,
+            _id: Types.ObjectId,
             id: String,
             data: schema,
             __v: Number
@@ -94,9 +92,9 @@ export class CollectionManager<T extends Document>
         return new Schema(schemaWrapper, schemaOptions);
     }
 
-    static modelWrapper<U extends SchemaDefinition>(
+    static modelWrapper(
         name: string,
-        schema: U,
+        schema: SchemaDefinition,
         collection?: string,
         options?: CompileModelOptions
     ) {
@@ -106,7 +104,7 @@ export class CollectionManager<T extends Document>
     }
 
     async create(...data: T[]): Promise<SchemaAdapter<T>[]> {
-        let ids: { [key: number]: ObjectId };
+        let ids: { [key: number]: Types.ObjectId };
 
         if (data.length < 1) {
             return [];

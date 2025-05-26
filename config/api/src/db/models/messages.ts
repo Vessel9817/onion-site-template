@@ -21,4 +21,7 @@ const MessageSchema = {
     version: Number
 };
 
-export const Message = CollectionManager.modelWrapper('Message', MessageSchema);
+export const Message = CollectionManager.modelWrapper(
+    'messages',
+    MessageSchema
+);

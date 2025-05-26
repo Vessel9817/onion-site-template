@@ -35,6 +35,6 @@ async function main() {
 }
 
 // Running consumer
-(async () => {
+void (async () => {
     await main();
 })();

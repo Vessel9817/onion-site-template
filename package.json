@@ -5,7 +5,7 @@
     "license": "MIT",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "install-all": "npm i && npm --prefix ./config/api i && npm --prefix ./config/express i && npm --prefix ./config/kafka i",
+        "install-all": "npm i && npm --prefix ./config/api i && npm --prefix ./config/express i && npm --prefix ./config/kafka i && npm --prefix ./config/mongo i",
         "start": "node --run=start:prod",
         "start:dev": "docker compose --profile development up -d",
         "start:prod": "docker compose --profile production up -d",

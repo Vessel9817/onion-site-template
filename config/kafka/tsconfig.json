@@ -39,7 +39,8 @@
         "**/node_modules/",
         "**/secrets/",
         "**/temp/",
-        "**/tmp/"
+        "**/tmp/",
+        "**/dist/"
     ],
     "ts-node": {
         "compilerOptions": {
