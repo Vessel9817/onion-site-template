@@ -1,7 +1,11 @@
 # Onion Site Template
 
-This documentation, as well as the overall project, is currently
-under construction, see the Issues and Contribution section below.
+This project- which includes this documentation- is currently
+in beta. See the Issues and Contribution section below.
+
+## License
+
+[MIT](./LICENSE.md)
 
 ## Compatibility
 
@@ -74,7 +78,7 @@ npm run start:dev
 ```
 
 This can be done before or after starting production mode,
-as it depends on all production containers except for tor.
+as they collectively depend on all production containers except tor.
 
 <!--
 ### Kafka
@@ -87,13 +91,6 @@ All in separate processes:
 - Optionally, you may now terminate the broker process
 -->
 
-## Licenses
-
-See [our license](./licenses/Vessel9817.license)
-and some of our [upstream licenses](./licenses)
-Though we can't include them all, (e.g, node modules) we try to be respectful
-of the open-source contributors whose work we've built upon.
-
 ## Credits
 
 - [onionscan](https://github.com/harr1424/onionscan)
@@ -103,11 +100,18 @@ of the open-source contributors whose work we've built upon.
 
 ## Issues and Contribution
 
-See the [TODOs](TODO.md)
+This project is currently in beta. We welcome issues or pull requests,
+but before opening one, we ask that you first see the [TODOs](./TODO.md)
+for any currently planned fixes or features.
 
 - **Currently, only static website functionality is supported.**
-  We're working on it, see below.
+  Implementing dynamic website functionality is our top priority,
+  and would bring this project out of beta.
 - Kafka is currently implemented independently
-  and requires further integration to communicate with other components
+  and requires further integration to communicate
+  with Express and the Express backend.
 - Express is currently implemented independently,
-  but is fully functional through the debug container
+  but is fully functional through the debug container.
+- The Express backend is currently implemented independently,
+  <!-- but is integrated with MongoDB. -->
+  with partial integration with MongoDB.

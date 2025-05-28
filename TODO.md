@@ -16,6 +16,7 @@
 - Fix tsc package.json command
 - Configure tests and container health checks
 - Name Kafka broker volumes
+- Start versioning package.json files
 - Configure ratelimiting
 - Configure modified Docker images to be rebuilt upon container creation
 - Fix ESLint issues
