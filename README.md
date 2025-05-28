@@ -1,17 +1,27 @@
 # Onion Site Template
 
-This project- which includes this documentation- is currently
-in beta. See the Issues and Contribution section below.
-
-## License
-
-[MIT](./LICENSE.md)
+Note: this project- which includes this documentation- is currently in beta.
+See the Issues and Contribution section below.
 
 ## Compatibility
 
-This project officially supports the latest stable versions of Node and npm
-for up-to-date security releases. Other Node package managers (e.g, yarn, pnpm)
-may not be supported.
+This project is OS-agnostic, except for some of the optional features used,
+which are currently Windows-only. We officially support the latest
+stable versions of Node and npm (consequently also npx) for up-to-date
+security releases. As such, other Node package managers (e.g, yarn, pnpm)
+may not be supported. Where possible, package manager commands are replaced
+with an equivalent Node CLI command.
+
+## Licenses
+
+This project is licensed under the [MIT](./LICENSE.md) license.
+
+However, to view the licenses of the Node packages we explicitly depend on,
+run the following command: (currently only supports Windows and npx)
+
+```shell
+npm run license-report
+```
 
 ## Installation
 

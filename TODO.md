@@ -12,6 +12,7 @@
 
 ## General
 
+- Move towards becoming OS-agnostic
 - Store encrypted mongo passwords rather than plaintext, if and where possible
 - Fix tsc package.json command
 - Configure tests and container health checks
