@@ -8,7 +8,7 @@ RUN \
     apt-get install -y tor && \
     apt-get clean
 
-# Configuring Tor
+# Configuring tor
 # https://docs.docker.com/engine/reference/builder/#copy
 COPY "./secrets/" "/var/lib/tor/website/"
 COPY "./torrc" "/etc/tor/"

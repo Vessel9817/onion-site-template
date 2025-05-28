@@ -3,48 +3,49 @@
 This documentation, as well as the overall project, is currently
 under construction, see the Issues and Contribution section below.
 
+## Compatibility
+
+This project officially supports the latest stable versions of Node and npm
+for up-to-date security releases. Other Node package managers (e.g, yarn, pnpm)
+may not be supported.
+
 ## Installation
 
 ### Installing Dependencies
 
 - Clone this repository
-- Install the node modules by running `npm run install-all`, or the equivalent
-  for your particular Node.js package manager (e.g, npm, yarn, pnpm)
+- Install the node modules by running `npm install` in the top-level
+  project directory
+- Install Docker or Docker Desktop
+
+Optionally, install onionscan:
+
 - Install Go (tested on the current latest version, 1.21.4)
   - Add Go to the PATH variable
   - Set the GOPATH environment variable
 - Install [onionscan](https://github.com/harr1424/onionscan)
   - Run `go install github.com/harr1424/onionscan@latest`
-- Install Docker or Docker Desktop
 
 ### Configuring Secrets
+
+#### General
 
 Remove the `.example` extension from the following files,
 renaming them all to `.env`:
 
-- [`./config/mongo/.env.example`](./config/mongo/.env.example)
-- [`./config/mongo/debug/.env.example`](./config/mongo/debug/.env.example)
+- [`mongo`](./config/mongo/.env.example)
+- [`mongo_debug`](./config/mongo/debug/.env.example)
+- [`api`](./config/api/.env.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
 
-<!--
-### Kafka
+#### tor
 
-All in separate processes:
-
-- Run Docker
-- Run `npm run broker`
-- Run `npm run create_topic test-topic`
-- Optionally, you may now terminate the broker process
--->
-
-### Configuring Tor Secrets
-
-If you have an existing onion domain, the public/private keys and other
+**If you have an existing onion domain**, the public/private keys and other
 secrets can be placed in [`./config/tor/secrets`](./config/tor/secrets).
 
-If you don't have an existing onion domain, run the Tor container.
+**If you don't have an existing onion domain**, run the tor container.
 This will generate a domain name and related secrets in the container
 at `/var/lib/tor/website/`. To reuse this domain, as per the above steps,
 save and copy them to the host filesystem at
@@ -72,8 +73,19 @@ run the following command in the top-level directory:
 npm run start:dev
 ```
 
-This can be done after starting production mode,
-or it can be done to also start production mode.
+This can be done before or after starting production mode,
+as it depends on all production containers except for tor.
+
+<!--
+### Kafka
+
+All in separate processes:
+
+- Run Docker
+- Run `npm run broker`
+- Run `npm run create_topic test-topic`
+- Optionally, you may now terminate the broker process
+-->
 
 ## Licenses
 
@@ -85,7 +97,9 @@ of the open-source contributors whose work we've built upon.
 ## Credits
 
 - [onionscan](https://github.com/harr1424/onionscan)
-- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate)
+- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
+  modified to lint and prettify this Node project
+- Many more projects we explicitly or inadvertently depend on
 
 ## Issues and Contribution
 

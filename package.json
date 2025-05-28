@@ -5,21 +5,28 @@
     "license": "MIT",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "install-all": "npm i && npm --prefix ./config/api i && npm --prefix ./config/express i && npm --prefix ./config/kafka i && npm --prefix ./config/mongo i",
         "start": "node --run=start:prod",
         "start:dev": "docker compose --profile development up -d",
         "start:prod": "docker compose --profile production up -d",
         "broker": "docker compose up -d kafka",
         "create_topic": "docker exec -i broker bash /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic",
         "onionscan": ".\\utils\\onionscan",
-        "prettier": "prettier --write **/*.{js,jsx,ts,tsx,json,css,scss,html}",
+        "prettier": "prettier --write **/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
-        "eslint:fix": "npm run eslint --fix",
+        "eslint:fix": "node --run=eslint -- --fix",
         "tsc": "tsc --noEmit"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/Vessel9817/onion-site-template.git"
+    },
+    "workspaces": {
+        "packages": [
+            "./config/api",
+            "./config/express",
+            "./config/kafka",
+            "./config/mongo"
+        ]
     },
     "devDependencies": {
         "@eslint/js": "^9.23.0",

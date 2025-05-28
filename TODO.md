@@ -7,8 +7,6 @@
 - Rename [api](./config/api) to backend
 - Document methods and classes
 - Create the sample messages collection
-- Replace horrible install-all package.json command with workspaces,
-  as it breaks mongo by adding an evil dependency
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
 
