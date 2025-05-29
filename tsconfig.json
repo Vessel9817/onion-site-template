@@ -25,12 +25,13 @@
         "resolveJsonModule": true,
         "noEmit": false,
         "jsx": "react",
+        "typeRoots": ["./node_modules/@types"],
         "downlevelIteration": true,
         "importHelpers": true,
         "newLine": "lf",
         "stripInternal": true
     },
-    "include": ["**/*"],
+    "include": ["./config/eslint/**/*"],
     "exclude": [
         "**/coverage/",
         "**/licenses/",

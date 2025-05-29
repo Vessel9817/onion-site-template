@@ -2,8 +2,6 @@
 
 ## Backend branch
 
-- Document [example](./config/api/.env.example)
-  [env](./config/mongo/.env.example) usages
 - Rename [api](./config/api) to backend
 - Document methods and classes
 - Create the sample messages collection

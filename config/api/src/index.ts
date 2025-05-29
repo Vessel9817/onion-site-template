@@ -30,7 +30,7 @@ async function main() {
     });
 
     await consumer.connect();
-    await consumer.subscribe({ topic: 'test-topic' });
+    await consumer.subscribe({ topic: 'unauthorized.msg_board_db.v1' });
     await consumer.run(CONFIG);
 }
 

@@ -45,13 +45,17 @@ async function main() {
     const PRODUCER = new Producer();
 
     try {
-        await PRODUCER.send('test-topic', [{ value: 'Hello world!' }]);
+        await PRODUCER.send('unauthorized.msg_board_db.v1', [
+            {
+                value: 'Hello world!'
+            }
+        ]);
     } finally {
         await PRODUCER.disconnect();
     }
 }
 
 // Running producer
-(async () => {
+void (async () => {
     await main();
 })();

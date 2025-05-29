@@ -97,7 +97,7 @@ All in separate processes:
 
 - Run Docker
 - Run `npm run broker`
-- Run `npm run create_topic test-topic`
+- Run `npm run create_topic unauthorized.msg_board_db.v1`
 - Optionally, you may now terminate the broker process
 -->
 
