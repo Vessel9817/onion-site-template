@@ -1,5 +1,6 @@
 # TODOs
 
+- Create Vanguard container for improved tor security
 - Configure tests
 - Configure ratelimiting
 - Configure Docker images to be rebuilt upon container creation

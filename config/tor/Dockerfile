@@ -19,4 +19,7 @@ RUN \
 
 # Running tor as a non-root user
 USER debian-tor
+
+HEALTHCHECK CMD [ "tor", "--verify-config" ]
+
 ENTRYPOINT [ "tor" ]

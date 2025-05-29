@@ -61,9 +61,6 @@ services:
       'express':
         condition: 'service_started'
         required: true
-      'api':
-        condition: 'service_started'
-        required: false
     networks:
       'kafka':
         ipv4_address: '10.5.1.2' # ::ffff:a05:102
@@ -79,11 +76,6 @@ services:
       CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  'api':
-    depends_on:
-      - 'mongo'
-    networks:
-      - 'kafka'
   'mongo':
     restart: 'always'
     image: 'mongo:8.0.9'
