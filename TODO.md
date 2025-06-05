@@ -10,12 +10,11 @@
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
 - Create backend_debug container for testing backend routes
-- Refactor MONGODB_URI so that DbManager can take in a collection (name)
-  as a constructor argument
 - Create proper consumer configuration
 
 ## General
 
+- Support Docker swarm mode
 - Create kafka_debug container for testing container intercommunication
 - Create webpack configurations instead of using ts-node in production
 - Move towards becoming OS-agnostic

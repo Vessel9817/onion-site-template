@@ -31,8 +31,15 @@ assert.ok(
 );
 const USER_PASSWORD = process.env.MONGO_INITDB_PASSWORD;
 
+assert.ok(
+    process.env.MSG_COLLECTION_NAME,
+    'Message collection name is missing from env'
+);
+const MSG_COLLECTION_NAME = process.env.MSG_COLLECTION_NAME;
+
 module.exports = {
     dbName: DB_NAME,
+    collectionName: MSG_COLLECTION_NAME,
     admin: {
         username: ADMIN_USERNAME,
         password: ADMIN_PASSWORD

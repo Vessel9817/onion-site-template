@@ -29,7 +29,8 @@
         "downlevelIteration": true,
         "importHelpers": true,
         "newLine": "lf",
-        "stripInternal": true
+        "stripInternal": true,
+        "outDir": "./dist" // Unused: https://stackoverflow.com/a/48798945
     },
     "include": ["./config/eslint/**/*"],
     "exclude": [

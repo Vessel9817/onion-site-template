@@ -18,7 +18,7 @@ assert.ok(
 // Authenticating
 db.getSiblingDB('admin').auth(env.admin.username, env.admin.password);
 
-db.disableTelemetry();
+disableTelemetry();
 
 // Creating unprivileged user and database
 // NOTE: Databases and collections are hidden until data
@@ -33,3 +33,8 @@ db.createUser({
         }
     ]
 });
+
+/** @type {unknown} */
+const MSG_BOARD = db.getSiblingDB(env.dbName);
+
+MSG_BOARD.createCollection(env.collectionName);

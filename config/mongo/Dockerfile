@@ -9,3 +9,10 @@ FROM mongo:8.0.9 AS mongo
 WORKDIR /docker-entrypoint-initdb.d
 COPY . .
 COPY --from=0 "/docker-entrypoint-initdb.d/node_modules/" "."
+
+HEALTHCHECK \
+    --interval=5s \
+    --timeout=5s \
+    --start-period=10s \
+    --retries=3 \
+    CMD [ "mongosh", "--eval", "db.adminCommand('ping')"]

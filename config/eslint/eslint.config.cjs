@@ -180,7 +180,8 @@ const MONGO_JS_CONFIG = {
     languageOptions: {
         globals: {
             ...globals.mongo,
-            db: 'writable'
+            db: 'writable',
+            disableTelemetry: 'readonly'
         }
     }
 };
