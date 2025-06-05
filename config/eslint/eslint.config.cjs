@@ -122,6 +122,8 @@ const JS_CONFIG = {
                 allowWithName: '^props$'
             }
         ],
+        // https://typescript-eslint.io/rules/no-namespace
+        '@typescript-eslint/no-namespace': ['off'],
 
         // https://eslint.style/rules/js/indent
         '@stylistic/indent': ['off'],
