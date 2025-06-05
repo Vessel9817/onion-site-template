@@ -1,5 +1,5 @@
 import mongoose, { type Mongoose } from 'mongoose';
-import { MONGODB_URI } from '../env.js';
+import { MONGODB_URI } from '../env';
 import { CollectionManager, type UntrackedSchemaWrapper } from './collections';
 
 /**

@@ -1,27 +1,21 @@
 import { CollectionManager } from '../collections';
-
-export interface MessageTypeV1 {
-    name: string;
-    msg: string;
-    version: 1;
-}
+import { Unauthorized } from '../kafka';
 
 /**
- * A union type of each supported schema revision
+ * An amalgamation of all supported collection messages
  */
-export type MessageType = MessageTypeV1;
+const MsgCollectionMsgs = Unauthorized.MsgBoardDb;
 
 /**
  * An amalgamation of all supported schema revisions
  * @see {@link MessageType}
  */
-const MessageSchema = {
+const MsgSchema = {
     name: String,
     msg: String,
     version: Number
 };
 
-export const Message = CollectionManager.modelWrapper(
-    'messages',
-    MessageSchema
-);
+const MsgCollection = CollectionManager.modelWrapper('messages', MsgSchema);
+
+export { MsgCollection, MsgCollectionMsgs };

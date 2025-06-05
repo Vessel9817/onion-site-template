@@ -1,36 +1,43 @@
 // KafkaJS migration guide:
 // https://github.com/confluentinc/confluent-kafka-javascript/blob/master/MIGRATION.md#kafkajs
-import {
-    Kafka,
-    type ConsumerRunConfig
-} from '@confluentinc/kafka-javascript/types/kafkajs';
-import { BROKER } from './env';
+import { KafkaJS } from '@confluentinc/kafka-javascript';
+import { BROKERS } from './env';
 import { DbManager } from './db';
+import { MsgCollection, MsgCollectionMsgs } from './db/models/messages';
 
 const DB = new DbManager();
 
-const KAFKA = new Kafka({
+const KAFKA = new KafkaJS.Kafka({
     kafkaJS: {
-        brokers: [BROKER]
+        brokers: BROKERS
     }
 });
 
-const CONFIG: ConsumerRunConfig = {
+const CONFIG: KafkaJS.ConsumerRunConfig = {
     // eslint-disable-next-line @typescript-eslint/require-await
-    eachMessage: async (req) => {
-        console.log({ value: req.message.value?.toString() });
+    eachBatch: async (req) => {
+        const rawMsgs = req.batch.messages;
+
+        for (const rawMsg of rawMsgs) {
+            const msg = rawMsg.value?.toString();
+
+            console.log(`New message: ${msg ?? 'null'}`);
+        }
     }
 };
 
 async function main() {
+    await MsgCollection.createCollection();
     await DB.connect();
 
     const consumer = KAFKA.consumer({
-        kafkaJS: { groupId: 'test-group', fromBeginning: true }
+        kafkaJS: {
+            groupId: 'test-group'
+        }
     });
 
     await consumer.connect();
-    await consumer.subscribe({ topic: 'unauthorized.msg_board_db.v1' });
+    await consumer.subscribe({ topic: MsgCollectionMsgs.V1.TOPIC });
     await consumer.run(CONFIG);
 }
 

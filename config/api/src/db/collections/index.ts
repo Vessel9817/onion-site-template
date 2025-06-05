@@ -33,7 +33,8 @@ export interface Collection<
     create: (...data: TUntracked[]) => PromiseLike<UTracked[]>;
     filter: (
         query: Partial<TUntracked>,
-        limit: number
+        limit: number,
+        id?: string
     ) => PromiseLike<UTracked[]>;
     update: (...data: UTracked[]) => PromiseLike<void>;
     remove: (...data: UTracked[]) => PromiseLike<void>;
@@ -61,16 +62,21 @@ export class CollectionManager<T extends Document>
         });
     }
 
-    protected documentWrapper(doc: T): UntrackedSchemaWrapper<T>;
     protected documentWrapper(
-        doc: Partial<T>
-    ): UntrackedSchemaWrapper<Partial<T>>;
-
+        doc: T,
+        id?: string
+    ): UntrackedSchemaWrapper<T> | SchemaAdapter<T>;
     protected documentWrapper(
-        doc: T | Partial<T>
-    ): UntrackedSchemaWrapper<T | Partial<T>> {
+        doc: Partial<T>,
+        id?: string
+    ): UntrackedSchemaWrapper<Partial<T>> | SchemaAdapter<Partial<T>>;
+    protected documentWrapper(
+        doc: T | Partial<T>,
+        id?: string
+    ): UntrackedSchemaWrapper<T | Partial<T>> | SchemaAdapter<T | Partial<T>> {
         return {
-            data: doc
+            data: doc,
+            id
         };
     }
 
@@ -99,12 +105,13 @@ export class CollectionManager<T extends Document>
         options?: CompileModelOptions
     ) {
         const newSchema = CollectionManager.schemaWrapper(schema);
+        const newModel = model(name, newSchema, collection, options);
 
-        return model(name, newSchema, collection, options);
+        return newModel;
     }
 
     async create(...data: T[]): Promise<SchemaAdapter<T>[]> {
-        let ids: { [key: number]: Types.ObjectId };
+        let ids: Record<number, Types.ObjectId>;
 
         if (data.length < 1) {
             return [];
@@ -132,15 +139,16 @@ export class CollectionManager<T extends Document>
 
     async filter(
         query: Partial<T>,
-        limit: number
+        limit: number,
+        id?: string
     ): Promise<SchemaAdapter<T>[]> {
         let results: TrackingSchemaWrapper<T>[];
+        const newQuery = this.documentWrapper(query, id);
 
-        if (limit <= 1) {
-            const result = await this.collection.findOne(query);
+        if (limit <= 1 || id != null) {
+            const result = await this.collection.findOne(newQuery);
             results = result == null ? [] : [result];
         } else {
-            const newQuery = this.documentWrapper(query);
             results = await this.collection.find(newQuery, { limit }).toArray();
         }
 
