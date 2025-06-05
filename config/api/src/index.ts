@@ -27,8 +27,8 @@ const CONFIG: KafkaJS.ConsumerRunConfig = {
 };
 
 async function main() {
-    await MsgCollection.createCollection();
     await DB.connect();
+    await MsgCollection.createCollection();
 
     const consumer = KAFKA.consumer({
         kafkaJS: {

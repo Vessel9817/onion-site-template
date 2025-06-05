@@ -90,8 +90,8 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   'backend':
     restart: 'on-failure'
-    depends_on:
-      - 'mongo'
+    links:
+      - 'mongo' # Implicit depends_on
     build:
       context: './config/api'
       dockerfile: './Dockerfile'
@@ -114,6 +114,8 @@ services:
       - 'mongo-configdb:/data/configdb'
     env_file:
       - './config/mongo/.env'
+    networks:
+      - 'mongo'
   'mongo_debug':
     container_name: 'mongo_debug'
     restart: 'unless-stopped'
@@ -130,6 +132,9 @@ services:
       # Theme demo:
       # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
       ME_CONFIG_OPTIONS_EDITORTHEME: 'tomorrow-night-bright'
+    networks:
+      'mongo':
+        ipv4_address: '10.5.3.254' # ::ffff:a05:3fe
 volumes:
   'mongo-db':
   'mongo-configdb':

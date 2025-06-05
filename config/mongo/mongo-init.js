@@ -18,8 +18,11 @@ assert.ok(
 // Authenticating
 db.getSiblingDB('admin').auth(env.admin.username, env.admin.password);
 
+db.disableTelemetry();
+
 // Creating unprivileged user and database
-// NOTE: Databases and collections are hidden until data is added to them
+// NOTE: Databases and collections are hidden until data
+// is added to them, by default
 db.createUser({
     user: env.user.username,
     pwd: env.user.password,
