@@ -1,7 +1,23 @@
 # TODOs
 
+## Main Branch
+
+- Merge `backend` into `main`
+
+## General
+
 - Create Vanguard container for improved tor security
 - Configure tests
+- Migrate from debian-slim to alpine for reduced image size
+- Support Docker swarm mode
+- Create kafka_debug container for testing container intercommunication
+- Create webpack configurations instead of using ts-node in production
+- Move towards becoming OS-agnostic
+- Store encrypted mongo passwords rather than plaintext, if and where possible
+- Fix tsc package.json command
+- Configure tests and container health checks
+- Name Kafka broker volumes
+- Start versioning package.json files
 - Configure ratelimiting
 - Configure Docker images to be rebuilt upon container creation
 - Fix ESLint issues
