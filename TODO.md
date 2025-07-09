@@ -2,9 +2,6 @@
 
 ## Backend branch
 
-- Merge [kafka](./config/kafka/) and [express](./config/express/)
-- Create Kafka Dockerfile to eliminate need for
-  `npm run create_topic unauthorized.msg_board_db.v1`
 - Rename [api](./config/api) to backend
 - Document methods and classes
 - Absorb model creation to assert documents match the type
@@ -14,6 +11,7 @@
 
 ## General
 
+- **Do not bake tor secrets into image, this is a security risk!**
 - Support Docker swarm mode
 - Create kafka_debug container for testing container intercommunication
 - Create webpack configurations instead of using ts-node in production

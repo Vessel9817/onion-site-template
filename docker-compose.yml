@@ -41,6 +41,11 @@ services:
         ipv4_address: '10.5.0.254' # ::ffff:a05:fe
   'express':
     container_name: 'express'
+    restart: 'on-failure'
+    depends_on:
+      'kafka':
+        condition: 'service_started'
+        required: true
     build:
       context: './config'
       dockerfile: './express/Dockerfile'
@@ -65,15 +70,10 @@ services:
       'express':
         ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
   'kafka':
-    container_name: 'kafka_broker' # Name matters in environment variables
-    image: 'apache/kafka:3.8.0'
-    depends_on:
-      'express':
-        condition: 'service_started'
-        required: true
-      'backend':
-        condition: 'service_started'
-        required: false
+    container_name: 'kafka_broker'
+    build:
+      context: './config/kafka'
+      dockerfile: './Dockerfile'
     volumes:
       - 'kafka-secrets:/etc/kafka/secrets'
       - 'kafka-config:/mnt/shared/config'
@@ -84,7 +84,7 @@ services:
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://localhost:9092,PLAINTEXT://kafka_broker:19092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://10.5.1.2:9092,PLAINTEXT://kafka_broker:19092'
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka_broker:29093'
       KAFKA_LISTENERS: 'CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092'
@@ -96,6 +96,8 @@ services:
   'backend':
     container_name: 'backend'
     restart: 'on-failure'
+    depends_on:
+      - 'kafka'
     links:
       - 'mongo' # Implicit depends_on
     build:

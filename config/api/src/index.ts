@@ -1,9 +1,33 @@
 // KafkaJS migration guide:
 // https://github.com/confluentinc/confluent-kafka-javascript/blob/master/MIGRATION.md#kafkajs
 import { KafkaJS } from '@confluentinc/kafka-javascript';
-import { BROKERS } from './env';
 import { DbManager } from './db';
-import { MsgCollection, MsgCollectionMsgs } from './db/models/messages';
+import { BROKERS } from './env';
+// import { MsgCollection } from './db/models/messages';
+import { Unauthorized, validateString } from './db/kafka';
+// Used in documentation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type AssertionError } from 'assert';
+
+/**
+ * Validates and parses a raw Kafka message into a usable message object.
+ * @returns {Unauthorized.MsgBoardDb.V1.Msg} The parsed message
+ * @throws {AssertionError} If the message is not valid
+ * @throws {SyntaxError} If the message is not valid JSON
+ */
+function parseRawMsg(
+    rawMsg: KafkaJS.KafkaMessage
+): Unauthorized.MsgBoardDb.V1.Msg {
+    const unparsedMsg = rawMsg.value?.toString();
+
+    validateString(unparsedMsg);
+
+    const msg: unknown = JSON.parse(unparsedMsg);
+
+    Unauthorized.MsgBoardDb.V1.validateMsg(msg);
+
+    return msg;
+}
 
 const DB = new DbManager();
 
@@ -19,9 +43,14 @@ const CONFIG: KafkaJS.ConsumerRunConfig = {
         const rawMsgs = req.batch.messages;
 
         for (const rawMsg of rawMsgs) {
-            const msg = rawMsg.value?.toString();
+            try {
+                const msg = parseRawMsg(rawMsg);
 
-            console.log(`New message: ${msg ?? 'null'}`);
+                // TODO TESTING
+                console.log(`New message: ${JSON.stringify(msg)}`);
+            } catch (err: unknown) {
+                console.error((err as Error).message);
+            }
         }
     }
 };
@@ -36,7 +65,7 @@ async function main() {
     });
 
     await consumer.connect();
-    await consumer.subscribe({ topic: MsgCollectionMsgs.V1.TOPIC });
+    await consumer.subscribe({ topic: Unauthorized.MsgBoardDb.V1.TOPIC });
     await consumer.run(CONFIG);
 }
 

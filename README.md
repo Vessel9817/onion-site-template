@@ -90,17 +90,6 @@ npm run start:dev
 This can be done before or after starting production mode,
 as they collectively depend on all production containers except tor.
 
-<!--
-### Kafka
-
-All in separate processes:
-
-- Run Docker
-- Run `npm run broker`
-- Run `npm run create_topic unauthorized.msg_board_db.v1`
-- Optionally, you may now terminate the broker process
--->
-
 ## Credits
 
 - [onionscan](https://github.com/harr1424/onionscan)

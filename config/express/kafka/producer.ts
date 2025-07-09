@@ -2,7 +2,7 @@
 // https://github.com/confluentinc/confluent-kafka-javascript/blob/master/MIGRATION.md#kafkajs
 import { KafkaJS } from '@confluentinc/kafka-javascript';
 import { BROKERS } from '../env';
-import { type Unauthorized } from './shared';
+import { Unauthorized } from './shared';
 
 const KAFKA = new KafkaJS.Kafka({
     kafkaJS: {
@@ -10,34 +10,48 @@ const KAFKA = new KafkaJS.Kafka({
     }
 });
 
-export async function sendMsgs(msgs: Unauthorized.MsgBoardDb.V1.Msg[]) {
-    const PRODUCER = KAFKA.producer({
-        kafkaJS: {
-            acks: 1
-        }
-    });
-
-    try {
-        await PRODUCER.send({
-            topic: 'unauthorized.msg_board_db.v1',
-            messages: msgs.map((msg) => {
-                return {
-                    value: JSON.stringify(msg)
-                };
-            })
-        });
-    } finally {
-        await PRODUCER.disconnect();
+const PRODUCER = KAFKA.producer({
+    kafkaJS: {
+        acks: 1
     }
+});
+
+export function connectProducer(): Promise<void> {
+    return PRODUCER.connect();
 }
 
-// void (async () => {
-//     await sendMsgs([
-//         {
-//             type: 'create',
-//             name: 'name',
-//             content: 'content',
-//             date: Date.now()
-//         }
-//     ]);
-// })();
+export function disconnectProducer(): Promise<void> {
+    return PRODUCER.disconnect();
+}
+
+/**
+ * Sends any messages that pass validation, if any
+ * @param msgs The messages to send
+ */
+export async function sendMsgs(
+    msgs: Unauthorized.MsgBoardDb.V1.Msg[]
+): Promise<void> {
+    const validatedMessages = msgs
+        .map((msg) => {
+            try {
+                Unauthorized.MsgBoardDb.V1.validateMsg(msg);
+            } catch (err: unknown) {
+                console.error(
+                    `Prevented sending of invalid message: ${(err as Error).message}`
+                );
+                return null;
+            }
+
+            const out: KafkaJS.Message = { value: JSON.stringify(msg) };
+
+            return out;
+        })
+        .filter((msg) => msg != null);
+
+    if (validatedMessages.length > 0) {
+        await PRODUCER.send({
+            topic: Unauthorized.MsgBoardDb.V1.TOPIC,
+            messages: validatedMessages
+        });
+    }
+}

@@ -1,10 +1,12 @@
 FROM node:lts-bookworm-slim
-RUN mkdir -p /usr/app/src
+
+# Installing dependencies
 WORKDIR /usr/app
+COPY [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
+RUN npm i
+
+# Running app
 COPY "." "."
-RUN \
-    npm i && \
-    chown -R node ./src && \
-    chown node ./package.json
+RUN chown -R node ./
 USER node
 CMD ["npm", "start"]

@@ -1,6 +1,7 @@
-import path from 'node:path';
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
+import path from 'node:path';
+import { connectProducer } from './kafka/producer';
 import appRouter from './routes';
 
 const app = express();
@@ -13,6 +14,10 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', appRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server is running!`);
-});
+void (async () => {
+    await connectProducer();
+
+    app.listen(PORT, () => {
+        console.log(`Server is running!`);
+    });
+})();

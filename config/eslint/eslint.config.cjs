@@ -141,7 +141,7 @@ const JS_CONFIG = {
         // https://eslint.style/rules/js/comma-dangle
         '@stylistic/comma-dangle': ['off'],
         // https://eslint.style/rules/js/arrow-parens
-        '@stylistic/arrow-parens': ['warn'],
+        '@stylistic/arrow-parens': ['warn', 'always'],
         // https://eslint.style/rules/js/member-delimiter-style
         '@stylistic/member-delimiter-style': [
             'error',
