@@ -49,7 +49,7 @@ renaming them all to `.env`:
 
 - [`mongo`](./config/mongo/.env.example)
 - [`mongo_debug`](./config/mongo/debug/.env.example)
-- [`api`](./config/api/.env.example)
+- [`backend`](./config/backend/.env.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**

@@ -27,7 +27,7 @@
     },
     "workspaces": {
         "packages": [
-            "./config/api",
+            "./config/backend",
             "./config/express",
             "./config/kafka",
             "./config/mongo"

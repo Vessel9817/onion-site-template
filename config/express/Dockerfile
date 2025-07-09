@@ -7,7 +7,7 @@ RUN npm i
 
 # Copying source files
 COPY "./express" "."
-COPY "./api/src/db/kafka/shared/" "./kafka/shared/"
+COPY "./backend/src/db/kafka/shared/" "./kafka/shared/"
 
 # Running app
 RUN chown -R node /usr/app/src

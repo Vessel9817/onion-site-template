@@ -1,5 +1,5 @@
 {
-    "name": "api_",
+    "name": "backend_",
     "version": "0.0.0",
     "license": "MIT",
     "main": "src/index.ts",

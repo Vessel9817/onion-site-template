@@ -1,5 +1,5 @@
 {
-    "package": "./config/api/package.json",
+    "package": "./config/backend/package.json",
     "fields": [
         "name",
         "licensePeriod",

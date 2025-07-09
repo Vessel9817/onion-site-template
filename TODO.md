@@ -2,7 +2,9 @@
 
 ## Backend branch
 
-- Rename [api](./config/api) to backend
+- Create healthchecks for express and backend containers
+  (new broker is causing a race condition on startup)
+- Create express validators
 - Document methods and classes
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
