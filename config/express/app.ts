@@ -1,23 +1,26 @@
 import cors from 'cors';
 import express from 'express';
 import path from 'node:path';
-import { connectProducer } from './kafka/producer';
-import appRouter from './routes';
+import { PRODUCER } from './kafka/producer';
+import { connectConsumer } from './kafka/consumer';
+import APP_ROUTER from './routes';
 
-const app = express();
+const APP = express();
 const PORT = 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', appRouter);
+APP.use(cors());
+APP.use(express.json());
+APP.use(express.urlencoded({ extended: false }));
+APP.set('view engine', 'ejs');
+APP.use(express.static(path.join(__dirname, 'public')));
+APP.use('/', APP_ROUTER);
 
+// Starting server
 void (async () => {
-    await connectProducer();
+    await connectConsumer();
+    await PRODUCER.connect();
 
-    app.listen(PORT, () => {
+    APP.listen(PORT, () => {
         console.log(`Server is running!`);
     });
 })();

@@ -2,6 +2,7 @@
 
 ## Backend branch
 
+- Replace `res.send` usage with ejs pages in express container
 - Create proper consumer configuration
 - Integrate database actions into the backend consumer
 - Create express validators

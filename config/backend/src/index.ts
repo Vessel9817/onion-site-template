@@ -2,32 +2,9 @@
 // https://github.com/confluentinc/confluent-kafka-javascript/blob/master/MIGRATION.md#kafkajs
 import { KafkaJS } from '@confluentinc/kafka-javascript';
 import { DbManager } from './db';
-import { BROKERS } from './env';
+import { BROKERS, GROUP_ID } from './env';
 // import { MsgCollection } from './db/models/messages';
-import { Unauthorized, validateString } from './db/kafka';
-// Used in documentation
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type AssertionError } from 'assert';
-
-/**
- * Validates and parses a raw Kafka message into a usable message object.
- * @returns {Unauthorized.MsgBoardDb.V1.Msg} The parsed message
- * @throws {AssertionError} If the message is not valid
- * @throws {SyntaxError} If the message is not valid JSON
- */
-function parseRawMsg(
-    rawMsg: KafkaJS.KafkaMessage
-): Unauthorized.MsgBoardDb.V1.Msg {
-    const unparsedMsg = rawMsg.value?.toString();
-
-    validateString(unparsedMsg);
-
-    const msg: unknown = JSON.parse(unparsedMsg);
-
-    Unauthorized.MsgBoardDb.V1.validateMsg(msg);
-
-    return msg;
-}
+import { Unauthorized } from './db/kafka';
 
 const DB = new DbManager();
 
@@ -37,17 +14,38 @@ const KAFKA = new KafkaJS.Kafka({
     }
 });
 
+const PRODUCER = KAFKA.producer({
+    kafkaJS: {
+        acks: 1
+    }
+});
+
 const CONFIG: KafkaJS.ConsumerRunConfig = {
-    // eslint-disable-next-line @typescript-eslint/require-await
     eachBatch: async (req) => {
         const rawMsgs = req.batch.messages;
 
         for (const rawMsg of rawMsgs) {
             try {
-                const msg = parseRawMsg(rawMsg);
+                const msg = Unauthorized.MsgBoardDb.V1.parseRawMsg(rawMsg);
 
-                // TODO TESTING
-                console.log(`New message: ${JSON.stringify(msg)}`);
+                switch (msg.type) {
+                    case 'statusRes': {
+                        // These messages are sent by us: ignore them
+                        continue;
+                    }
+                    case 'status': {
+                        // Acknowledging request: backend is online
+                        await Unauthorized.MsgBoardDb.V1.sendMsgs(PRODUCER, [
+                            { type: 'statusRes', id: msg.id }
+                        ]);
+                        break;
+                    }
+                    default: {
+                        // TODO TESTING
+                        console.log(`New message: ${JSON.stringify(msg)}`);
+                        break;
+                    }
+                }
             } catch (err: unknown) {
                 console.error((err as Error).message);
             }
@@ -56,20 +54,20 @@ const CONFIG: KafkaJS.ConsumerRunConfig = {
 };
 
 async function main() {
-    await DB.connect();
-
-    const consumer = KAFKA.consumer({
+    const CONSUMER = KAFKA.consumer({
         kafkaJS: {
-            groupId: 'test-group'
+            groupId: GROUP_ID
         }
     });
 
-    await consumer.connect();
-    await consumer.subscribe({ topic: Unauthorized.MsgBoardDb.V1.TOPIC });
-    await consumer.run(CONFIG);
+    await DB.connect();
+    await PRODUCER.connect();
+    await CONSUMER.connect();
+    await CONSUMER.subscribe({ topic: Unauthorized.MsgBoardDb.V1.TOPIC });
+    await CONSUMER.run(CONFIG);
 }
 
-// Running consumer
+// Starting server
 void (async () => {
     await main();
 })();
