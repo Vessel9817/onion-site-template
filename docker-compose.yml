@@ -120,6 +120,7 @@ services:
     build:
       context: './config/mongo'
       dockerfile: './Dockerfile'
+      target: 'run'
     volumes:
       - 'mongo-db:/data/db'
       - 'mongo-configdb:/data/configdb'

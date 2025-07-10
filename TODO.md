@@ -2,17 +2,16 @@
 
 ## Backend branch
 
+- Replace `res.send` usage with ejs pages in express container
 - Create a frontend UI for sending Kafka messages
 - Create express validators
 - Integrate database actions into the backend consumer
-- Replace `res.send` usage with ejs pages in express container
 - Document methods and classes
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
 
 ## General
 
-- Migrate from Debian to Alpine for reduced image size
 - **Do not bake tor secrets into image, this is a security risk!**
 - Support Docker swarm mode
 - Create kafka_debug container for testing container intercommunication

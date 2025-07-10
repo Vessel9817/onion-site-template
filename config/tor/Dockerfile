@@ -2,14 +2,14 @@
 # https://www.debian.org/releases
 # https://wiki.debian.org/LTS
 FROM debian:bookworm-slim
+
+# Installing dependencies
 RUN \
-    # Installing tor
     apt-get update && \
-    apt-get install -y tor && \
+    apt-get install -y --no-install-recommends tor && \
     apt-get clean
 
 # Configuring tor
-# https://docs.docker.com/engine/reference/builder/#copy
 COPY "./secrets/" "/var/lib/tor/website/"
 COPY "./torrc" "/etc/tor/"
 RUN \

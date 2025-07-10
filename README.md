@@ -6,9 +6,9 @@ See the Issues and Contribution section below.
 ## Compatibility
 
 This project is OS-agnostic, except for some of the optional features used,
-which are currently Windows-only. We officially support the latest
-stable versions of Node and npm (consequently also npx) for up-to-date
-security releases. As such, other Node package managers (e.g, yarn, pnpm)
+which are currently Windows-only. We officially support recent versions of
+Node and npm (consequently also npx) for up-to-date security releases.
+As such, other Node package managers (e.g, yarn, pnpm)
 may not be supported. Where possible, package manager commands are replaced
 with an equivalent Node CLI command.
 
