@@ -29,7 +29,6 @@
         "packages": [
             "./config/backend",
             "./config/express",
-            "./config/kafka",
             "./config/mongo"
         ]
     },
