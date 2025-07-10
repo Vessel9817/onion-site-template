@@ -17,13 +17,18 @@ export const getStatus: RequestHandler = async (req, res) => {
             id: ID
         }
     ]);
+
     getStatusRes(ID)
         .then(() => {
             // OK
-            res.status(400).send('Server: Online');
+            res.status(200).render('pages/home/status', {
+                msg: 'Server online!'
+            });
         })
         .catch(() => {
             // Service unavailable
-            res.status(503).send('Server: Took too long to respond');
+            res.status(503).render('pages/home/status', {
+                msg: 'Server took too long to respond'
+            });
         });
 };

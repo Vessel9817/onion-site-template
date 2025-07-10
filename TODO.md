@@ -2,7 +2,6 @@
 
 ## Backend branch
 
-- Replace `res.send` usage with ejs pages in express container
 - Create a frontend UI for sending Kafka messages
 - Create express validators
 - Integrate database actions into the backend consumer
