@@ -4,14 +4,18 @@ import path from 'node:path';
 import { PRODUCER } from './kafka/producer';
 import { connectConsumer } from './kafka/consumer';
 import APP_ROUTER from './routes';
+import { blockTrace } from './middleware/blockTrace';
 
 const APP = express();
 const PORT = 3000;
 
+APP.set('view engine', 'ejs');
+
+// Setting global app middleware
 APP.use(cors());
 APP.use(express.json());
 APP.use(express.urlencoded({ extended: false }));
-APP.set('view engine', 'ejs');
+APP.use(blockTrace);
 APP.use(express.static(path.join(__dirname, 'public')));
 APP.use('/', APP_ROUTER);
 
