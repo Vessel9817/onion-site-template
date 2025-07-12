@@ -1,1 +1,2 @@
-export * as HomeController from './homeController';
+export * as ChatController from './chat';
+export * as HomeController from './home';

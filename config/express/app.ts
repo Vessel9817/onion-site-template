@@ -1,10 +1,10 @@
 import cors from 'cors';
 import express from 'express';
 import path from 'node:path';
-import { PRODUCER } from './kafka/producer';
 import { connectConsumer } from './kafka/consumer';
-import APP_ROUTER from './routes';
+import { PRODUCER } from './kafka/producer';
 import { blockTrace } from './middleware/blockTrace';
+import APP_ROUTER from './routes';
 
 const APP = express();
 const PORT = 3000;

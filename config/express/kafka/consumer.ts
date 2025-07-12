@@ -10,7 +10,7 @@ type EmitterMap = Record<
 
 const EMITTER = new EventEmitter<EmitterMap>();
 
-const CONSUMER = KAFKA.consumer({
+export const CONSUMER = KAFKA.consumer({
     kafkaJS: {
         groupId: GROUP_ID
     }

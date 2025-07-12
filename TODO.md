@@ -2,9 +2,16 @@
 
 ## Backend branch
 
-- Create a frontend UI for sending Kafka messages
+- Investigate how Express handles NUL bytes, for security purposes
 - Create express validators
 - Integrate database actions into the backend consumer
+- Move express node modules into `/usr/app` by moving the
+  [source code](./config/express/) into [`src/`](./config/express/src/)
+  folder in order to cache the majority of the `chown`-ing done by the
+  [Dockerfile](./config/express/Dockerfile)
+- Move [`/config/backend/src/db/kafka/`](./config/backend/src/db/kafka/)
+  to [`/config/backend/src/kafka/`](./config/backend/src/kafka/)
+- Create fallback express error page
 - Document methods and classes
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
@@ -26,7 +33,6 @@
 - Configure Dependabot for Docker
 - Configure Docker containers
   - Connect NGINX to Express
-  - Connect Express to Kafka
   - Create debug Kafka container
 - Update README:
   - Add usage instructions for each npm command
