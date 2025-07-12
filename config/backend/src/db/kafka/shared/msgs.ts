@@ -1,5 +1,5 @@
 import { KafkaJS } from '@confluentinc/kafka-javascript';
-import assert, { AssertionError } from 'assert';
+import assert, { type AssertionError } from 'assert';
 import {
     validateDateTime,
     validateNumber,
