@@ -19,6 +19,7 @@
 ## General
 
 - **Do not bake tor secrets into image, this is a security risk!**
+- Create Vanguards container for improved hidden service security
 - Support Docker swarm mode
 - Create kafka_debug container for testing container intercommunication
 - Create webpack configurations instead of using ts-node in production
@@ -40,3 +41,5 @@
 - Add updating command
 - Merge onionscan branch
 - Integrate code coverage tool
+- Add Linux support for `license-report`.
+  Better yet, containerize it for cross-platform reproducibility.

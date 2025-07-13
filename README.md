@@ -17,7 +17,7 @@ with an equivalent Node CLI command.
 This project is licensed under the [MIT](./LICENSE.md) license.
 
 However, to view the licenses of the Node packages we explicitly depend on,
-run the following command: (currently only supports Windows and npx)
+run the following command: (currently only supported on Windows)
 
 ```shell
 npm run license-report
@@ -44,8 +44,7 @@ Optionally, install onionscan:
 
 #### General
 
-Remove the `.example` extension from the following files,
-renaming them all to `.env`:
+Rename the following files from `.env.example` to `.env`:
 
 - [`mongo`](./config/mongo/.env.example)
 - [`mongo_debug`](./config/mongo/debug/.env.example)
@@ -68,6 +67,7 @@ save and copy them to the host filesystem at
 This process would be done automatically with a bind mount if the permissions
 allowed such, but unfortunately, there isn't an elegant cross-platform solution
 to this.
+<!-- In future revisions, just use a volume -->
 
 ## Running
 
@@ -88,7 +88,8 @@ npm run start:dev
 ```
 
 This can be done before or after starting production mode,
-as they collectively depend on all production containers except tor.
+as they collectively depend on all production containers except tor
+<!-- and Vanguards -->.
 
 ## Credits
 
@@ -99,18 +100,4 @@ as they collectively depend on all production containers except tor.
 
 ## Issues and Contribution
 
-This project is currently in beta. We welcome issues or pull requests,
-but before opening one, we ask that you first see the [TODOs](./TODO.md)
-for any currently planned fixes or features.
-
-- **Currently, only static website functionality is supported.**
-  Implementing dynamic website functionality is our top priority,
-  and would bring this project out of beta.
-- Kafka is currently implemented independently
-  and requires further integration to communicate
-  with Express and the Express backend.
-- Express is currently implemented independently,
-  but is fully functional through the debug container.
-- The Express backend is currently implemented independently,
-  <!-- but is integrated with MongoDB. -->
-  with partial integration with MongoDB.
+See: [CONTRIBUTING](./CONTRIBUTING.md)
