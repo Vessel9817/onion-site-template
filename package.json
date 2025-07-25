@@ -22,7 +22,7 @@
         "url": "https://github.com/Vessel9817/onion-site-template.git"
     },
     "devDependencies": {
-        "@eslint/js": "^9.23.0",
+        "@eslint/js": "^9.32.0",
         "@eslint/json": "^0.11.0",
         "@stylistic/eslint-plugin": "^4.2.0",
         "@types/node": "^22.13.8",
