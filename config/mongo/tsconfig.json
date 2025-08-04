@@ -24,7 +24,6 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noEmit": false,
-        "jsx": "react",
         "downlevelIteration": true,
         "importHelpers": true,
         "newLine": "lf",

@@ -24,7 +24,6 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "noEmit": false,
-        "jsx": "react",
         "typeRoots": ["./node_modules/@types"],
         "downlevelIteration": true,
         "importHelpers": true,

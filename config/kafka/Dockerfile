@@ -1,6 +1,6 @@
 FROM apache/kafka:4.0.0
 
 WORKDIR /usr/app/
-COPY "." "."
+COPY "./" "./"
 
 CMD [ "./docker-entrypoint.sh" ]

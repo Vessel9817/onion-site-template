@@ -1,5 +1,4 @@
 const eslint = require('@eslint/js');
-const pluginReact = require('eslint-plugin-react');
 const tseslint = require('typescript-eslint');
 const stylistic = require('@stylistic/eslint-plugin');
 const path = require('node:path');
@@ -7,15 +6,13 @@ const globals = require('globals');
 
 /** @typedef {import('@typescript-eslint/utils').TSESLint.FlatConfig.Config} Config */
 
-const REACT_FILE_GLOBS = ['**/*.jsx', '**/*.tsx'];
 const JS_FILE_GLOBS = [
     '**/*.js',
     '**/*.cjs',
     '**/*.mjs',
     '**/*.ts',
     '**/*.cts',
-    '**/*.mts',
-    ...REACT_FILE_GLOBS
+    '**/*.mts'
 ];
 const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.js',
@@ -88,8 +85,6 @@ const DEFAULT_JS_CONFIGS = tseslint.config([
         }
     }
 ]);
-
-const DEFAULT_REACT_CONFIG = pluginReact.configs.flat.recommended;
 
 /** @type {Config} */
 const JS_CONFIG = {
@@ -190,7 +185,6 @@ const MONGO_JS_CONFIG = {
 const CONFIG = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
-    DEFAULT_REACT_CONFIG,
     JS_CONFIG,
     MONGO_JS_CONFIG
 ];
