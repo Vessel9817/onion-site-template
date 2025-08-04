@@ -25,7 +25,7 @@ services:
     networks:
       'nginx':
         ipv4_address: '10.5.0.2' # ::ffff:a05:2
-  'nginx_debug':
+  'nginx-debug':
     container_name: 'nginx_debug'
     depends_on:
       - nginx
@@ -57,7 +57,7 @@ services:
         ipv4_address: '10.5.2.2' # ::ffff:a05:202
       'kafka':
         ipv4_address: '10.5.1.4' # ::ffff:a05:104
-  'express_debug':
+  'express-debug':
     container_name: 'express_debug'
     depends_on:
       - express
@@ -128,7 +128,7 @@ services:
       - './config/mongo/.env'
     networks:
       - 'mongo'
-  'mongo_debug':
+  'mongo-debug':
     container_name: 'mongo_debug'
     restart: 'on-failure'
     depends_on:

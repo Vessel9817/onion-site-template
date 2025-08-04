@@ -4,9 +4,6 @@
 // This and all other JS files should be treated as CommonJS:
 // https://www.mongodb.com/docs/mongodb-shell/write-scripts/
 
-// Top-level .js and .sh files should be treated as mongo initdb entrypoints:
-// https://github.com/docker-library/mongo/blob/master/8.0/docker-entrypoint.sh#L386-L393
-
 const assert = require('node:assert');
 const env = require('./src/env.cjs');
 

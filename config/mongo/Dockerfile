@@ -1,14 +1,16 @@
 # Installing dependencies
 FROM node:lts-alpine3.22 AS build
-WORKDIR /docker-entrypoint-initdb.d
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm i
+
+WORKDIR /docker-entrypoint-initdb.d/
+COPY [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
+RUN [ "npm", "i", "--omit=dev" ]
 
 # Running MongoDB
 FROM mongo:8.0.9 AS run
-WORKDIR /docker-entrypoint-initdb.d
-COPY . .
-COPY --from=build "/docker-entrypoint-initdb.d/node_modules/" "."
+
+WORKDIR /docker-entrypoint-initdb.d/
+COPY --from=build "/docker-entrypoint-initdb.d/" "./"
+COPY "./" "./"
 
 HEALTHCHECK \
     --interval=5s \
