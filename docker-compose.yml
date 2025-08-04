@@ -1,15 +1,30 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 services:
+  'tor-init':
+    container_name: 'tor-init'
+    profiles:
+      - 'production'
+    restart: 'no'
+    build:
+      context: './config/tor'
+      dockerfile: './Dockerfile'
+      target: 'init'
+    volumes:
+      - './config/tor/secrets/:/secrets/'
   'tor':
     container_name: 'tor'
     depends_on:
+      - 'tor-init'
       - 'nginx'
     profiles:
       - 'production'
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
+      target: 'run'
+    volumes:
+      - './config/tor/secrets/:/var/lib/tor/website/'
     networks:
       - 'tor'
       - 'nginx'

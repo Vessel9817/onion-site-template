@@ -55,19 +55,10 @@ in each of these files, **for your own security, please change them.**
 
 #### tor
 
-**If you have an existing onion domain**, the public/private keys and other
-secrets can be placed in [`./config/tor/secrets`](./config/tor/secrets).
-
-**If you don't have an existing onion domain**, run the tor container.
-This will generate a domain name and related secrets in the container
-at `/var/lib/tor/website/`. To reuse this domain, as per the above steps,
-save and copy them to the host filesystem at
-[`./config/tor/secrets`](./config/tor/secrets).
-
-This process would be done automatically with a bind mount if the permissions
-allowed such, but unfortunately, there isn't an elegant cross-platform solution
-to this.
-<!-- In future revisions, just use a volume -->
+If you have an existing onion domain, the public/private keys and other
+secrets can be placed in [`./config/tor/secrets/`](./config/tor/secrets).
+If you don't, one will automatically be generated for you in the aforementioned
+directory. Your website URL will be found in `./config/tor/secrets/hostname`.
 
 ## Running
 
@@ -88,8 +79,7 @@ npm run start:dev
 ```
 
 This can be done before or after starting production mode,
-as they collectively depend on all production containers except tor
-<!-- and Vanguards -->.
+as they collectively depend on all production containers unrelated to tor.
 
 ## Credits
 

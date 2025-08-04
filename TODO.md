@@ -18,7 +18,6 @@
 
 ## General
 
-- **Do not bake tor secrets into image, this is a security risk!**
 - Create Vanguards container for improved hidden service security
 - Support Docker swarm mode
 - Create kafka_debug container for testing container intercommunication
@@ -37,7 +36,6 @@
   - Create debug Kafka container
 - Update README:
   - Add usage instructions for each npm command
-  - Add reference to getting an onion hostname and associated keys
 - Add updating command
 - Merge onionscan branch
 - Integrate code coverage tool
