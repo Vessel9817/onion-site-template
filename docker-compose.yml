@@ -14,17 +14,23 @@ services:
       - './config/tor/secrets/:/secrets/'
   'tor':
     container_name: 'tor'
-    depends_on:
-      - 'tor-init'
-      - 'nginx'
     profiles:
       - 'production'
+    depends_on:
+      'tor-init':
+        condition: 'service_completed_successfully'
+        required: true
+      'nginx':
+        condition: 'service_started'
+        required: true
     build:
       context: './config/tor'
       dockerfile: './Dockerfile'
       target: 'run'
     volumes:
       - './config/tor/secrets/:/var/lib/tor/website/'
+    sysctls:
+      - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
       - 'tor'
       - 'nginx'
@@ -39,28 +45,30 @@ services:
       dockerfile: './Dockerfile'
     networks:
       'nginx':
-        ipv4_address: '10.5.0.2' # ::ffff:a05:2
+        ipv4_address: '10.5.0.2'
   'nginx-debug':
     container_name: 'nginx_debug'
-    depends_on:
-      - nginx
     profiles:
       - 'development'
+    depends_on:
+      - nginx
     build:
-      context: './config/nginx/debug'
+      context: './config/container-link'
       dockerfile: './Dockerfile'
+    environment:
+      - 'FORWARD_IP=10.5.0.2:80'
     ports:
       - ':80'
     networks:
       'nginx':
-        ipv4_address: '10.5.0.254' # ::ffff:a05:fe
+        ipv4_address: '10.5.0.254'
   'express':
     container_name: 'express'
-    restart: 'on-failure'
     depends_on:
       'kafka':
         condition: 'service_started'
         required: true
+    restart: 'on-failure'
     build:
       context: './config'
       dockerfile: './express/Dockerfile'
@@ -69,23 +77,26 @@ services:
       - 'GROUP_ID=frontend'
     networks:
       'express':
-        ipv4_address: '10.5.2.2' # ::ffff:a05:202
+        ipv4_address: '10.5.2.2'
       'kafka':
-        ipv4_address: '10.5.1.4' # ::ffff:a05:104
+        ipv4_address: '10.5.1.4'
   'express-debug':
     container_name: 'express_debug'
-    depends_on:
-      - express
     profiles:
       - 'development'
+    depends_on:
+      - express
     build:
-      context: './config/express/debug'
+      context: './config/container-link'
       dockerfile: './Dockerfile'
+    environment:
+      - 'FORWARD_IP=10.5.2.2:3000'
+      - 'EXPOSE_PORT=3000'
     ports:
       - ':3000'
     networks:
       'express':
-        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
+        ipv4_address: '10.5.2.254'
   'kafka':
     container_name: 'kafka_broker'
     build:
@@ -97,7 +108,7 @@ services:
       - 'kafka-data:/var/lib/kafka/data'
     networks:
       'kafka':
-        ipv4_address: '10.5.1.2' # ::ffff:a05:102
+        ipv4_address: '10.5.1.2'
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -112,11 +123,11 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
   'backend':
     container_name: 'backend'
-    restart: 'on-failure'
     depends_on:
       - 'kafka'
     links:
       - 'mongo' # Implicit depends_on
+    restart: 'on-failure'
     build:
       context: './config/backend'
       dockerfile: './Dockerfile'
@@ -127,11 +138,12 @@ services:
       - 'GROUP_ID=backend'
     networks:
       'kafka':
-        ipv4_address: '10.5.1.3' # ::ffff:a05:103
+        ipv4_address: '10.5.1.3'
       'mongo':
   'mongo':
-    restart: 'on-failure'
     container_name: 'mongo'
+    restart: 'on-failure'
+    mem_swappiness: 1 # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
     build:
       context: './config/mongo'
       dockerfile: './Dockerfile'
@@ -145,11 +157,11 @@ services:
       - 'mongo'
   'mongo-debug':
     container_name: 'mongo_debug'
-    restart: 'on-failure'
-    depends_on:
-      - 'mongo'
     profiles:
       - 'development'
+    depends_on:
+      - 'mongo'
+    restart: 'on-failure'
     image: 'mongo-express:1.0.2'
     ports:
       - ':8081'
@@ -161,7 +173,7 @@ services:
       ME_CONFIG_OPTIONS_EDITORTHEME: 'tomorrow-night-bright'
     networks:
       'mongo':
-        ipv4_address: '10.5.3.254' # ::ffff:a05:3fe
+        ipv4_address: '10.5.3.254'
 volumes:
   'kafka-secrets':
   'kafka-config':
@@ -182,29 +194,29 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.0.0/24' # ::ffff:a05:0/120
-          gateway: '10.5.0.1' # ::ffff:a05:1
+        - subnet: '10.5.0.0/24'
+          gateway: '10.5.0.1'
   'express':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.2.0/24' # ::ffff:a05:200/120
-          gateway: '10.5.2.1' # ::ffff:a05:201
+        - subnet: '10.5.2.0/24'
+          gateway: '10.5.2.1'
   'kafka':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
-          gateway: '10.5.1.1' # ::ffff:a05:101
+        - subnet: '10.5.1.0/24'
+          gateway: '10.5.1.1'
   'mongo':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.3.0/24' # ::ffff:a05:300/120
-          gateway: '10.5.3.1' # ::ffff:a05:301
+        - subnet: '10.5.3.0/24'
+          gateway: '10.5.3.1'
