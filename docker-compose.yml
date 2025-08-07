@@ -11,7 +11,9 @@ services:
       dockerfile: './Dockerfile'
       target: 'init'
     volumes:
-      - './config/tor/secrets/:/secrets/'
+      - type: 'bind'
+        source: './config/tor/secrets/'
+        target: '/secrets/'
   'tor':
     container_name: 'tor'
     profiles:
@@ -28,7 +30,9 @@ services:
       dockerfile: './Dockerfile'
       target: 'run'
     volumes:
-      - './config/tor/secrets/:/var/lib/tor/website/'
+      - type: 'bind'
+        source: './config/tor/secrets/'
+        target: '/var/lib/tor/website/'
     sysctls:
       - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
@@ -40,9 +44,23 @@ services:
       'express':
         condition: 'service_started'
         required: false
-    build:
-      context: './config/nginx'
-      dockerfile: './Dockerfile'
+    image: 'openresty/openresty:1.21.4.1-0-alpine'
+    volumes:
+      # Overwriting default config without affecting other default files
+      - type: 'bind'
+        source: './config/nginx/conf/nginx.conf'
+        target: '/usr/local/openresty/nginx/conf/nginx.conf'
+        read_only: true
+      # Adding custom configs
+      - type: 'bind'
+        source: './config/nginx/conf/conf.d/'
+        target: '/etc/nginx/conf.d/'
+        read_only: true
+      # Adding custom HTML
+      - type: 'bind'
+        source: './config/nginx/html/'
+        target: '/usr/local/openresty/nginx/html/'
+        read_only: true
     networks:
       'nginx':
         ipv4_address: '10.5.0.2'
@@ -103,9 +121,15 @@ services:
       context: './config/kafka'
       dockerfile: './Dockerfile'
     volumes:
-      - 'kafka-secrets:/etc/kafka/secrets'
-      - 'kafka-config:/mnt/shared/config'
-      - 'kafka-data:/var/lib/kafka/data'
+      - type: 'volume'
+        source: 'kafka-secrets'
+        target: '/etc/kafka/secrets'
+      - type: 'volume'
+        source: 'kafka-config'
+        target: '/mnt/shared/config'
+      - type: 'volume'
+        source: 'kafka-data'
+        target: '/var/lib/kafka/data'
     networks:
       'kafka':
         ipv4_address: '10.5.1.2'
@@ -149,8 +173,12 @@ services:
       dockerfile: './Dockerfile'
       target: 'run'
     volumes:
-      - 'mongo-db:/data/db'
-      - 'mongo-configdb:/data/configdb'
+      - type: 'volume'
+        source: 'mongo-db'
+        target: '/data/db'
+      - type: 'volume'
+        source: 'mongo-configdb'
+        target: '/data/configdb'
     env_file:
       - './config/mongo/.env'
     networks:
