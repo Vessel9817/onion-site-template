@@ -1,5 +1,7 @@
-FROM nginx:1.28.0-bookworm
+FROM nginx:1.29.0-alpine
 
-# Copying NGINX configuration
-COPY "./conf.d/" "/etc/nginx/conf/"
-COPY "./html/" "/usr/share/nginx/html/"
+# Copying NGINX config and overwriting default config
+RUN [ "rm", "-rf", "/usr/share/nginx" ]
+COPY [ "./conf/", "/etc/nginx/" ]
+RUN [ "nginx", "-t" ]
+COPY [ "./html/", "/usr/share/nginx/html/" ]
