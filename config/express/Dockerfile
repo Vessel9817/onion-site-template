@@ -9,11 +9,10 @@ COPY [ "./express/package.json", "./express/package-lock.json*", "./express/npm-
 RUN npm i
 
 # Copying source files
-COPY "./express" "."
-COPY "./backend/src/db/kafka/shared/" "./kafka/shared/"
+COPY --chown=node [ "./express", "./" ]
+COPY --chown=node [ "./backend/src/db/kafka/shared/", "./kafka/shared/" ]
 
 # Running app
-RUN chown -R node /usr/app/src
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \

@@ -94,6 +94,7 @@ services:
       dockerfile: './express/Dockerfile'
     env_file: './config/express/.env'
     environment:
+      - 'NODE_ENV=production'
       - 'GROUP_ID=frontend'
     networks:
       'express':
@@ -160,6 +161,7 @@ services:
     env_file:
       - './config/backend/.env'
     environment:
+      - 'NODE_ENV=production'
       - 'BROKERS=10.5.1.2:9092'
       - 'GROUP_ID=backend'
     networks:
