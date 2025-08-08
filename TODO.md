@@ -11,7 +11,6 @@
   [Dockerfile](./config/express/Dockerfile)
 - Move [`/config/backend/src/db/kafka/`](./config/backend/src/db/kafka/)
   to [`/config/backend/src/kafka/`](./config/backend/src/kafka/)
-- Create fallback express error page
 - Document methods and classes
 - Absorb model creation to assert documents match the type
   defined in modelWrapper and schemaWrapper
@@ -32,7 +31,6 @@
 - Fix ESLint issues
 - Configure Dependabot for Docker
 - Configure Docker containers
-  - Connect NGINX to Express
   - Create debug Kafka container
 - Update README:
   - Add usage instructions for each npm command

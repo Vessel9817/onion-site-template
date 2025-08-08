@@ -64,6 +64,8 @@ services:
     networks:
       'nginx':
         ipv4_address: '10.5.0.2'
+      'express':
+        ipv4_address: '10.5.2.3'
   'nginx-debug':
     container_name: 'nginx_debug'
     profiles:
