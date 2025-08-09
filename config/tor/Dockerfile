@@ -17,9 +17,9 @@ RUN \
     apt-get install -y --no-install-recommends tor && \
     apt-get clean && \
     chmod 700 -R "/var/lib/tor" && \
-    chown -R debian-tor:debian-tor "/var/lib/tor"
-COPY [ "./torrc", "/etc/tor/" ]
-RUN [ "chown", "-R", "debian-tor:debian-tor", "/etc/tor" ]
+    chown -R debian-tor:debian-tor "/var/lib/tor" && \
+    chown -R debian-tor:debian-tor "/etc/tor"
+COPY --chown=debian-tor:debian-tor [ "./torrc", "/etc/tor/" ]
 
 # Running tor as a non-root user
 VOLUME [ "/var/lib/tor/website/" ]
