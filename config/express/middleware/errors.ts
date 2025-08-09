@@ -1,4 +1,4 @@
-import { RequestHandler, type ErrorRequestHandler } from 'express';
+import { RequestHandler, ErrorRequestHandler } from 'express';
 
 // Same error codes as in nginx config
 const KNOWN_ERRORS = new Set<number>([

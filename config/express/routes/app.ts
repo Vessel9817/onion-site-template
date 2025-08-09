@@ -9,5 +9,7 @@ APP_ROUTER.get('/', HomeController.getHome);
 // Building chat routes
 APP_ROUTER.get('/chat', ChatController.getChat);
 APP_ROUTER.post('/chat/send', ChatController.sendMsg);
+APP_ROUTER.post('/chat/edit', ChatController.editMsg);
+APP_ROUTER.post('/chat/delete', ChatController.deleteMsg);
 
 export default APP_ROUTER;
