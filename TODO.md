@@ -4,34 +4,25 @@
 
 - Investigate how Express handles NUL bytes, for security purposes
 - Create express validators
-- Integrate database actions into the backend consumer
-- Move express node modules into `/usr/app` by moving the
-  [source code](./config/express/) into [`src/`](./config/express/src/)
-  folder in order to cache the majority of the `chown`-ing done by the
-  [Dockerfile](./config/express/Dockerfile)
-- Move [`/config/backend/src/db/kafka/`](./config/backend/src/db/kafka/)
-  to [`/config/backend/src/kafka/`](./config/backend/src/kafka/)
+- Reimplement message editing and deletion
+- Create frontend for document paging
+- Add TTL to MongoDB documents so that they expire
 - Document methods and classes
-- Absorb model creation to assert documents match the type
-  defined in modelWrapper and schemaWrapper
 
 ## General
 
+- Create self-signed TLS certificates for inter-container communication security
 - Create Vanguards container for improved hidden service security
 - Support Docker swarm mode
-- Create kafka_debug container for testing container intercommunication
 - Create webpack configurations instead of using ts-node in production
 - Move towards becoming OS-agnostic
 - Store encrypted mongo passwords rather than plaintext, if and where possible
 - Fix tsc package.json command
 - Configure tests and container health checks
-- Start versioning package.json files
 - Configure ratelimiting
 - Configure modified Docker images to be rebuilt upon container creation
 - Fix ESLint issues
 - Configure Dependabot for Docker
-- Configure Docker containers
-  - Create debug Kafka container
 - Update README:
   - Add usage instructions for each npm command
 - Add updating command

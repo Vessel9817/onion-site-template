@@ -5,12 +5,11 @@ RUN \
     apk update && \
     apk add --no-cache curl
 WORKDIR /usr/app/src
-COPY [ "./express/package.json", "./express/package-lock.json*", "./express/npm-shrinkwrap.json*", "./" ]
+COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
 RUN npm i
 
 # Copying source files
-COPY --chown=node [ "./express", "./" ]
-COPY --chown=node [ "./backend/src/db/kafka/shared/", "./kafka/shared/" ]
+COPY --chown=node [ "./", "./" ]
 
 # Running app
 USER node

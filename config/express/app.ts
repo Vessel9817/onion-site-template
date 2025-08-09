@@ -1,8 +1,8 @@
 import cors from 'cors';
 import express from 'express';
+import mongoose from 'mongoose';
 import path from 'node:path';
-import { connectConsumer } from './kafka/consumer';
-import { PRODUCER } from './kafka/producer';
+import { MONGODB_URI } from './env';
 import { blockTrace, errorHandler } from './middleware';
 import { APP_ROUTER, NOT_FOUND_ROUTER } from './routes';
 
@@ -25,10 +25,9 @@ APP.use(errorHandler);
 
 // Starting server
 void (async () => {
-    await connectConsumer();
-    await PRODUCER.connect();
+    await mongoose.connect(MONGODB_URI);
 
     APP.listen(PORT, () => {
-        console.log(`Server is running!`);
+        console.log('Server is running!');
     });
 })();

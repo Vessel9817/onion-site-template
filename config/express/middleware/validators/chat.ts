@@ -22,12 +22,3 @@ export const sendMsgValidator = [
         .bail()
     // TODO
 ];
-
-export const editMsgValidator = [
-    ...sendMsgValidator
-    // TODO
-];
-
-export const deleteMsgValidator = [
-    // TODO
-];
