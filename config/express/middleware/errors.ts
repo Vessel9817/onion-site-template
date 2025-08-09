@@ -10,9 +10,9 @@ const KNOWN_ERRORS = new Set<number>([
 ]);
 
 const ERROR_EXPLANATION = new Map<number, string>([
-    [500, 'Server is down, likely for maintenance.'],
+    [500, 'Server has an outage, likely for maintenance.'],
     [501, 'Under construction.'],
-    [502, 'Server is temporarily down, likely for maintenance.']
+    [502, 'Server has a temporary outage, likely for maintenance.']
 ]);
 
 /**
