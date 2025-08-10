@@ -1,15 +1,18 @@
 import { RequestHandler } from 'express';
 import { ObjectId, WithId } from 'mongodb';
 import { MsgBoard } from '../db';
+import { errorWrapper } from '../utils';
 
-const PAGE = 1;
+export const getChat: RequestHandler = errorWrapper(async (req, res) => {
+    const params = req.query as { page?: string };
+    const rawPage = Number(params.page);
+    const page = isFinite(rawPage) ? Math.min(rawPage) : 1;
+    const msgs = await MsgBoard.getMsgs(page);
 
-export const getChat: RequestHandler = async (req, res) => {
-    const msgs = await MsgBoard.getMsgs(PAGE);
-
+    // Newest messages at bottom
     msgs.reverse();
 
-    const formattedEntries = msgs.map((e) => ({
+    const formattedMsgs = msgs.map((e) => ({
         id: e._id,
         name: e.name,
         content: e.content,
@@ -19,13 +22,15 @@ export const getChat: RequestHandler = async (req, res) => {
             timeZone: 'UTC'
         })
     }));
+    const args = {
+        msgs: formattedMsgs,
+        page
+    };
 
-    res.render('pages/chat', {
-        msgs: formattedEntries
-    });
-};
+    res.render('pages/chat', args);
+});
 
-export const sendMsg: RequestHandler = async (req, res) => {
+export const sendMsg: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.body as {
         name: string;
         content: string;
@@ -38,9 +43,9 @@ export const sendMsg: RequestHandler = async (req, res) => {
     await MsgBoard.createMsg(msg);
 
     res.redirect('/chat');
-};
+});
 
-export const editMsg: RequestHandler = async (req, res) => {
+export const editMsg: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.body as {
         name: string;
         content: string;
@@ -55,13 +60,13 @@ export const editMsg: RequestHandler = async (req, res) => {
     await MsgBoard.editMsg(newMsg);
 
     res.redirect('/chat');
-};
+});
 
-export const deleteMsg: RequestHandler = async (req, res) => {
+export const deleteMsg: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.body as { id: string };
     const id = new ObjectId(params.id);
 
     await MsgBoard.deleteMsg(id);
 
     res.redirect('/chat');
-};
+});

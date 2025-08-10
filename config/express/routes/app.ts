@@ -1,15 +1,15 @@
 import express from 'express';
 import { ChatController, HomeController } from '../controllers';
 
-const APP_ROUTER = express.Router();
+const router = express.Router();
 
 // Building home routes
-APP_ROUTER.get('/', HomeController.getHome);
+router.get('/', HomeController.getHome);
 
 // Building chat routes
-APP_ROUTER.get('/chat', ChatController.getChat);
-APP_ROUTER.post('/chat/send', ChatController.sendMsg);
-APP_ROUTER.post('/chat/edit', ChatController.editMsg);
-APP_ROUTER.post('/chat/delete', ChatController.deleteMsg);
+router.get('/chat', ChatController.getChat);
+router.post('/chat/send', ChatController.sendMsg);
+router.post('/chat/edit', ChatController.editMsg);
+router.post('/chat/delete', ChatController.deleteMsg);
 
-export default APP_ROUTER;
+export default router;

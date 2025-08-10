@@ -1,8 +1,8 @@
 import express from 'express';
 import { errorPage } from '../middleware';
 
-const ERROR_ROUTER = express.Router();
+const router = express.Router();
 
-ERROR_ROUTER.use('/', errorPage);
+router.use('/', errorPage);
 
-export default ERROR_ROUTER;
+export default router;

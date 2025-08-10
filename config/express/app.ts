@@ -1,7 +1,6 @@
 import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
-import path from 'node:path';
 import { MONGODB_URI } from './env';
 import { blockTrace, errorHandler } from './middleware';
 import { APP_ROUTER, NOT_FOUND_ROUTER } from './routes';
@@ -15,13 +14,10 @@ APP.set('view engine', 'ejs');
 APP.use(cors());
 APP.use(express.json());
 APP.use(express.urlencoded({ extended: false }));
-APP.use(blockTrace);
-APP.use(express.static(path.join(__dirname, 'public')));
-APP.use('/', APP_ROUTER);
-
-// Setting error handlers
-APP.use('/', NOT_FOUND_ROUTER);
-APP.use(errorHandler);
+APP.use(blockTrace); // Blocks TRACE requests
+APP.use('/', APP_ROUTER); // Serves app
+APP.use('/', NOT_FOUND_ROUTER); // Catches errors
+APP.use(errorHandler); // Handles errors
 
 // Starting server
 void (async () => {

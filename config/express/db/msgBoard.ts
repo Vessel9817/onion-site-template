@@ -1,6 +1,8 @@
 import mongoose, { PipelineStage, Schema } from 'mongoose';
 import { ObjectId, WithId } from 'mongodb';
 
+const MAX_INT64 = Number.MAX_SAFE_INTEGER; // mongo uses 64-bit integers, but JS requires BigInt to represent that upper bound
+
 export interface Msg {
     name: string;
     content: string;
@@ -37,11 +39,13 @@ const MSG_PAGE_SIZE = 10;
  * @returns A message batch, paged by most recent
  */
 export function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
-    const pipeline: PipelineStage[] = [
-        { $sort: { date: -1 } },
-        { $skip: MSG_PAGE_SIZE * (page - 1) },
+    const skip = Math.min(MAX_INT64, MSG_PAGE_SIZE * (page - 1));
+    const rawPipeline: (PipelineStage | null)[] = [
+        { $sort: { lastModified: -1 } },
+        skip <= 0 ? null : { $skip: skip },
         { $limit: MSG_PAGE_SIZE }
     ];
+    const pipeline = rawPipeline.filter((stage) => stage != null);
 
     return MsgModel.aggregate(pipeline).exec() as Promise<WithId<HydratedMsg>[]>;
 }

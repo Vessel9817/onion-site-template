@@ -92,9 +92,6 @@ services:
       context: './config/express'
       dockerfile: './Dockerfile'
     env_file: './config/express/.env'
-    environment:
-      - 'NODE_ENV=production'
-      - 'GROUP_ID=frontend'
     networks:
       'express':
         ipv4_address: '10.5.2.2'
