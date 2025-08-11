@@ -24,6 +24,7 @@ const ERROR_EXPLANATIONS = new Map<number, string>([
  * @param next The callback function for the next middleware
  */
 export const errorHandler: ErrorRequestHandler = (err, req, res) => {
+    // Logging stack trace internally, NOT handing over to client
     console.error('Express handled uncaught error:', err);
 
     const explanation =
@@ -46,5 +47,5 @@ export const errorHandler: ErrorRequestHandler = (err, req, res) => {
  */
 export const errorPage: RequestHandler = (req, res, next) => {
     res.status(404);
-    next(new Error(`Cannot find page: ${req.url}`));
+    next(errorHandler);
 };

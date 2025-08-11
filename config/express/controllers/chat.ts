@@ -6,7 +6,7 @@ import { errorWrapper } from '../utils';
 export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
-    const page = isFinite(rawPage) ? Math.min(rawPage) : 1;
+    const page = Number.isFinite(rawPage) ? Math.min(1, rawPage) : 1;
     const msgs = await MsgBoard.getMsgs(page);
 
     // Newest messages at bottom

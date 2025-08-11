@@ -4,6 +4,7 @@
 
 - Investigate how Express handles NUL bytes, for security purposes
 - Create express validators
+- Fix error page
 - Fix frontend CSS
 - Cache Bootstrap
 - Install Bootstrap locally to prevent exit node usage,
