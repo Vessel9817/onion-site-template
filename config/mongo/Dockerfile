@@ -9,8 +9,8 @@ RUN [ "npm", "i", "--omit=dev" ]
 FROM mongo:8.0.12 AS run
 
 WORKDIR /docker-entrypoint-initdb.d/
-COPY --from=build "/docker-entrypoint-initdb.d/" "./"
-COPY "./" "./"
+COPY --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
+COPY --link [ "./", "./" ]
 
 HEALTHCHECK \
     --interval=5s \

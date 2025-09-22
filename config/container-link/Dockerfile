@@ -6,7 +6,7 @@ WORKDIR /usr/app/
 RUN \
     apk update && \
     apk add --no-cache socat
-COPY [ "./", "./" ]
+COPY --link [ "./", "./" ]
 
 # Redirecting traffic from localhost to the NGINX container
 # Note: requires env var FORWARD_IP
