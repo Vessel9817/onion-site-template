@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
-        "start:prod": "docker compose --profile up -d tor",
+        "start:prod": "docker compose --profile production up -d tor",
         "start:dev": "docker compose --profile development up -d nginx",
         "stop": "docker compose down --remove-orphans",
         "mongosh": "node --env-file=\"./config/mongo/debug/.env\" -r ts-node/register ./config/mongo/debug/mongosh.ts",
