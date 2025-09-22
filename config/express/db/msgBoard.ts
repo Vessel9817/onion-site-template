@@ -21,11 +21,12 @@ export const MsgSchema = new Schema({
 export const MsgModel = mongoose.model('messages', MsgSchema);
 
 function hydrateMsg(partialMsg: Msg): HydratedMsg {
-    // No rest parameter, since PartialMsg covers Msg, WithId<PartialMsg>, etc
     const msg: HydratedMsg = {
+        // No rest parameter, since partialMsg could be of type WithId<Msg>.
+        // Developers can specify WithId<HydratedMsg> instead
         name: partialMsg.name,
-        lastModified: new Date().getTime(),
-        content: partialMsg.content
+        content: partialMsg.content,
+        lastModified: new Date().getTime()
     };
 
     return msg;
@@ -33,21 +34,31 @@ function hydrateMsg(partialMsg: Msg): HydratedMsg {
 
 const MSG_PAGE_SIZE = 10;
 
+export async function idExists(id: ObjectId): Promise<boolean> {
+    return (await MsgModel.findById(id)) != null;
+}
+
 /**
  * Returns a message batch by page number
  * @param page The 1-indexed page index
  * @returns A message batch, paged by most recent
  */
-export function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
+export async function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
     const skip = Math.min(MAX_INT64, MSG_PAGE_SIZE * (page - 1));
     const rawPipeline: (PipelineStage | null)[] = [
         { $sort: { lastModified: -1 } },
+        // This is O(m+n), where m is the page size and n is the total documents skipped.
+        // There is supposedly a better method that achieves O(m)
         skip <= 0 ? null : { $skip: skip },
         { $limit: MSG_PAGE_SIZE }
     ];
     const pipeline = rawPipeline.filter((stage) => stage != null);
+    const msgs = (await MsgModel.aggregate(pipeline).exec()) as WithId<HydratedMsg>[];
 
-    return MsgModel.aggregate(pipeline).exec() as Promise<WithId<HydratedMsg>[]>;
+    // Newest messages at bottom
+    msgs.reverse();
+
+    return msgs;
 }
 
 export async function createMsg(partialMsg: Msg): Promise<void> {

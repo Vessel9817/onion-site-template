@@ -1,17 +1,13 @@
 import { RequestHandler } from 'express';
 import { ObjectId, WithId } from 'mongodb';
 import { MsgBoard } from '../db';
-import { errorWrapper } from '../utils';
+import { errorWrapper, validationWrapper } from '../utils';
 
 export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
     const page = Number.isFinite(rawPage) ? Math.min(1, rawPage) : 1;
     const msgs = await MsgBoard.getMsgs(page);
-
-    // Newest messages at bottom
-    msgs.reverse();
-
     const formattedMsgs = msgs.map((e) => ({
         id: e._id,
         name: e.name,
@@ -24,13 +20,13 @@ export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     }));
     const args = {
         msgs: formattedMsgs,
-        page
+        page: page
     };
 
     res.render('pages/chat', args);
 });
 
-export const sendMsg: RequestHandler = errorWrapper(async (req, res) => {
+export const sendMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
     const params = req.body as {
         name: string;
         content: string;
@@ -43,9 +39,9 @@ export const sendMsg: RequestHandler = errorWrapper(async (req, res) => {
     await MsgBoard.createMsg(msg);
 
     res.redirect('/chat');
-});
+}));
 
-export const editMsg: RequestHandler = errorWrapper(async (req, res) => {
+export const editMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
     const params = req.body as {
         name: string;
         content: string;
@@ -60,13 +56,13 @@ export const editMsg: RequestHandler = errorWrapper(async (req, res) => {
     await MsgBoard.editMsg(newMsg);
 
     res.redirect('/chat');
-});
+}));
 
-export const deleteMsg: RequestHandler = errorWrapper(async (req, res) => {
+export const deleteMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
     const params = req.body as { id: string };
     const id = new ObjectId(params.id);
 
     await MsgBoard.deleteMsg(id);
 
     res.redirect('/chat');
-});
+}));

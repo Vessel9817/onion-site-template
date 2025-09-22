@@ -9,7 +9,8 @@ COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" 
 RUN npm i
 
 # Copying source files
-COPY --chown=node [ "./", "./" ]
+# 1000:1000 corresponds to user "node"
+COPY --link --chown=1000:1000 [ "./", "./" ]
 
 # Running app
 USER node
