@@ -3,9 +3,6 @@
     "editor.formatOnPaste": false,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "typescript.tsdk": "node_modules/typescript/lib",
-    "prettier.configPath": "./config/prettier/.prettierrc",
-    "prettier.ignorePath": "./config/prettier/.prettierignore",
-    "markdownlint.configFile": "./config/markdownlint/.markdownlint-cli2.jsonc",
     "eslint.options": {
         "overrideConfigFile": "./config/eslint/eslint.config.cjs"
     },
