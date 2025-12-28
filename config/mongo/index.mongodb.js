@@ -15,6 +15,7 @@ assert.ok(
 // Authenticating
 db.getSiblingDB('admin').auth(env.admin.username, env.admin.password);
 
+// Disabling telemetry globally
 disableTelemetry();
 
 // Creating unprivileged user and database

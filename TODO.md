@@ -2,7 +2,7 @@
 
 ## Backend branch
 
-- Fix MongoDB authentication
+- Fix MongoDB authentication ([index.mongodb.js](/config/mongo/index.mongodb.js) isn't run)
 - If Express cannot complete a DB action, an error should be served to the user
 - Investigate how Express handles NUL bytes, for security purposes
 - Fix error page
@@ -13,6 +13,7 @@
 
 ## General
 
+- Env file safety check ([dotenvx prebuild](https://dotenvx.com/features/prebuild))
 - Support Docker swarm mode:
   - Create self-signed TLS certificates for inter-container communication security
   - If possible, perform a test run of swarm mode
