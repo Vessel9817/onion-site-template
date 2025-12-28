@@ -1,5 +1,10 @@
-// Validates and exports env vars
+/**
+ * Validates and exports env vars
+ */
+
 const assert = require('node:assert');
+
+require('dotenv').config({ path: ['./secrets/.env'] });
 
 assert.ok(
     process.env.MONGO_INITDB_DATABASE,

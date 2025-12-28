@@ -1,4 +1,11 @@
+/**
+ * Validates and exports env vars
+ */
+
 import assert from 'node:assert';
+import { config } from 'dotenv';
+
+config({ path: ['./secrets/.env'] });
 
 assert.ok(
     process.env.ME_CONFIG_MONGODB_AUTHDB,
