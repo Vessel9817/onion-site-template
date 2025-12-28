@@ -1,4 +1,6 @@
-FROM node:lts-alpine3.22
+ARG NODE_VERSION=node:lts-alpine3.22
+
+FROM ${NODE_VERSION}
 
 # Installing dependencies
 RUN \
