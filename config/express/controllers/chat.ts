@@ -7,7 +7,15 @@ export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
     const page = Number.isFinite(rawPage) ? Math.min(1, rawPage) : 1;
-    const msgs = await MsgBoard.getMsgs(page);
+    let msgs: WithId<MsgBoard.HydratedMsg>[];
+
+    try {
+        msgs = await MsgBoard.getMsgs(page);
+    } catch (err) {
+        console.warn(err);
+        msgs = [];
+    }
+
     const formattedMsgs = msgs.map((e) => ({
         id: e._id,
         name: e.name,
@@ -26,43 +34,61 @@ export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     res.render('pages/chat', args);
 });
 
-export const sendMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
-    const params = req.body as {
-        name: string;
-        content: string;
-    };
-    const msg: MsgBoard.Msg = {
-        name: params.name,
-        content: params.content
-    };
+export const sendMsg: RequestHandler = errorWrapper(
+    validationWrapper(async (req, res) => {
+        const params = req.body as {
+            name: string;
+            content: string;
+        };
+        const msg: MsgBoard.Msg = {
+            name: params.name,
+            content: params.content
+        };
 
-    await MsgBoard.createMsg(msg);
+        try {
+            await MsgBoard.createMsg(msg);
+        } catch (err) {
+            console.warn(err);
+        }
 
-    res.redirect('/chat');
-}));
+        res.redirect('/chat');
+    })
+);
 
-export const editMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
-    const params = req.body as {
-        name: string;
-        content: string;
-        id: string;
-    };
-    const newMsg: WithId<MsgBoard.Msg> = {
-        _id: new ObjectId(params.id),
-        name: params.name,
-        content: params.content
-    };
+export const editMsg: RequestHandler = errorWrapper(
+    validationWrapper(async (req, res) => {
+        const params = req.body as {
+            name: string;
+            content: string;
+            id: string;
+        };
+        const newMsg: WithId<MsgBoard.Msg> = {
+            _id: new ObjectId(params.id),
+            name: params.name,
+            content: params.content
+        };
 
-    await MsgBoard.editMsg(newMsg);
+        try {
+            await MsgBoard.editMsg(newMsg);
+        } catch (err) {
+            console.warn(err);
+        }
 
-    res.redirect('/chat');
-}));
+        res.redirect('/chat');
+    })
+);
 
-export const deleteMsg: RequestHandler = errorWrapper(validationWrapper(async (req, res) => {
-    const params = req.body as { id: string };
-    const id = new ObjectId(params.id);
+export const deleteMsg: RequestHandler = errorWrapper(
+    validationWrapper(async (req, res) => {
+        const params = req.body as { id: string };
+        const id = new ObjectId(params.id);
 
-    await MsgBoard.deleteMsg(id);
+        try {
+            await MsgBoard.deleteMsg(id);
+        } catch (err) {
+            console.warn(err);
+        }
 
-    res.redirect('/chat');
-}));
+        res.redirect('/chat');
+    })
+);

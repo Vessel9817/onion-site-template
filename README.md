@@ -32,12 +32,12 @@ npm run license-report
   project directory
 - Install Docker or Docker Desktop
 
-Optionally, install onionscan:
+Optionally, install [onionscan](https://github.com/harr1424/onionscan):
 
-- Install Go (tested on the current latest version, 1.21.4)
+- Install Go (tested on the current latest version, 1.21.4):
   - Add Go to the PATH variable
   - Set the GOPATH environment variable
-- Install [onionscan](https://github.com/harr1424/onionscan)
+- Install onionscan:
   - Run `go install github.com/harr1424/onionscan@latest`
 
 ### Configuring Secrets

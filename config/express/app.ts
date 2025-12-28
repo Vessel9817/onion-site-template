@@ -21,7 +21,11 @@ APP.use(errorHandler); // Handles errors
 
 // Starting server
 void (async () => {
-    await mongoose.connect(MONGODB_URI);
+    try {
+        await mongoose.connect(MONGODB_URI);
+    } catch (err) {
+        console.error('Failed to connect to database:', err);
+    }
 
     APP.listen(PORT, () => {
         console.log('Server is running!');

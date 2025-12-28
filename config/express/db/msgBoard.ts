@@ -26,7 +26,7 @@ function hydrateMsg(partialMsg: Msg): HydratedMsg {
         // Developers can specify WithId<HydratedMsg> instead
         name: partialMsg.name,
         content: partialMsg.content,
-        lastModified: new Date().getTime()
+        lastModified: Date.now()
     };
 
     return msg;
@@ -53,7 +53,9 @@ export async function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
         { $limit: MSG_PAGE_SIZE }
     ];
     const pipeline = rawPipeline.filter((stage) => stage != null);
-    const msgs = (await MsgModel.aggregate(pipeline).exec()) as WithId<HydratedMsg>[];
+    const msgs = (await MsgModel.aggregate(
+        pipeline
+    ).exec()) as WithId<HydratedMsg>[];
 
     // Newest messages at bottom
     msgs.reverse();

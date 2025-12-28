@@ -2,12 +2,12 @@
 
 ## Backend branch
 
+- Fix MongoDB authentication
+- If Express cannot complete a DB action, an error should be served to the user
 - Investigate how Express handles NUL bytes, for security purposes
 - Fix error page
 - Fix frontend CSS
-- Cache Bootstrap
-- Install Bootstrap locally to prevent exit node usage,
-  or replace the dependency entirely
+- Replace the Bootstrap dependency with something self-made
 - Add TTL to MongoDB documents so that they expire
 - Document methods and classes
 
