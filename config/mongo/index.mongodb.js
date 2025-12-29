@@ -11,9 +11,8 @@ const admin = connect('localhost:27017/admin');
 admin.auth(env.admin.username, env.admin.password);
 
 // Disabling telemetry globally
-// NOTE: load is used in place of require
-// so that mongo globals are available to the script
-load('./src/disableTelemetry.mongodb.js');
+// (config doesn't seem to exist here)
+disableTelemetry();
 
 // Creating unprivileged user and database
 const MSG_BOARD = admin.getSiblingDB(env.dbName);
