@@ -6,10 +6,11 @@ function quoteString(s: string, quote: `'` | `"` = `'`): string {
     return quote + s.replaceAll(/(['"])/g, `${quote}\\$1${quote}`) + quote;
 }
 
-const cmd = `mongosh `
-    + `--authenticationDatabase ${quoteString(AUTH_DB)} `
-    + `-f './src/disableTelemetry.mongodb.js' --shell `
-    + CONNECTION_STRING;
+const cmd =
+    `mongosh ` +
+    `--authenticationDatabase ${quoteString(AUTH_DB)} ` +
+    `-f './src/disableTelemetry.mongodb.js' --shell ` +
+    CONNECTION_STRING;
 
 // TODO Just replace with a container, this is ridiculous
 child_process.execSync(`docker exec -it ${CONTAINER_NAME} ${cmd}`, {

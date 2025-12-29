@@ -130,9 +130,7 @@ services:
       - type: 'volume'
         source: 'mongo-configdb'
         target: '/data/configdb'
-    secrets:
-      - source: 'mongo'
-        target: '/docker-entrypoint-initdb.d/secrets/'
+    env_file: './config/mongo/secrets/.env'
     networks:
       - 'mongo'
   'mongo-debug':
@@ -147,10 +145,6 @@ services:
       - ':8081'
     env_file:
       - './config/mongo/debug/secrets/.env'
-    environment:
-      # Theme demo:
-      # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
-      ME_CONFIG_OPTIONS_EDITORTHEME: 'tomorrow-night-bright'
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
@@ -160,8 +154,6 @@ volumes:
 secrets:
   'express':
     file: './config/express/secrets/'
-  'mongo':
-    file: './config/mongo/secrets/'
 networks:
   'tor':
     driver: 'bridge'

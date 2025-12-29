@@ -6,11 +6,8 @@ const assert = require('node:assert');
 
 require('dotenv').config({ path: ['./secrets/.env'] });
 
-assert.ok(
-    process.env.MONGO_INITDB_DATABASE,
-    'MONGO_INITDB_DATABASE is missing from env'
-);
-const DB_NAME = process.env.MONGO_INITDB_DATABASE;
+// https://hub.docker.com/_/mongo#initializing-a-fresh-instance
+const DB_NAME = process.env.MONGO_INITDB_DATABASE ?? 'test';
 
 assert.ok(
     process.env.MONGO_INITDB_ROOT_USERNAME,

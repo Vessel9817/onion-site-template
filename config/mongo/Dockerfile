@@ -20,4 +20,4 @@ HEALTHCHECK \
     --timeout=5s \
     --start-period=10s \
     --retries=3 \
-    CMD [ "mongosh", "--eval", "db.adminCommand('ping')"]
+    CMD [ "mongosh", "--eval", "disableTelemetry();db.adminCommand('ping');"]
