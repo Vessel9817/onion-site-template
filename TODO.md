@@ -2,7 +2,7 @@
 
 ## Backend branch
 
-- Fix MongoDB authentication ([index.mongodb.js](/config/mongo/index.mongodb.js) isn't run)
+- Fix MongoDB authentication (mongo-express OK, express FAIL)
 - If Express cannot complete a DB action, an error should be served to the user
 - Investigate how Express handles NUL bytes, for security purposes
 - Fix error page

@@ -11,11 +11,11 @@ const admin = connect('localhost:27017/admin');
 admin.auth(env.admin.username, env.admin.password);
 
 // Disabling telemetry globally
-require('./src/disableTelemetry.mongodb');
+// NOTE: load is used in place of require
+// so that mongo globals are available to the script
+load('./src/disableTelemetry.mongodb.js');
 
 // Creating unprivileged user and database
-// NOTE: Databases and collections are hidden until data
-// is added to them, by default
 const MSG_BOARD = admin.getSiblingDB(env.dbName);
 
 MSG_BOARD.createUser({
@@ -29,4 +29,6 @@ MSG_BOARD.createUser({
     ]
 });
 
+// NOTE: Databases and collections are hidden until data
+// is added to them, by default
 MSG_BOARD.createCollection(env.collectionName);

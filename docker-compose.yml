@@ -1,5 +1,6 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
+name: 'website'
 services:
   'tor-init':
     container_name: 'tor-init'
