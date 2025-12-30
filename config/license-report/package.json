@@ -4,6 +4,16 @@
     "license": "MIT",
     "main": "index.sh",
     "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Vessel9817/onion-site-template.git",
+        "directory": "config/license-report"
+    },
+    "homepage": "https://github.com/Vessel9817/onion-site-template#readme",
+    "readme": "https://github.com/Vessel9817/onion-site-template/blob/main/README.md",
+    "bugs": {
+        "url": "https://github.com/Vessel9817/onion-site-template/issues"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "./index.sh"

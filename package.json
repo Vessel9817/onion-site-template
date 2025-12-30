@@ -3,6 +3,15 @@
     "version": "0.0.0",
     "private": true,
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Vessel9817/onion-site-template.git"
+    },
+    "homepage": "https://github.com/Vessel9817/onion-site-template#readme",
+    "readme": "https://github.com/Vessel9817/onion-site-template/blob/main/README.md",
+    "bugs": {
+        "url": "https://github.com/Vessel9817/onion-site-template/issues"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
@@ -15,10 +24,6 @@
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose up -d license-report"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Vessel9817/onion-site-template.git"
     },
     "workspaces": {
         "packages": [
