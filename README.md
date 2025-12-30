@@ -3,6 +3,11 @@
 This documentation, as well as the overall project, is currently
 under construction, see the Issues and Contribution section below.
 
+This project is currently in beta. Until further notice,
+**please use the [`backend`][backend] branch** while we work on a full release.
+
+[backend]: https://github.com/Vessel9817/onion-site-template/tree/backend
+
 ## Installation
 
 ### Installing Dependencies
