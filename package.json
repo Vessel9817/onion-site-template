@@ -14,7 +14,7 @@
         "prettier": "prettier --write **/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
         "eslint:fix": "node --run=eslint -- --fix",
-        "license-report": ".\\config\\license-report\\index.cmd"
+        "license-report": ".\\config\\license-report\\index.sh"
     },
     "repository": {
         "type": "git",
@@ -23,7 +23,8 @@
     "workspaces": {
         "packages": [
             "./config/express",
-            "./config/mongo"
+            "./config/mongo",
+            "./config/license-report"
         ]
     },
     "devDependencies": {
