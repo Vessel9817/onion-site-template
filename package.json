@@ -14,7 +14,7 @@
         "prettier": "prettier --write **/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
         "eslint:fix": "node --run=eslint -- --fix",
-        "license-report": ".\\config\\license-report\\index.sh"
+        "license-report": "docker compose up -d license-report"
     },
     "repository": {
         "type": "git",

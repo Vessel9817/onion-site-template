@@ -2,12 +2,6 @@
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 name: 'website'
 services:
-  'license-report':
-    container_name: 'license-report'
-    restart: 'no'
-    build:
-      context: './config/license-report'
-      dockerfile: './Dockerfile'
   'tor-init':
     container_name: 'tor-init'
     profiles:
@@ -155,6 +149,13 @@ services:
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
+  'license-report':
+    container_name: 'license-report'
+    profiles:
+      - 'license-report'
+    build:
+      context: '.'
+      dockerfile: './config/license-report/Dockerfile'
 volumes:
   'mongo-db':
   'mongo-configdb':

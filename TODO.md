@@ -28,5 +28,3 @@
   - Add usage instructions for each npm command
 - Merge onionscan branch
 - Integrate code coverage tool
-- Add Linux support for `license-report`.
-  Better yet, containerize it for cross-platform reproducibility.

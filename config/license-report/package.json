@@ -1,13 +1,14 @@
 {
-  "name": "license-report_",
-  "version": "0.0.0",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "license-report": "^6.8.1"
-  },  
-  "private": "true"
-
+    "name": "license-report_",
+    "version": "0.0.0",
+    "license": "MIT",
+    "main": "index.sh",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "./index.sh"
+    },
+    "dependencies": {
+        "license-report": "^6.8.1"
+    }
 }

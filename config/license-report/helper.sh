@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# echo  ------------
+echo  ------------
 #echo package name
 #echo ------------
 
