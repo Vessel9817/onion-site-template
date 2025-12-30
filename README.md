@@ -17,7 +17,7 @@ with an equivalent Node CLI command.
 This project is licensed under the [MIT](./LICENSE.md) license.
 
 However, to view the licenses of the Node packages we explicitly depend on,
-run the following command: (currently only supported on Windows)
+run the following command:
 
 ```shell
 npm run license-report
