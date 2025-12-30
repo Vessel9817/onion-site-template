@@ -149,6 +149,13 @@ services:
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
+  'license-report':
+    container_name: 'license-report'
+    profiles:
+      - 'license-report'
+    build:
+      context: '.'
+      dockerfile: './config/license-report/Dockerfile'
 volumes:
   'mongo-db':
   'mongo-configdb':

@@ -1,5 +1,5 @@
 {
-    "package": "./config/backend/package.json",
+    "package": "./config/license-report/package.json",
     "fields": [
         "name",
         "licensePeriod",
@@ -14,6 +14,6 @@
     },
     "__PLACEHOLDER__": {
         "label": "workspace",
-        "value": "backend"
+        "value": "license-report"
     }
 }
