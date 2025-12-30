@@ -1,0 +1,13 @@
+{
+  "name": "license-report_",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "license-report": "^6.8.1"
+  },  
+  "private": "true"
+
+}
