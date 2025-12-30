@@ -28,8 +28,6 @@ npm run license-report
 ### Installing Dependencies
 
 - Clone this repository
-- Install the node modules by running `npm install` in the top-level
-  project directory
 - Install Docker or Docker Desktop
 
 Optionally, install [onionscan](https://github.com/harr1424/onionscan):
