@@ -11,6 +11,6 @@ RUN \
 COPY --link [ "./", "./" ]
 
 # Redirecting traffic from localhost to the NGINX container
-# Note: requires env var FORWARD_IP
+# Note: requires env var FORWARD_ADDR
 EXPOSE ${EXPOSE_PORT}
 ENTRYPOINT [ "./index.sh" ]

@@ -78,7 +78,7 @@ services:
       context: './config/container-link'
       dockerfile: './Dockerfile'
     environment:
-      - 'FORWARD_IP=10.5.0.2:80'
+      - 'FORWARD_ADDR=10.5.0.2:80'
     ports:
       - ':80'
     networks:
@@ -109,7 +109,7 @@ services:
       context: './config/container-link'
       dockerfile: './Dockerfile'
     environment:
-      - 'FORWARD_IP=10.5.2.2:3000'
+      - 'FORWARD_ADDR=10.5.2.2:3000'
       - 'EXPOSE_PORT=3000'
     ports:
       - ':3000'
