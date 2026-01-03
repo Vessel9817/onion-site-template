@@ -156,6 +156,17 @@ services:
     build:
       context: '.'
       dockerfile: './config/license-report/Dockerfile'
+  'vanguards':
+    container_name: 'vanguards'
+    profiles:
+      - 'production'
+    build:
+      context: "."
+      dockerfile: './vanguards/Dockerfile'
+    networks:
+      - 'tor'
+    depends_on:
+      - 'tor'
 volumes:
   'mongo-db':
   'mongo-configdb':
