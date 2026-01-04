@@ -38,7 +38,6 @@ services:
     sysctls:
       - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
-      'public':
       'tor':
         ipv4_address: '10.5.3.2'
       'nginx':
@@ -177,13 +176,6 @@ secrets:
   'express':
     file: './config/express/secrets/'
 networks:
-  'public':
-    driver: 'bridge'
-    enable_ipv4: true
-    enable_ipv6: true
-    driver_opts:
-      com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-      com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'tor':
     driver: 'bridge'
     enable_ipv4: true
