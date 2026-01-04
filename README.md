@@ -60,10 +60,10 @@ directory. Your website URL will be found in `./config/tor/secrets/hostname`.
 
 ## Running
 
-For production mode, run one of the following equivalent commands
+For production mode, run **one** of the following equivalent commands
 in the top-level directory:
 
-```sh
+```shell
 npm start
 npm run start
 npm run start:prod
@@ -72,12 +72,19 @@ npm run start:prod
 To attach all debugging containers intended for development-only use,
 run the following command in the top-level directory:
 
-```sh
+```shell
 npm run start:dev
 ```
 
 This can be done before or after starting production mode,
 as they collectively depend on all production containers unrelated to tor.
+
+To stop the website, run **one** of the following equivalent commands:
+
+```shell
+npm stop
+npm run stop
+```
 
 ## Credits
 

@@ -16,9 +16,9 @@
 - Support Docker swarm mode:
   - Create self-signed TLS certificates for inter-container communication security
   - If possible, perform a test run of swarm mode
-- Create Vanguards container for improved hidden service security
 - Create webpack configurations instead of using ts-node in production
-- Store encrypted mongo passwords rather than plaintext, if and where possible
+- [Encrypt secrets](https://dotenvx.com/docs/quickstart),
+  primarily in the case of plaintext mongo passwords
 - Fix tsc package.json command
 - Configure tests and container health checks
 - Configure ratelimiting

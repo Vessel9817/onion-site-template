@@ -35,11 +35,29 @@ services:
       - type: 'bind'
         source: './config/tor/secrets/'
         target: '/var/lib/tor/website/'
+      - type: 'volume'
+        source: 'tor-data'
+        target: '/var/lib/tor/'
     sysctls:
       - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
       - 'tor'
       - 'nginx'
+  'vanguards':
+    container_name: 'vanguards'
+    profiles:
+      - 'production'
+    depends_on:
+      - 'tor'
+    build:
+      context: './config/vanguards'
+      dockerfile: './Dockerfile'
+    volumes:
+      - type: 'volume'
+        source: 'tor-data'
+        target: '/var/lib/tor/'
+        read_only: true
+    network_mode: 'container:tor'
   'nginx':
     container_name: 'nginx'
     depends_on:
@@ -157,6 +175,7 @@ services:
       context: '.'
       dockerfile: './config/license-report/Dockerfile'
 volumes:
+  'tor-data':
   'mongo-db':
   'mongo-configdb':
 secrets:
@@ -167,9 +186,6 @@ networks:
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: true
-    driver_opts:
-      com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-      com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
     enable_ipv4: true
