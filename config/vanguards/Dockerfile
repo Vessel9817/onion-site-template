@@ -7,4 +7,3 @@ COPY [ "./requirements.txt", "./" ]
 RUN pip install -r "./requirements.txt"
 
 ENTRYPOINT [ "vanguards" ]
-CMD [ "--control_port", "9099" ]
