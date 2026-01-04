@@ -26,5 +26,6 @@
 - Configure Dependabot for Docker
 - Update README:
   - Add usage instructions for each npm command
-- Merge onionscan branch
+- Merge onionscan branch (Fix for
+  [s-rah/onionscan#191](https://github.com/s-rah/onionscan/issues/191))
 - Integrate code coverage tool
