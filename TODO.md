@@ -12,6 +12,7 @@
 
 ## General
 
+- Rename [config](./config/) to `src`
 - Env file safety check ([dotenvx prebuild](https://dotenvx.com/features/prebuild))
 - Support Docker swarm mode:
   - Create self-signed TLS certificates for inter-container communication security
