@@ -161,8 +161,8 @@ services:
     profiles:
       - 'production'
     build:
-      context: "."
-      dockerfile: './vanguards/Dockerfile'
+      context: './config/vanguards'
+      dockerfile: './Dockerfile'
     networks:
       - 'tor'
     depends_on:
