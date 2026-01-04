@@ -166,9 +166,7 @@ services:
     build:
       context: './config/vanguards'
       dockerfile: './Dockerfile'
-    command: ['--control_ip', '10.5.3.2', '--control_port', '9099']
-    networks:
-      - 'tor'
+    network_mode: 'container:tor'
 volumes:
   'mongo-db':
   'mongo-configdb':
@@ -179,7 +177,7 @@ networks:
   'tor':
     driver: 'bridge'
     enable_ipv4: true
-    enable_ipv6: false
+    enable_ipv6: true
     ipam:
       config:
         - subnet: '10.5.3.0/24'
