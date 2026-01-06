@@ -15,12 +15,11 @@
 - Rename [config](./config/) to `src`
 - Env file safety check ([dotenvx prebuild](https://dotenvx.com/features/prebuild))
 - Support Docker swarm mode:
-  - Create self-signed TLS certificates for inter-container communication security
+  - Create self-signed TLS certificates for container network security
   - If possible, perform a test run of swarm mode
 - Create webpack configurations instead of using ts-node in production
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart),
   primarily in the case of plaintext mongo passwords
-- Fix tsc package.json command
 - Configure tests and container health checks
 - Configure ratelimiting
 - Fix ESLint issues
