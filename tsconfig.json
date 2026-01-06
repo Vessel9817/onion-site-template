@@ -31,7 +31,7 @@
         "stripInternal": true,
         "outDir": "./dist" // Unused: https://stackoverflow.com/a/48798945
     },
-    "include": ["./config/eslint/**/*"],
+    "include": ["./src/eslint/**/*"],
     "exclude": [
         "**/coverage/",
         "**/licenses/",

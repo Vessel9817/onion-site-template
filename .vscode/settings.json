@@ -4,7 +4,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "typescript.tsdk": "node_modules/typescript/lib",
     "eslint.options": {
-        "overrideConfigFile": "./config/eslint/eslint.config.cjs"
+        "overrideConfigFile": "./src/eslint/eslint.config.cjs"
     },
     "sonarlint.analysisExcludesStandalone": "**/node_modules/**",
     "search.exclude": {

@@ -7,7 +7,7 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Vessel9817/onion-site-template.git",
-        "directory": "config/license-report"
+        "directory": "src/license-report"
     },
     "homepage": "https://github.com/Vessel9817/onion-site-template#readme",
     "readme": "https://github.com/Vessel9817/onion-site-template/blob/main/README.md",

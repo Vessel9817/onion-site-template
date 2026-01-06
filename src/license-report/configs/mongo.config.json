@@ -1,5 +1,5 @@
 {
-    "package": "./config/license-report/package.json",
+    "package": "./src/mongo/package.json",
     "fields": [
         "name",
         "licensePeriod",
@@ -14,6 +14,6 @@
     },
     "__PLACEHOLDER__": {
         "label": "workspace",
-        "value": "license-report"
+        "value": "mongo"
     }
 }

@@ -8,12 +8,12 @@ services:
       - 'production'
     restart: 'no'
     build:
-      context: './config/tor'
+      context: './src/tor'
       dockerfile: './Dockerfile'
       target: 'init'
     volumes:
       - type: 'bind'
-        source: './config/tor/secrets/'
+        source: './src/tor/secrets/'
         target: '/secrets/'
     network_mode: 'none'
   'tor':
@@ -28,12 +28,12 @@ services:
         condition: 'service_started'
         required: true
     build:
-      context: './config/tor'
+      context: './src/tor'
       dockerfile: './Dockerfile'
       target: 'run'
     volumes:
       - type: 'bind'
-        source: './config/tor/secrets/'
+        source: './src/tor/secrets/'
         target: '/var/lib/tor/website/'
       - type: 'volume'
         source: 'tor-data'
@@ -50,7 +50,7 @@ services:
     depends_on:
       - 'tor'
     build:
-      context: './config/vanguards'
+      context: './src/vanguards'
       dockerfile: './Dockerfile'
     volumes:
       - type: 'volume'
@@ -68,17 +68,17 @@ services:
     volumes:
       # Overwriting default config without affecting other default files
       - type: 'bind'
-        source: './config/nginx/conf/nginx.conf'
+        source: './src/nginx/conf/nginx.conf'
         target: '/usr/local/openresty/nginx/conf/nginx.conf'
         read_only: true
       # Adding custom configs
       - type: 'bind'
-        source: './config/nginx/conf/conf.d/'
+        source: './src/nginx/conf/conf.d/'
         target: '/etc/nginx/conf.d/'
         read_only: true
       # Adding custom HTML
       - type: 'bind'
-        source: './config/nginx/html/'
+        source: './src/nginx/html/'
         target: '/usr/local/openresty/nginx/html/'
         read_only: true
     networks:
@@ -93,7 +93,7 @@ services:
     depends_on:
       - nginx
     build:
-      context: './config/container-link'
+      context: './src/container-link'
       dockerfile: './Dockerfile'
     environment:
       - 'FORWARD_ADDR=10.5.0.2:80'
@@ -108,7 +108,7 @@ services:
       - 'mongo' # Implicit depends_on
     restart: 'on-failure'
     build:
-      context: './config/express'
+      context: './src/express'
       dockerfile: './Dockerfile'
     secrets:
       - source: 'express'
@@ -124,7 +124,7 @@ services:
     depends_on:
       - express
     build:
-      context: './config/container-link'
+      context: './src/container-link'
       dockerfile: './Dockerfile'
     environment:
       - 'FORWARD_ADDR=10.5.2.2:3000'
@@ -139,7 +139,7 @@ services:
     restart: 'on-failure'
     mem_swappiness: 1 # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
     build:
-      context: './config/mongo'
+      context: './src/mongo'
       dockerfile: './Dockerfile'
       target: 'run'
     volumes:
@@ -149,7 +149,7 @@ services:
       - type: 'volume'
         source: 'mongo-configdb'
         target: '/data/configdb'
-    env_file: './config/mongo/secrets/.env'
+    env_file: './src/mongo/secrets/.env'
     networks:
       - 'mongo'
   'mongo-debug':
@@ -163,7 +163,7 @@ services:
     ports:
       - ':8081'
     env_file:
-      - './config/mongo/debug/secrets/.env'
+      - './src/mongo/debug/secrets/.env'
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
@@ -173,14 +173,14 @@ services:
       - 'license-report'
     build:
       context: '.'
-      dockerfile: './config/license-report/Dockerfile'
+      dockerfile: './src/license-report/Dockerfile'
 volumes:
   'tor-data':
   'mongo-db':
   'mongo-configdb':
 secrets:
   'express':
-    file: './config/express/secrets/'
+    file: './src/express/secrets/'
 networks:
   'tor':
     driver: 'bridge'

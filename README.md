@@ -44,9 +44,9 @@ Optionally, install [onionscan](https://github.com/harr1424/onionscan):
 
 Rename the following files from `.env.example` to `.env`:
 
-- [./config/mongo/secrets/.env.example](./config/mongo/secrets/.env.example)
-- [./config/mongo/debug/secrets/.env.example](./config/mongo/debug/secrets/.env.example)
-- [./config/express/secrets/.env.example](./config/express/secrets/.env.example)
+- [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
+- [./src/mongo/debug/secrets/.env.example](./src/mongo/debug/secrets/.env.example)
+- [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
@@ -54,9 +54,9 @@ in each of these files, **for your own security, please change them.**
 #### tor
 
 If you have an existing onion domain, the public/private keys and other
-secrets can be placed in [`./config/tor/secrets/`](./config/tor/secrets).
+secrets can be placed in [`./src/tor/secrets/`](./src/tor/secrets).
 If you don't, one will automatically be generated for you in the aforementioned
-directory. Your website URL will be found in `./config/tor/secrets/hostname`.
+directory. Your website URL will be found in `./src/tor/secrets/hostname`.
 
 ## Running
 
