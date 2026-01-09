@@ -20,6 +20,7 @@
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart),
   primarily in the case of plaintext mongo passwords
 - Configure tests and container health checks
+  - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
 - Fix ESLint issues
 - Configure Dependabot for Docker
