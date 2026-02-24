@@ -1,0 +1,15 @@
+on:
+  push:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
+        with:
+          version: v5.0.2
+      - name: Build Compose stack
+        run: docker compose --profile production --profile development build
