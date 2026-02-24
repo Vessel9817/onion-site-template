@@ -12,4 +12,4 @@ jobs:
         with:
           version: v5.0.2
       - name: Build Compose stack
-        run: docker compose --profile production --profile development build
+        run: docker compose --profile production --profile development --profile license-report build
