@@ -6,7 +6,7 @@ if NOT "%1 " == " " (
     if "%2 " == " " (
         REM Running onionscan
         set top=%~dp0..
-        set /p hostname=<"!top!/config/tor/secrets/hostname"
+        set /p hostname=<"!top!/src/tor/secrets/hostname"
         set onionscan="%GOPATH%/bin/onionscan"
         set outDir=!top!/onionscan
         set db="!outDir!/db"

@@ -1,0 +1,12 @@
+html {
+    color-scheme: light dark;
+    background-color: light-dark(white, black);
+    color: light-dark(black, white);
+}
+
+/* Default nginx CSS */
+body {
+    width: 35em;
+    margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+}

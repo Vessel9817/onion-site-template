@@ -1,41 +1,24 @@
 # TODOs
 
-## Main Branch
-
-- Merge `backend` into `main`
-
-## General
-
-- Create Vanguard container for improved tor security
-- Configure tests
-- Migrate from debian-slim to alpine for reduced image size
-- Support Docker swarm mode
-- Create kafka_debug container for testing container intercommunication
+- If Express cannot complete a DB action, an error should be served to the user
+- Investigate how Express handles NUL bytes, for security purposes
+- Fix error page
+- Fix frontend CSS
+- Replace the Bootstrap dependency with something locally hosted
+- Document methods and classes
+- Env file safety check ([dotenvx prebuild](https://dotenvx.com/features/prebuild))
+- Support Docker swarm mode:
+  - Create self-signed TLS certificates for container network security
+  - Perform a test run of swarm mode
 - Create webpack configurations instead of using ts-node in production
-- Move towards becoming OS-agnostic
-- Store encrypted mongo passwords rather than plaintext, if and where possible
-- Fix tsc package.json command
+- [Encrypt secrets](https://dotenvx.com/docs/quickstart),
+  primarily in the case of plaintext mongo passwords
 - Configure tests and container health checks
-- Name Kafka broker volumes
-- Start versioning package.json files
+  - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
-- Configure Docker images to be rebuilt upon container creation
-- Fix ESLint issues
-- Explicitly add globals to ESLint config
+- Fix ESLint issues/config
 - Configure Dependabot for Docker
-- Configure Docker containers
-  - Migrate Onionscan to a container
-  - Connect NGINX to Express
-  - Connect Express to Kafka
-  - Connect API to MongoDB
-- Rename config folder to src
 - Update README:
   - Add usage instructions for each npm command
-  - Add reference to getting an onion hostname and associated keys
-- Add updating command
-- Fix onionscan.cmd:
-  - `-timeout 1` doesn't prevent hanging after results are output
-  - Validate environment variables
+- Fix [s-rah/onionscan#191](https://github.com/s-rah/onionscan/issues/191)
 - Integrate code coverage tool
-- Specify React version in eslint-plugin-react
-  [settings](https://github.com/jsx-eslint/eslint-plugin-react#configuration)

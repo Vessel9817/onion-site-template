@@ -1,0 +1,18 @@
+{
+    "fields": [
+        "name",
+        "licensePeriod",
+        "licenseType",
+        "definedVersion",
+        "installedVersion",
+        "__PLACEHOLDER__"
+    ],
+    "name": {
+        "label": "package name",
+        "value": ""
+    },
+    "__PLACEHOLDER__": {
+        "label": "workspace",
+        "value": "express"
+    }
+}

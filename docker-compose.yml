@@ -1,144 +1,212 @@
 # We use the reserved private subnet 10.5.0.0/16 (::ffff:a05:0/112)
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
+name: 'website'
 services:
-  'tor':
-    depends_on:
-      - 'nginx'
+  'tor-init':
+    container_name: 'tor-init'
     profiles:
       - 'production'
+    restart: 'no'
     build:
-      context: './config/tor'
+      context: './src/tor'
       dockerfile: './Dockerfile'
+      target: 'init'
+    volumes:
+      - type: 'bind'
+        source: './src/tor/secrets/'
+        target: '/secrets/'
+    network_mode: 'none'
+  'tor':
+    container_name: 'tor'
+    profiles:
+      - 'production'
+    depends_on:
+      'tor-init':
+        condition: 'service_completed_successfully'
+        required: true
+      'nginx':
+        condition: 'service_started'
+        required: true
+    build:
+      context: './src/tor'
+      dockerfile: './Dockerfile'
+      target: 'run'
+    volumes:
+      - type: 'bind'
+        source: './src/tor/secrets/'
+        target: '/var/lib/tor/website/'
+      - type: 'volume'
+        source: 'tor-data'
+        target: '/var/lib/tor/'
+    sysctls:
+      - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
       - 'tor'
       - 'nginx'
-  'nginx':
+  'vanguards':
+    container_name: 'vanguards'
+    profiles:
+      - 'production'
+    depends_on:
+      - 'tor'
     build:
-      context: './config/nginx'
+      context: './src/vanguards'
       dockerfile: './Dockerfile'
+    volumes:
+      - type: 'volume'
+        source: 'tor-data'
+        target: '/var/lib/tor/'
+        read_only: true
+    network_mode: 'container:tor'
+  'nginx':
+    container_name: 'nginx'
+    depends_on:
+      'express':
+        condition: 'service_started'
+        required: false
+    image: 'openresty/openresty:1.27.1.2-0-alpine'
+    volumes:
+      # Overwriting default config without affecting other default files
+      - type: 'bind'
+        source: './src/nginx/conf/nginx.conf'
+        target: '/usr/local/openresty/nginx/conf/nginx.conf'
+        read_only: true
+      # Adding custom configs
+      - type: 'bind'
+        source: './src/nginx/conf/conf.d/'
+        target: '/etc/nginx/conf.d/'
+        read_only: true
+      # Adding custom HTML
+      - type: 'bind'
+        source: './src/nginx/html/'
+        target: '/usr/local/openresty/nginx/html/'
+        read_only: true
     networks:
       'nginx':
-        ipv4_address: '10.5.0.2' # ::ffff:a05:2
-  'nginx_debug':
-    depends_on:
-      - nginx
+        ipv4_address: '10.5.0.2'
+      'express':
+        ipv4_address: '10.5.2.3'
+  'nginx-debug':
+    container_name: 'nginx-debug'
     profiles:
       - 'development'
+    depends_on:
+      - nginx
     build:
-      context: './config/nginx/debug'
+      context: './src/container-link'
       dockerfile: './Dockerfile'
+    environment:
+      - 'FORWARD_ADDR=10.5.0.2:80'
     ports:
       - ':80'
     networks:
       'nginx':
-        ipv4_address: '10.5.0.254' # ::ffff:a05:fe
+        ipv4_address: '10.5.0.254'
   'express':
+    container_name: 'express'
+    links:
+      - 'mongo' # Implicit depends_on
+    restart: 'on-failure'
     build:
-      context: './config/express'
+      context: './src/express'
       dockerfile: './Dockerfile'
-    env_file:
-      - './config/express/.env'
+    secrets:
+      - source: 'express'
+        target: '/usr/app/src/secrets/'
     networks:
       'express':
-        ipv4_address: '10.5.2.2' # ::ffff:a05:202
-      'kafka':
-  'express_debug':
-    depends_on:
-      - express
+        ipv4_address: '10.5.2.2'
+      'mongo':
+  'express-debug':
+    container_name: 'express-debug'
     profiles:
       - 'development'
+    depends_on:
+      - express
     build:
-      context: './config/express/debug'
+      context: './src/container-link'
       dockerfile: './Dockerfile'
+    environment:
+      - 'FORWARD_ADDR=10.5.2.2:3000'
+      - 'EXPOSE_PORT=3000'
     ports:
       - ':3000'
     networks:
       'express':
-        ipv4_address: '10.5.2.254' # ::ffff:a05:20fe
-  'kafka':
-    image: 'apache/kafka:3.8.0'
-    depends_on:
-      'express':
-        condition: 'service_started'
-        required: true
-    networks:
-      'kafka':
-        ipv4_address: '10.5.1.2' # ::ffff:a05:102
-    environment:
-      KAFKA_NODE_ID: 1
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT_HOST://localhost:9092,PLAINTEXT://broker:19092'
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
-      KAFKA_LISTENERS: 'CONTROLLER://:29093,PLAINTEXT_HOST://:9092,PLAINTEXT://:19092'
-      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      CLUSTER_ID: '60dfc0be-bd99-4362-9712-63ae3d5026fd'
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+        ipv4_address: '10.5.2.254'
   'mongo':
-    restart: 'always'
-    image: 'mongo:8.0.9'
+    container_name: 'mongo'
+    restart: 'on-failure'
+    mem_swappiness: 1 # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
+    build:
+      context: './src/mongo'
+      dockerfile: './Dockerfile'
+      target: 'run'
     volumes:
-      - 'mongo-db:/data/db'
-      - 'mongo-configdb:/data/configdb'
-    env_file:
-      - './config/mongo/.env'
-  'mongo_debug':
-    depends_on:
+      - type: 'volume'
+        source: 'mongo-db'
+        target: '/data/db'
+      - type: 'volume'
+        source: 'mongo-configdb'
+        target: '/data/configdb'
+    env_file: './src/mongo/secrets/.env'
+    networks:
       - 'mongo'
+  'mongo-debug':
+    container_name: 'mongo-debug'
     profiles:
       - 'development'
-    restart: 'always'
-    image: 'mongo-express:1.0.2'
+    depends_on:
+      - 'mongo'
+    restart: 'on-failure'
+    image: 'mongo-express:1.0.2@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64'
     ports:
       - ':8081'
     env_file:
-      - './config/mongo/debug/.env'
-    environment:
-      # Theme demo:
-      # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
-      ME_CONFIG_OPTIONS_EDITORTHEME: 'tomorrow-night-bright'
+      - './src/mongo/debug/secrets/.env'
+    networks:
+      'mongo':
+        ipv4_address: '10.5.1.254'
+  'license-report':
+    container_name: 'license-report'
+    profiles:
+      - 'license-report'
+    build:
+      context: '.'
+      dockerfile: './src/license-report/Dockerfile'
 volumes:
+  'tor-data':
   'mongo-db':
   'mongo-configdb':
+secrets:
+  'express':
+    file: './src/express/secrets/'
 networks:
   'tor':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: true
-    driver_opts:
-      com.docker.network.bridge.gateway_mode_ipv4: 'nat'
-      com.docker.network.bridge.gateway_mode_ipv6: 'nat'
   'nginx':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.0.0/24' # ::ffff:a05:0/120
-          gateway: '10.5.0.1' # ::ffff:a05:1
+        - subnet: '10.5.0.0/24'
+          gateway: '10.5.0.1'
   'express':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.2.0/24' # ::ffff:a05:200/120
-          gateway: '10.5.2.1' # ::ffff:a05:201
-  'kafka':
-    driver: 'bridge'
-    enable_ipv4: true
-    enable_ipv6: false
-    ipam:
-      config:
-        - subnet: '10.5.1.0/24' # ::ffff:a05:100/120
-          gateway: '10.5.1.1' # ::ffff:a05:101
+        - subnet: '10.5.2.0/24'
+          gateway: '10.5.2.1'
   'mongo':
     driver: 'bridge'
     enable_ipv4: true
     enable_ipv6: false
     ipam:
       config:
-        - subnet: '10.5.3.0/24' # ::ffff:a05:300/120
-          gateway: '10.5.3.1' # ::ffff:a05:301
+        - subnet: '10.5.1.0/24'
+          gateway: '10.5.1.1'

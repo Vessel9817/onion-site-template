@@ -1,0 +1,7 @@
+# Exposing onion site to tor network and redirecting requests to NGINX
+HiddenServiceDir /var/lib/tor/website/
+HiddenServicePort 80 10.5.0.2:80
+HiddenServicePort 443 10.5.0.2:443
+ControlPort 9051
+CookieAuthentication 1
+DataDirectory /var/lib/tor/data/

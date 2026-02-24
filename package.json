@@ -3,39 +3,48 @@
     "version": "0.0.0",
     "private": true,
     "license": "MIT",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "install-all": "npm i && npm --prefix ./config/api i && npm --prefix ./config/express i && npm --prefix ./config/kafka i",
-        "start": "node --run=start:prod",
-        "start:dev": "docker compose --profile development up -d",
-        "start:prod": "docker compose --profile production up -d",
-        "broker": "docker compose up -d kafka",
-        "create_topic": "docker exec -i broker bash /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic",
-        "onionscan": ".\\utils\\onionscan",
-        "prettier": "prettier --write **/*.{js,jsx,ts,tsx,json,css,scss,html}",
-        "eslint": "eslint . -c ./config/eslint/eslint.config.cjs",
-        "eslint:fix": "npm run eslint --fix",
-        "tsc": "tsc --noEmit"
-    },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Vessel9817/onion-site-template.git"
+        "url": "git+https://github.com/Vessel9817/onion-site-template.git"
+    },
+    "homepage": "https://github.com/Vessel9817/onion-site-template#readme",
+    "readme": "https://github.com/Vessel9817/onion-site-template/blob/main/README.md",
+    "bugs": {
+        "url": "https://github.com/Vessel9817/onion-site-template/issues"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --run=start:prod",
+        "start:prod": "docker compose --profile production up -d vanguards",
+        "start:dev": "docker compose --profile development up -d",
+        "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
+        "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
+        "onionscan": ".\\utils\\onionscan",
+        "prettier": "prettier --write **/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,css,scss,html}",
+        "eslint": "eslint . -c ./src/eslint/eslint.config.cjs",
+        "eslint:fix": "node --run=eslint -- --fix",
+        "license-report": "docker compose up -d license-report"
+    },
+    "workspaces": {
+        "packages": [
+            "./src/express",
+            "./src/mongo",
+            "./src/license-report"
+        ]
     },
     "devDependencies": {
-        "@eslint/js": "^9.23.0",
-        "@eslint/json": "^0.11.0",
+        "@eslint/js": "^9.32.0",
+        "@eslint/json": "^0.13.1",
         "@stylistic/eslint-plugin": "^4.2.0",
-        "@types/node": "^22.13.8",
-        "@typescript-eslint/utils": "^8.28.0",
-        "eslint": "^9.23.0",
-        "eslint-plugin-import": "^2.27.4",
-        "eslint-plugin-jsx-a11y": "^6.7.1",
-        "eslint-plugin-react": "^7.37.4",
-        "globals": "^16.0.0",
-        "prettier": "^3.5.2",
+        "@types/node": "^24.2.0",
+        "eslint": "^9.32.0",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "globals": "^16.3.0",
+        "prettier": "^3.6.2",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",
-        "typescript": "^5.8.2",
-        "typescript-eslint": "^8.28.0"
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.39.0"
     }
 }

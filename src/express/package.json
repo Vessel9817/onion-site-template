@@ -1,0 +1,38 @@
+{
+    "name": "express_",
+    "version": "0.0.0",
+    "license": "MIT",
+    "main": "app.ts",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Vessel9817/onion-site-template.git",
+        "directory": "src/express"
+    },
+    "homepage": "https://github.com/Vessel9817/onion-site-template#readme",
+    "readme": "https://github.com/Vessel9817/onion-site-template/blob/main/README.md",
+    "bugs": {
+        "url": "https://github.com/Vessel9817/onion-site-template/issues"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --env-file=./secrets/.env -r ts-node/register ./app.ts"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "express-validator": "^7.2.1",
+        "mongodb": "^6.18.0",
+        "mongoose": "^8.17.1"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/mongodb": "^4.0.6",
+        "@types/mongoose": "^5.11.96",
+        "@types/node": "^24.2.0",
+        "ts-node": "^10.9.2",
+        "tslib": "^2.8.1"
+    }
+}
