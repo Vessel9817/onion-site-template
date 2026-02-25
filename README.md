@@ -17,7 +17,7 @@ However, to view the licenses of the Node packages we explicitly depend on,
 run the following command:
 
 ```shell
-npm run license-report
+node --run=license-report
 ```
 
 ## Installation
