@@ -8,7 +8,7 @@ version: 2
 updates:
   # Enable version updates for npm
   - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the root directory
+    # Look for `package.json` and `lock` files
     directory: "/"
     # Check the npm registry for updates every day (weekdays)
     schedule:
@@ -17,5 +17,11 @@ updates:
   - package-ecosystem: "pip"
     # Look for `requirements.txt` files
     directory: "/src/vanguards/"
+    schedule:
+      interval: "daily"
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for Dockerfiles
+    directory: "/"
     schedule:
       interval: "daily"
