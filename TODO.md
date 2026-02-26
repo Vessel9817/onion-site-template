@@ -17,7 +17,6 @@
   - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
 - Fix ESLint issues/config
-- Configure Dependabot for Docker
 - Update README:
   - Add usage instructions for each npm command
 - Fix [s-rah/onionscan#191](https://github.com/s-rah/onionscan/issues/191)
