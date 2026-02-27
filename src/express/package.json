@@ -31,7 +31,7 @@
         "@types/express": "^5.0.6",
         "@types/mongodb": "^4.0.6",
         "@types/mongoose": "^5.11.96",
-        "@types/node": "^24.2.0",
+        "@types/node": "^25.3.2",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1"
     }
