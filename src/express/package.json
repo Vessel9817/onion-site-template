@@ -19,7 +19,7 @@
         "start": "node --env-file=./secrets/.env -r ts-node/register ./app.ts"
     },
     "dependencies": {
-        "cors": "^2.8.5",
+        "cors": "^2.8.6",
         "ejs": "^3.1.10",
         "express": "^5.2.1",
         "express-validator": "^7.2.1",
