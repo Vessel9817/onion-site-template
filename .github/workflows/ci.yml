@@ -2,7 +2,7 @@ on:
   push:
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

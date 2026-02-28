@@ -41,7 +41,6 @@ services:
     sysctls:
       - 'net.ipv6.conf.all.disable_ipv6=0'
     networks:
-      - 'tor'
       - 'nginx'
   'vanguards':
     container_name: 'vanguards'
@@ -182,10 +181,6 @@ secrets:
   'express':
     file: './src/express/secrets/'
 networks:
-  'tor':
-    driver: 'bridge'
-    enable_ipv4: true
-    enable_ipv6: true
   'nginx':
     driver: 'bridge'
     enable_ipv4: true
