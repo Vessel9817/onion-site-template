@@ -20,7 +20,7 @@
         "dotenv": "^17.3.1"
     },
     "devDependencies": {
-        "@types/node": "^25.3.2",
+        "@types/node": "^25.3.3",
         "mongodb": "^7.1.0"
     }
 }
