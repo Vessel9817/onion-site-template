@@ -1,5 +1,7 @@
 # Onion Site Template
 
+[![CI](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml)
+
 ## Compatibility
 
 This project is OS-agnostic, except for some of the optional features used,
