@@ -9,7 +9,8 @@ which are currently Windows-only. We officially support recent versions of
 Node and npm (consequently also npx) for up-to-date security releases.
 As such, other Node package managers (e.g, yarn, pnpm)
 may not be supported. Where possible, package manager commands are replaced
-with an equivalent Node CLI command.
+in the source code with an equivalent Node CLI command.
+(I.e, `npm run ABC` is equivalent to `node --run=ABC`)
 
 ## Licenses
 
@@ -19,7 +20,7 @@ However, to view the licenses of the Node packages we explicitly depend on,
 run the following command:
 
 ```shell
-node --run=license-report
+npm run license-report
 ```
 
 ## Installation
