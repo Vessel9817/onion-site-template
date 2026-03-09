@@ -15,6 +15,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
+        "build": "docker compose --profile production --profile development --profile license-report build",
         "start:prod": "docker compose --profile production up -d vanguards",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development --profile license-report down --remove-orphans && docker volume rm website_tor-data",
