@@ -1,5 +1,5 @@
-ARG NODE_VERSION=node:lts-alpine3.22
-ARG MONGO_VERSION=mongo:8.2.3@sha256:7f5bbdafebde7c42e42e33396d01c0eda3eb753da8dae99071a30e350568a0a4
+ARG NODE_VERSION=node:lts-alpine3.22@sha256:76db75ca7e7da9148ae42c92d9be12d12a8d7b03e171f18339355d8078d644a0
+ARG MONGO_VERSION=mongo:8.2.5@sha256:474f5c3bf0e355bb97dafda730e725169a4d51c5578abf7be9ec7ad3fdee4481
 
 # Installing dependencies
 FROM ${NODE_VERSION} AS build

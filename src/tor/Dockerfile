@@ -1,5 +1,12 @@
+ARG ALPINE_VERSION=alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+
+# Using latest stable Debian image (LTS EOL: 30 June 2028)
+# https://www.debian.org/releases
+# https://wiki.debian.org/LTS
+ARG DEBIAN_VERSION=debian:bookworm-slim
+
 # Modifies volume permissions: https://stackoverflow.com/a/73255981
-FROM alpine:3.22.0 AS init
+FROM ${ALPINE_VERSION} AS init
 
 WORKDIR /usr/app/
 COPY --link --chmod="+x" [ "./init.sh", "./" ]
@@ -7,10 +14,7 @@ COPY --link --chmod="+x" [ "./init.sh", "./" ]
 VOLUME [ "/secrets/" ]
 ENTRYPOINT [ "./init.sh" ]
 
-# Using latest stable Debian image (LTS EOL: 30 June 2028)
-# https://www.debian.org/releases
-# https://wiki.debian.org/LTS
-FROM debian:bookworm-slim AS run
+FROM ${DEBIAN_VERSION} AS run
 
 RUN \
     apt-get update -qq && \
