@@ -11,15 +11,16 @@ COPY [ \
     "./npm-shrinkwrap.json*", \
     "./" \
 ]
-COPY [ "./src/license-report/package.json", "./src/license-report/" ]
+
+COPY --link [ "./src/license-report/package.json", "./src/license-report/" ]
 RUN npm i -w ./src/license-report/
 
-# Copying source files
-COPY --link [ "./src/express/package.json", "./src/express/" ]
-COPY --link [ "./src/mongo/package.json", "./src/mongo/" ]
+COPY --link [ "./src/express/package.json", "./packages/express.json" ]
+COPY --link [ "./src/mongo/package.json", "./packages/mongo.json" ]
+COPY --link [ "./package.json", "./packages/website.json" ]
 # 1000:1000 corresponds to user "node"
-COPY --link --chown=1000:1000 [ "./src/license-report/", "./src/license-report/" ]
+COPY --link --chown=1000:1000 [ "./src/license-report/", "./packages/" ]
 
 # Running app
 USER node
-ENTRYPOINT [ "/project/src/license-report/index.sh" ]
+ENTRYPOINT [ "/project/packages/index.sh" ]

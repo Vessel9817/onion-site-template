@@ -173,6 +173,14 @@ services:
     build:
       context: '.'
       dockerfile: './src/license-report/Dockerfile'
+    # If we have node modules installed, inspect them.
+    # If we don't, only inspect package.json
+    working_dir: '/project/packages/'
+    volumes:
+      - type: 'bind'
+        source: './node_modules/'
+        target: '/project/packages/node_modules/'
+        read_only: true
 volumes:
   'tor-data':
   'mongo-db':

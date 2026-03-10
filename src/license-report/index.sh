@@ -3,9 +3,9 @@
 # Update prompt breaks table formatting
 npm config set update-notifier false
 
-helper="$(dirname "$0")/helper.sh"
+script_dir="$(dirname "$0")"
+config_dir="${script_dir}/configs"
+helper="${script_dir}/helper.sh"
 
-"${helper}" --config=./src/license-report/configs/website.config.json
-"${helper}" --config=./src/license-report/configs/license-report.config.json
-"${helper}" --config=./src/license-report/configs/express.config.json
-"${helper}" --config=./src/license-report/configs/mongo.config.json
+# Spaces in config file name will break this
+find "${config_dir}" -type f -exec "${helper}" --config={} \;
