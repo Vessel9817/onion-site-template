@@ -1,5 +1,5 @@
 {
-    "package": "./src/mongo/package.json",
+    "package": "./mongo.json",
     "fields": [
         "name",
         "licensePeriod",

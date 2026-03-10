@@ -1,5 +1,5 @@
 {
-    "package": "./package.json",
+    "package": "./website.json",
     "fields": [
         "name",
         "licensePeriod",
