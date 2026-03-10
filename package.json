@@ -1,5 +1,5 @@
 {
-    "name": "website",
+    "name": "website_",
     "version": "0.0.0",
     "private": true,
     "license": "MIT",
@@ -15,15 +15,16 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
+        "build": "docker compose --profile production --profile development --profile license-report build",
         "start:prod": "docker compose --profile production up -d vanguards",
         "start:dev": "docker compose --profile development up -d",
-        "stop": "docker compose --profile production --profile development --profile license-report down --remove-orphans && docker volume rm website_tor-data",
+        "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
         "onionscan": ".\\utils\\onionscan",
         "prettier": "prettier --write **/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,css,scss,html}",
         "eslint": "eslint . -c ./src/eslint/eslint.config.cjs",
         "eslint:fix": "node --run=eslint -- --fix",
-        "license-report": "docker compose up -d license-report"
+        "license-report": "docker compose run --rm license-report > licenses.log"
     },
     "workspaces": {
         "packages": [

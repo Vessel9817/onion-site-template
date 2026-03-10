@@ -57,4 +57,4 @@ hostname.txt
 **/*.yaml
 **/Dockerfile
 **/*.dockerfile
-**/mongod.conf
+**/*.conf

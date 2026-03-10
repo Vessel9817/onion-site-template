@@ -1,5 +1,5 @@
 {
-    "package": "./src/license-report/package.json",
+    "package": "./package.json",
     "fields": [
         "name",
         "licensePeriod",

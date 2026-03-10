@@ -1,5 +1,7 @@
 # TODOs
 
+- `mongo-express` image deprecated due to maintainer inactivity:
+  fork or find alternative
 - If Express cannot complete a DB action, an error should be served to the user
 - Investigate how Express handles NUL bytes, for security purposes
 - Fix error page
