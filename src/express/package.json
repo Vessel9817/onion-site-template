@@ -24,7 +24,7 @@
         "express": "^5.2.1",
         "express-validator": "^7.2.1",
         "mongodb": "^7.1.0",
-        "mongoose": "^9.2.3"
+        "mongoose": "^9.3.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.19",
