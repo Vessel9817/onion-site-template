@@ -27,9 +27,9 @@ export const errorHandler: ErrorRequestHandler = (err, req, res) => {
     // Logging stack trace internally, NOT handing over to client
     console.error('Express handled uncaught error:', err);
 
-    const explanation =
-        (ERROR_EXPLANATIONS.get(res.statusCode) ?? "We're not sure what happened.")
-        + ' If you believe this to be an error, contact the website maintainers.';
+    const explanation
+        = (ERROR_EXPLANATIONS.get(res.statusCode) ?? "We're not sure what happened.")
+          + ' If you believe this to be an error, contact the website maintainers.';
     const args = {
         code: res.statusCode,
         msg: res.statusMessage,
