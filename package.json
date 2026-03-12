@@ -22,7 +22,6 @@
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
         "onionscan": ".\\utils\\onionscan",
         "eslint": "eslint . -c ./src/eslint/eslint.config.mjs",
-        "eslint:dry": "node --run=eslint -- --fix-dry-run",
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report > licenses.log"
     },
