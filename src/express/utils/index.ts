@@ -10,11 +10,13 @@ export function validationWrapper<T extends RequestHandler>(
         try {
             if (validationResult(req).isEmpty()) {
                 await callback(req, res, next);
-            } else {
+            }
+            else {
                 res.status(HTTP_BAD_REQUEST);
                 validationResult(req).throw();
             }
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     };
@@ -26,7 +28,8 @@ export function errorWrapper<T extends RequestHandler>(
     return async (req, res, next) => {
         try {
             await callback(req, res, next);
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     };

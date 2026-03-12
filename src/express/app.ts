@@ -23,7 +23,8 @@ APP.use(errorHandler); // Handles errors
 void (async () => {
     try {
         await mongoose.connect(MONGODB_URI);
-    } catch (err) {
+    }
+    catch (err) {
         console.error('Failed to connect to database:', err);
     }
 
