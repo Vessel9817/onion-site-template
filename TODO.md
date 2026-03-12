@@ -3,7 +3,6 @@
 - `mongo-express` image deprecated due to maintainer inactivity:
   fork or find alternative
 - If Express cannot complete a DB action, an error should be served to the user
-- Investigate how Express handles NUL bytes, for security purposes
 - Fix error page
 - Fix frontend CSS
 - Replace the Bootstrap dependency with something locally hosted
@@ -18,7 +17,6 @@
 - Configure tests and container health checks
   - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
-- Fix ESLint issues/config
 - Update README:
   - Add usage instructions for each npm command
 - Fix [s-rah/onionscan#191](https://github.com/s-rah/onionscan/issues/191)

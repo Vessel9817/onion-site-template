@@ -3,8 +3,9 @@ const tseslint = require('typescript-eslint');
 const stylistic = require('@stylistic/eslint-plugin');
 const path = require('node:path');
 const globals = require('globals');
+const { defineConfig } = require('eslint/config');
 
-/** @typedef {import('@typescript-eslint/utils').TSESLint.FlatConfig.Config} Config */
+/** @typedef {import('eslint/config').Config} Config */
 
 const JS_FILE_GLOBS = [
     '**/*.js',
@@ -14,6 +15,7 @@ const JS_FILE_GLOBS = [
     '**/*.cts',
     '**/*.mts'
 ];
+
 const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.js',
     '**/mongo/**/*.cjs',
@@ -69,15 +71,19 @@ const IGNORE_FILE_CONFIG = {
 };
 
 // https://typescript-eslint.io/users/configs/
-const DEFAULT_JS_CONFIGS = tseslint.config([
+const DEFAULT_JS_CONFIGS = defineConfig([
     eslint.configs.recommended,
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
     tseslint.configs.stylisticTypeChecked,
     {
         languageOptions: {
+            // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
-                projectService: true
+                tsconfigRootDir: path.resolve(__dirname, '..', '..', 'tsconfig.json'),
+                projectService: {
+                    allowDefaultProject: ['eslint.config.cjs']
+                }
             },
             globals: {
                 ...globals.node
@@ -89,14 +95,6 @@ const DEFAULT_JS_CONFIGS = tseslint.config([
 /** @type {Config} */
 const JS_CONFIG = {
     files: JS_FILE_GLOBS,
-    languageOptions: {
-        sourceType: 'script',
-        parserOptions: {
-            projectService: {
-                allowDefaultProject: [path.resolve(__dirname, __filename)]
-            }
-        }
-    },
     rules: {
         // https://eslint.org/docs/latest/rules/prefer-const
         'prefer-const': ['warn'],
@@ -121,7 +119,7 @@ const JS_CONFIG = {
         '@typescript-eslint/no-namespace': ['off'],
 
         // https://eslint.style/rules/js/indent
-        '@stylistic/indent': ['off'],
+        '@stylistic/indent': ['warn', 4],
         // https://eslint.style/rules/js/semi
         '@stylistic/semi': [
             'warn',
@@ -133,6 +131,8 @@ const JS_CONFIG = {
         ],
         // https://eslint.style/rules/js/no-extra-semi
         '@stylistic/no-extra-semi': ['warn'],
+        // https://eslint.style/rules/operator-linebreak
+        '@stylistic/operator-linebreak': ['error', 'before'],
         // https://eslint.style/rules/js/comma-dangle
         '@stylistic/comma-dangle': ['off'],
         // https://eslint.style/rules/js/arrow-parens
