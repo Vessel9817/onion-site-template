@@ -1,9 +1,9 @@
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const stylistic = require('@stylistic/eslint-plugin');
-const path = require('node:path');
-const globals = require('globals');
-const { defineConfig } = require('eslint/config');
+import eslint from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import path from 'node:path';
+import tseslint from 'typescript-eslint';
 
 /** @typedef {import('eslint/config').Config} Config */
 
@@ -27,12 +27,11 @@ const MONGO_JS_FILE_GLOBS = [
 const IGNORE_FILE_CONFIG = {
     ignores: [
         // Development
-        '/src/eslint/**',
         '/onionscan/**',
         '**/coverage/**',
-        '**/package-lock.json',
         '**/logs/**',
         '**/*.log',
+        '/src/nginx/**/*.conf',
 
         // Deployment
         '**/build/**',
@@ -80,9 +79,9 @@ const DEFAULT_JS_CONFIGS = defineConfig([
         languageOptions: {
             // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
-                tsconfigRootDir: path.resolve(__dirname, '..', '..', 'tsconfig.json'),
+                tsconfigRootDir: path.resolve(import.meta.dirname, '..', '..', 'tsconfig.json'),
                 projectService: {
-                    allowDefaultProject: ['eslint.config.cjs']
+                    allowDefaultProject: [import.meta.filename]
                 }
             },
             globals: {
@@ -189,4 +188,4 @@ const CONFIG = [
     MONGO_JS_CONFIG
 ];
 
-module.exports = CONFIG;
+export default CONFIG;

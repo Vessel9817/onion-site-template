@@ -8,7 +8,7 @@
   // https://github.com/microsoft/vscode-eslint/issues/1966
   "eslint.workingDirectories": ["."],
   "eslint.options": {
-    "overrideConfigFile": "./src/eslint/eslint.config.cjs"
+    "overrideConfigFile": "./src/eslint/eslint.config.mjs"
   },
   "sonarlint.analysisExcludesStandalone": "**/node_modules/**",
   "search.exclude": {
