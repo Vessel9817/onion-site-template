@@ -14,4 +14,4 @@ jobs:
         with:
           version: v5.0.2
       - name: Build Compose stack
-        run: docker compose --profile production --profile development --profile license-report build
+        run: docker compose --profile production --profile development --profile license-report --profile onionscan build

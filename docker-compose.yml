@@ -56,11 +56,11 @@ services:
     depends_on:
       - 'tor'
     profiles:
-      - 'development'
-      - 'tor'
+      - 'onionscan'
     build:
-      context: './config/onionscan/server'
+      context: './src/onionscan'
       dockerfile: './Dockerfile'
+      target: 'onionscan-server'
     environment:
       - 'TOR_HOST=10.5.3.2'
       - 'TOR_HOST_PORT=9050'
@@ -73,11 +73,11 @@ services:
     depends_on:
       - 'onionscan-server'
     profiles:
-      - 'development'
-      - 'tor'
+      - 'onionscan'
     build:
       context: './src/onionscan'
       dockerfile: './Dockerfile'
+      target: 'onionscan'
     env_file:
       - './src/onionscan/.env'
     environment:

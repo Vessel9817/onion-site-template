@@ -15,21 +15,22 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
-        "build": "docker compose --profile production --profile development --profile license-report build",
+        "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
         "start:prod": "docker compose --profile production up -d vanguards",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
+        "onionscan": "docker compose run --rm onionscan",
         "eslint": "eslint . -c ./src/eslint/eslint.config.mjs",
         "eslint:fix": "node --run=eslint -- --fix",
-        "license-report": "docker compose run --rm license-report > licenses.log"
+        "license-report": "docker compose run --rm license-report"
     },
     "workspaces": {
         "packages": [
             "./src/express",
             "./src/license-report",
             "./src/mongo",
-            "./src/onionscan/server"
+            "./src/onionscan"
         ]
     },
     "devDependencies": {
