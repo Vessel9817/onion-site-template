@@ -1,71 +1,61 @@
 # Onion Site Template
 
-This documentation, as well as the overall project, is currently
-under construction, see the Issues and Contribution section below.
+[![CI](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml)
+
+## Compatibility
+
+This project is OS-agnostic, except for some of the optional features used,
+which are currently Windows-only. We officially support recent versions of
+Node and npm (consequently also npx) for up-to-date security releases.
+As such, other Node package managers (e.g, yarn, pnpm)
+may not be supported. Where possible, package manager commands are replaced
+in the source code with an equivalent Node CLI command.
+(I.e, `npm run ABC` is equivalent to `node --run=ABC`)
+
+## Licenses
+
+This project is licensed under the [MIT](./LICENSE.md) license.
+
+However, to view the licenses of the Node packages we explicitly depend on,
+run the following command:
+
+```shell
+npm run license-report
+```
 
 ## Installation
 
 ### Installing Dependencies
 
 - Clone this repository
-- Install the node modules by running `npm run install-all`, or the equivalent
-  for your particular Node.js package manager (e.g, npm, yarn, pnpm)
-- Install Docker Desktop. If already installed, please use
-  the default `desktop-linux` context.
+- Install Docker Desktop
 
 ### Configuring Secrets From Template
 
-Remove the `.example` extension from the following files,
-renaming them all to `.env`:
+#### General
 
-- [`./config/mongo/.env.example`](./config/mongo/.env.example)
-- [`./config/mongo/debug/.env.example`](./config/mongo/debug/.env.example)
+Rename the following files from `.env.example` to `.env`:
+
+- [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
+- [./src/mongo/debug/secrets/.env.example](./src/mongo/debug/secrets/.env.example)
+- [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
 
-<!--
-### Kafka
-
-All in separate processes:
-
-- Run Docker
-- Run `npm run broker`
-- Run `npm run create_topic test-topic`
-- Optionally, you may now terminate the broker process
--->
-
-### Configuring tor Secrets
+#### tor
 
 If you have an existing onion domain, the public/private keys and other
-secrets can be placed in [`./config/tor/secrets/`](./config/tor/secrets).
-
-If you don't have an existing onion domain, run the tor container.
-This will generate a domain name and related secrets in the container
-at `/var/lib/tor/website/`. To reuse this domain, as per the above steps,
-save and copy them to the host filesystem at
-[`./config/tor/secrets/`](./config/tor/secrets).
-
-Side note: This process would be done automatically with a bind mount if the
-permissions allowed such, but unfortunately, there isn't an elegant
-cross-platform solution to this.
-
-Finally, create a `.env` file in the `./config/onionscan/` directory
-with the following text:
-
-```env
-HOSTNAME="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd.onion"
-```
-
-Where the above onion address represents the one you just generated,
-which can be found in the text file `./config/tor/secrets/hostname`.
+secrets can be placed in [`./src/tor/secrets/`](./src/tor/secrets).
+If you don't, one will automatically be generated for you in the aforementioned
+directory. Your website URL will be found in `./src/tor/secrets/hostname`.
 
 ## Running
 
-For production mode, run one of the following equivalent commands
+For production mode, run **one** of the following equivalent commands
 in the top-level directory:
 
-```sh
+```shell
 npm start
 npm run start
 npm run start:prod
@@ -74,32 +64,27 @@ npm run start:prod
 To attach all debugging containers intended for development-only use,
 run the following command in the top-level directory:
 
-```sh
+```shell
 npm run start:dev
 ```
 
-This can be done after starting production mode,
-or it can be done to also start production mode.
+This can be done before or after starting production mode,
+as they collectively depend on all production containers unrelated to tor.
 
-## Licenses
+To stop the website, run **one** of the following equivalent commands:
 
-See [our license](./licenses/Vessel9817.license)
-and some of our [upstream licenses](./licenses)
-Though we can't include them all, (e.g, node modules) we try to be respectful
-of the open-source contributors whose work we've built upon.
+```shell
+npm stop
+npm run stop
+```
 
 ## Credits
 
 - [onionscan](https://github.com/harr1424/onionscan)
-- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate)
+- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
+  modified to lint and prettify this Node project
+- Many more projects we explicitly or inadvertently depend on
 
 ## Issues and Contribution
 
-See the [TODOs](TODO.md)
-
-- **Currently, only static website functionality is supported.**
-  We're working on it, see below.
-- Kafka is currently implemented independently
-  and requires further integration to communicate with other components
-- Express is currently implemented independently,
-  but is fully functional through the debug container
+See: [CONTRIBUTING](./CONTRIBUTING.md)

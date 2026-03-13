@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../../common/header', { title: 'Error' }) %>
+    <body>
+        <h1>Error <%= code %></h1>
+        <%- include('../../common/nav') %>
+        <h2><%= msg %></h2>
+        <p><%= explanation %></p>
+    </body>
+    <%- include('../../common/scripts') %>
+</html>
