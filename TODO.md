@@ -23,3 +23,4 @@
   - `-timeout 1` doesn't prevent hanging after results are output
   - Validate environment variables
 - Integrate code coverage tool
+- Migrate `mongosh` command to a Docker command

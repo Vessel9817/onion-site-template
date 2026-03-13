@@ -27,7 +27,6 @@ const MONGO_JS_FILE_GLOBS = [
 const IGNORE_FILE_CONFIG = {
     ignores: [
         // Development
-        '/config/onionscan/**',
         '**/coverage/**',
         '**/logs/**',
         '**/*.log',

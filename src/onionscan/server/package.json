@@ -1,6 +1,6 @@
 {
-    "name": "onionscan-server",
-    "version": "1.0.0",
+    "name": "onionscan-server_",
+    "version": "0.0.0",
     "license": "MIT",
     "main": "app.ts",
     "private": true,

@@ -18,7 +18,6 @@
 !**/.env.example
 
 # Development
-/onionscan
 /coverage
 
 # Deployment

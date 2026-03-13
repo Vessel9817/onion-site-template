@@ -1,8 +1,8 @@
-import express, { type RequestHandler } from 'express';
-import cors from 'cors';
-import path from 'node:path';
 import { createServer } from '@pondwader/socks5-server';
+import cors from 'cors';
+import express, { type RequestHandler } from 'express';
 import net from 'node:net';
+import path from 'node:path';
 
 // Verifying env vars
 const TOR_HOST = process.env.TOR_HOST;
@@ -10,7 +10,8 @@ const TOR_HOST_PORT = Number(process.env.TOR_HOST_PORT);
 
 if (TOR_HOST == null) {
     throw new Error('Tor host is undefined');
-} else if (TOR_HOST_PORT == null || isNaN(TOR_HOST_PORT)) {
+}
+else if (TOR_HOST_PORT == null || Number.isNaN(TOR_HOST_PORT)) {
     throw new Error('Tor host port is invalid or undefined');
 }
 
@@ -22,9 +23,9 @@ function startHttpServer(port: number) {
     APP.use(express.urlencoded({ extended: false }));
 
     const handler: RequestHandler = (req, res) => {
-        // Starting SOCKS5 server
+    // Starting SOCKS5 server
         const READY = new Promise<void>((resolve) => {
-            SERVER.close(() => resolve());
+            SERVER.close(() => { resolve() });
         });
         startSocks5Server(port, READY);
 

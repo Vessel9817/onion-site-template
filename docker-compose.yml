@@ -50,7 +50,7 @@ services:
       - 'production'
     depends_on:
       - 'tor'
-  'onionscan_server':
+  'onionscan-server':
     container_name: 'onionscan_server'
     restart: 'always'
     depends_on:
@@ -71,20 +71,20 @@ services:
     container_name: 'onionscan'
     restart: 'always'
     depends_on:
-      - 'onionscan_server'
+      - 'onionscan-server'
     profiles:
       - 'development'
       - 'tor'
     build:
-      context: './config/onionscan'
+      context: './src/onionscan'
       dockerfile: './Dockerfile'
     env_file:
-      - './config/onionscan/.env'
+      - './src/onionscan/.env'
     environment:
       - 'TOR_PROXY=10.5.3.253:9150'
     networks:
       'tor':
-        ipv4_address: '10.5.3.254' # ::ffff:a05:04fe
+        ipv4_address: '10.5.3.254'
   'nginx':
     container_name: 'nginx'
     depends_on:
