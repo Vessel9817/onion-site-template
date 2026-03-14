@@ -50,30 +50,40 @@ services:
       - 'production'
     depends_on:
       - 'tor'
+    build:
+      context: './src/vanguards'
+      dockerfile: './Dockerfile'
+    volumes:
+      - type: 'volume'
+        source: 'tor-data'
+        target: '/var/lib/tor/'
+        read_only: true
+    network_mode: 'container:tor'
   'onionscan-server':
-    container_name: 'onionscan_server'
+    container_name: 'onionscan-server'
     restart: 'always'
+    profiles:
+      - 'production'
+      - 'onionscan'
     depends_on:
       - 'tor'
-    profiles:
-      - 'onionscan'
     build:
       context: './src/onionscan'
       dockerfile: './Dockerfile'
       target: 'onionscan-server'
     environment:
-      - 'TOR_HOST=10.5.3.2'
-      - 'TOR_HOST_PORT=9050'
+      'UPSTREAM_SOCKS5_HOSTNAME': '10.5.3.2'
     networks:
       'tor':
         ipv4_address: '10.5.3.253'
   'onionscan':
     container_name: 'onionscan'
     restart: 'always'
+    profiles:
+      - 'production'
+      - 'onionscan'
     depends_on:
       - 'onionscan-server'
-    profiles:
-      - 'onionscan'
     build:
       context: './src/onionscan'
       dockerfile: './Dockerfile'

@@ -30,7 +30,7 @@ npm run license-report
 - Clone this repository
 - Install Docker Desktop
 
-### Configuring Secrets From Template
+### Configuring Secrets
 
 #### General
 
@@ -39,6 +39,7 @@ Rename the following files from `.env.example` to `.env`:
 - [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
 - [./src/mongo/debug/secrets/.env.example](./src/mongo/debug/secrets/.env.example)
 - [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
+- [./src/onionscan/.env.example](./src/onionscan/.env.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
@@ -48,9 +49,17 @@ in each of these files, **for your own security, please change them.**
 If you have an existing onion domain, the public/private keys and other
 secrets can be placed in [`./src/tor/secrets/`](./src/tor/secrets).
 If you don't, one will automatically be generated for you in the aforementioned
-directory. Your website URL will be found in `./src/tor/secrets/hostname`.
+directory. Your website domain will be found in `./src/tor/secrets/hostname`,
+following the following format: (Onion v3 address)
+
+`abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion`
+
+This domain should also be specified in
+[./src/onionscan/.env](./src/onionscan/.env)
 
 ## Running
+
+### Production
 
 For production mode, run **one** of the following equivalent commands
 in the top-level directory:
@@ -60,6 +69,8 @@ npm start
 npm run start
 npm run start:prod
 ```
+
+### Development
 
 To attach all debugging containers intended for development-only use,
 run the following command in the top-level directory:
@@ -71,12 +82,30 @@ npm run start:dev
 This can be done before or after starting production mode,
 as they collectively depend on all production containers unrelated to tor.
 
-To stop the website, run **one** of the following equivalent commands:
+### Shutdown
+
+To stop the website, run **one** of the following equivalent commands
+in the top-level directory:
 
 ```shell
 npm stop
 npm run stop
 ```
+
+### Updating
+
+To update the website, run the following command in the top-level directory:
+
+```shell
+npm run build
+```
+
+Then, stop and start the website.
+
+In general, you should be able to omit the shutdown procedure,
+but some services may not function correctly.
+For instance, `vanguards` currently requires a restart if `tor` restarts,
+as does `express` if `mongo` restarts.
 
 ## Credits
 

@@ -16,19 +16,19 @@ ENTRYPOINT [ "./init.sh" ]
 
 FROM ${DEBIAN_VERSION} AS run
 
-RUN \
-    apt-get update -qq && \
-    apt-get install -yqq --no-install-recommends tor && \
-    apt-get clean && \
-    chmod 700 -R "/var/lib/tor" && \
-    chown -R debian-tor:debian-tor "/var/lib/tor" && \
-    chown -R debian-tor:debian-tor "/etc/tor"
+RUN apt-get update -qq \
+    && apt-get install -yqq --no-install-recommends tor \
+    && apt-get clean \
+    && chmod 700 -R "/var/lib/tor" \
+    && chown -R debian-tor:debian-tor "/var/lib/tor" \
+    && chown -R debian-tor:debian-tor "/etc/tor"
 
-# 101:103 corresponds to debian-tor
+# 101:103 corresponds to user "debian-tor"
 COPY --link --chown=101:103 [ "./torrc", "/etc/tor/" ]
 
 # Running tor as a non-root user
 VOLUME [ "/var/lib/tor/website/" ]
 USER debian-tor
 ENTRYPOINT [ "tor" ]
-EXPOSE 9050
+ENV SOCKS_PORT=9050
+EXPOSE "${SOCKS_PORT}"

@@ -4,12 +4,10 @@ ARG NODE_VERSION=node:lts-alpine3.22@sha256:76db75ca7e7da9148ae42c92d9be12d12a8d
 FROM ${GO_VERSION} AS onionscan
 
 RUN go install github.com/harr1424/onionscan@latest
-WORKDIR $GOPATH/bin
-RUN mkdir -p app \
-    && mv onionscan app/onionscan
 
-WORKDIR $GOPATH/bin/app
-COPY [ "./entrypoint.sh", "./" ]
+WORKDIR ${GOPATH}/bin/app
+RUN mv '../onionscan' './onionscan'
+COPY --link [ "./entrypoint.sh", "./" ]
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 EXPOSE 8080
@@ -18,12 +16,18 @@ FROM ${NODE_VERSION} AS onionscan-server
 
 RUN mkdir -p /usr/app/src
 WORKDIR /usr/app/src
-COPY --exclude="entrypoint.sh" [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
+COPY [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
 RUN npm i
 
 # 1000:1000 corresponds to user "node"
-COPY --link --chown=1000:1000 [ "./", "./" ]
+COPY --link --chown=1000:1000 --exclude="entrypoint.sh" [ "./", "./" ]
+
+ENV SERVER_PORT=9150
 
 USER node
-EXPOSE 3000
+EXPOSE "${SERVER_PORT}"
 CMD [ "npm", "start" ]
+
+# Also depends on the UPSTREAM_SOCKS5_HOSTNAME env var
+ENV HTTP_PORT=3000
+ENV UPSTREAM_SOCKS5_PORT=9050

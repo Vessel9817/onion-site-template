@@ -1,99 +1,137 @@
-import { createServer } from '@pondwader/socks5-server';
 import cors from 'cors';
-import express, { type RequestHandler } from 'express';
+import express from 'express';
 import net from 'node:net';
 import path from 'node:path';
+import { Duplex } from 'node:stream';
+
+interface ConnectionOptions {
+    hostname: string;
+    port: number;
+}
+
+interface HttpSocksOptions {
+    http: ConnectionOptions;
+    socks5: ConnectionOptions;
+}
 
 // Verifying env vars
-const TOR_HOST = process.env.TOR_HOST;
-const TOR_HOST_PORT = Number(process.env.TOR_HOST_PORT);
+const UPSTREAM_SOCKS5_HOSTNAME = process.env.UPSTREAM_SOCKS5_HOSTNAME;
+const UPSTREAM_SOCKS5_PORT = Number(process.env.UPSTREAM_SOCKS5_PORT);
+const HTTP_PORT = Number(process.env.HTTP_PORT);
+const SERVER_PORT = Number(process.env.SERVER_PORT);
 
-if (TOR_HOST == null) {
-    throw new Error('Tor host is undefined');
+if (UPSTREAM_SOCKS5_HOSTNAME == null) {
+    throw new TypeError('Upstream SOCKS5 hostname is undefined');
 }
-else if (TOR_HOST_PORT == null || Number.isNaN(TOR_HOST_PORT)) {
-    throw new Error('Tor host port is invalid or undefined');
+else if (Number.isNaN(UPSTREAM_SOCKS5_PORT)) {
+    throw new TypeError('Upstream SOCKS5 port is invalid or undefined');
+}
+else if (Number.isNaN(HTTP_PORT)) {
+    throw new TypeError('HTTP port is invalid or undefined');
+}
+else if (Number.isNaN(SERVER_PORT)) {
+    throw new TypeError('Server port is invalid or undefined');
+}
+
+function createProxy(
+    connection: Duplex,
+    upstream: ConnectionOptions,
+    protocol: string
+): net.Socket {
+    const uri = `${protocol}://${upstream.hostname}:${upstream.port.toString()}`;
+    const proxy = net.createConnection(upstream.port, upstream.hostname, () => {
+        console.log(`Connected to upstream server: ${uri}`);
+        connection.pipe(proxy);
+        proxy.pipe(connection);
+    });
+
+    proxy.on('close', () => {
+        console.log(`Disconnected from upstream server: ${uri}`);
+        connection.destroy();
+        proxy.unpipe(connection);
+        proxy.destroy();
+    });
+
+    connection.on('close', () => {
+        connection.unpipe(proxy);
+        connection.destroy();
+        proxy.destroy();
+    });
+
+    return proxy;
 }
 
 function startHttpServer(port: number) {
-    const APP = express();
+    const app = express();
 
-    APP.use(cors());
-    APP.use(express.json());
-    APP.use(express.urlencoded({ extended: false }));
+    app.use(cors());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
 
-    const handler: RequestHandler = (req, res) => {
-    // Starting SOCKS5 server
-        const READY = new Promise<void>((resolve) => {
-            SERVER.close(() => { resolve() });
-        });
-        startSocks5Server(port, READY);
-
+    app.get('/', (req, res) => {
         res.statusMessage = 'Tor is not an HTTP Proxy';
         res.status(501).sendFile(path.join(__dirname, 'html', 'error.html'));
-    };
-
-    APP.get('/', handler);
-
-    APP.on('error', (err) => {
-        console.error(`HTTP server error: ${err}`);
     });
 
-    const SERVER = APP.listen(port, () => {
+    const server = app.listen(port, () => {
         console.log(`HTTP server started!`);
     });
 
-    SERVER.on('close', () => {
+    server.on('close', () => {
         console.log(`HTTP server stopped!`);
     });
+
+    return server;
 }
 
-function startSocks5Server(port: number, ready: Promise<void>): void {
-    const SERVER = createServer();
+function createHttpSocksServer(options: HttpSocksOptions): net.Server {
+    return net.createServer((socket: net.Socket) => {
+        socket.once('data', (buf) => {
+            // Establishing a proxy connection could take a while.
+            // Unfortunately, if the proxy takes a long time, we could be
+            // blocking other connections. Onionscan will keep retrying.
+            socket.cork();
 
-    SERVER.setConnectionHandler((connection, sendStatus) => {
-        const SOCKET = connection.socket;
+            let proxy: net.Socket;
 
-        // Allowing connection
-        sendStatus('REQUEST_GRANTED');
+            if (buf[0] == 0x05) {
+                console.info('Creating SOCKS5 proxy...');
+                proxy = createProxy(socket, options.socks5, 'socks5');
+            }
+            /*
+            else if (buf[0] == 0x04) {
+                // Could also be SOCKS4a
+                proxy = createProxy(socket, options.socks4, 'socks4');
+            }
+            else if (buf[0] == 0x16) {
+                proxy = createProxy(socket, options.https, 'https');
+            }
+            */
+            else {
+                console.info('Creating HTTP proxy...');
 
-        // Proxying data to tor
-        const TARGET = net.createConnection(TOR_HOST_PORT, TOR_HOST, () => {
-            console.log(`Connected to upstream server!`);
-            SOCKET.pipe(TARGET);
-            TARGET.pipe(SOCKET);
-        });
+                proxy = createProxy(socket, options.http, 'http');
+            }
 
-        TARGET.on('close', () => {
-            SOCKET.destroy();
-            TARGET.unpipe(SOCKET);
-            TARGET.destroy();
-        });
-
-        SOCKET.on('close', () => {
-            SOCKET.unpipe(TARGET);
-            SOCKET.destroy();
-            TARGET.destroy();
-        });
-
-        SOCKET.on('error', (err) => {
-            SOCKET.destroy(new Error(`Socket error: ${err}`));
-        });
-
-        TARGET.on('error', (err) => {
-            TARGET.destroy(new Error(`tor error: ${err}`));
-        });
-    });
-
-    // Starting SOCKS5 server after HTTP server has stopped
-    ready.then(() => {
-        SERVER.listen(port, () => {
-            console.log('SOCKS5 server started!');
+            // Catching up
+            proxy.write(buf);
+            socket.uncork();
         });
     });
 }
 
-// Starting HTTP server
-const PORT = 9150;
+// Starting HTTP server/SOCKS proxy server
+startHttpServer(HTTP_PORT);
 
-startHttpServer(PORT);
+const server = createHttpSocksServer({
+    http: {
+        hostname: 'localhost',
+        port: HTTP_PORT
+    },
+    socks5: {
+        hostname: UPSTREAM_SOCKS5_HOSTNAME,
+        port: UPSTREAM_SOCKS5_PORT
+    }
+});
+
+server.listen(SERVER_PORT);

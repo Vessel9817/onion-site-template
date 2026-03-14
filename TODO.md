@@ -14,8 +14,10 @@
 - Create webpack configurations instead of using ts-node in production
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart),
   primarily in the case of plaintext mongo passwords
-- Configure tests and container health checks
-  - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
+- Add tests
+- Add healthchecks:
+  - `tor` service: `curl -s --socks5 10.5.3.2:9050 [...]`
+- Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
 - Update README:
   - Add usage instructions for each npm command
@@ -24,3 +26,5 @@
   - Validate environment variables
 - Integrate code coverage tool
 - Migrate `mongosh` command to a Docker command
+- Add ESLint precommit hook
+- Add static `Onion-Location` header through nginx and domain environment variable

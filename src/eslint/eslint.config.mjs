@@ -115,6 +115,8 @@ const JS_CONFIG = {
         ],
         // https://typescript-eslint.io/rules/no-namespace
         '@typescript-eslint/no-namespace': ['off'],
+        // https://typescript-eslint.io/rules/restrict-template-expressions/
+        '@typescript-eslint/restrict-template-expressions': ['error'],
 
         // https://eslint.style/rules/js/indent
         '@stylistic/indent': ['warn', 4],
