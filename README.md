@@ -4,9 +4,9 @@
 
 ## Compatibility
 
-This project is OS-agnostic, except for some of the optional features used,
-which are currently Windows-only. We officially support recent versions of
-Node and npm (consequently also npx) for up-to-date security releases.
+This project is OS-agnostic, being fully containerized.
+We officially support recent versions of Node and npm
+(consequently also npx) for up-to-date security releases.
 As such, other Node package managers (e.g, yarn, pnpm)
 may not be supported. Where possible, package manager commands are replaced
 in the source code with an equivalent Node CLI command.
@@ -106,6 +106,45 @@ In general, you should be able to omit the shutdown procedure,
 but some services may not function correctly.
 For instance, `vanguards` currently requires a restart if `tor` restarts,
 as does `express` if `mongo` restarts.
+
+## Maintenance
+
+### OnionScan
+
+Performs a comprehensive scan of the website, identifying fingerprints
+and computing correlation vectors accordingly. It can also be used to find
+misconfigurations, as it checks for ports that may not meant to be publicly
+exposed.
+
+Usage:
+
+```shell
+# Start the website and expose it to the tor network
+npm run onionscan
+
+# Stop only onionscan
+docker compose down onionscan
+
+# Stop onionscan and the website
+npm stop
+```
+
+### ESLint
+
+A code linter. Used to prettify code, ensuring teams conform to the same
+stylistic standards. Also used to address potential errors, such as
+[the many edge cases of JavaScript](https://github.com/denysdovhan/wtfjs)
+that make the language infamous for being poorly designed.
+
+Usage:
+
+```shell
+# Displays linting issues
+npm run eslint
+
+# Fixes linting issues, displaying any requiring manual fixing
+npm run eslint:fix
+```
 
 ## Credits
 

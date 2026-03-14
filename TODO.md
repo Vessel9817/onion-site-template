@@ -19,12 +19,13 @@
   - `tor` service: `curl -s --socks5 10.5.3.2:9050 mydomain.onion`
 - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
-- Update README:
-  - Add usage instructions for each npm command
-- Fix OnionScan:
+- OnionScan:
   - `-timeout 1` doesn't prevent hanging after results are output
-  - Validate environment variables
+  - Add webui command, if possible
 - Integrate code coverage tool
-- Migrate `mongosh` command to a Docker command
+- `mongosh` npm command:
+  - Migrate to a Docker command
+  - Add usage instructions to the README
 - Add ESLint precommit hook
+- Add SonarLint precommit hook
 - Add static `Onion-Location` header through nginx and domain environment variable
