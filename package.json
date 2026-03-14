@@ -20,7 +20,7 @@
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
-        "onionscan": "docker compose run --rm onionscan",
+        "onionscan": "docker compose up -d onionscan",
         "eslint": "eslint . -c ./src/eslint/eslint.config.mjs",
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report"
@@ -29,8 +29,7 @@
         "packages": [
             "./src/express",
             "./src/license-report",
-            "./src/mongo",
-            "./src/onionscan"
+            "./src/mongo"
         ]
     },
     "devDependencies": {

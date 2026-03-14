@@ -59,42 +59,6 @@ services:
         target: '/var/lib/tor/'
         read_only: true
     network_mode: 'container:tor'
-  'onionscan-server':
-    container_name: 'onionscan-server'
-    restart: 'always'
-    profiles:
-      - 'production'
-      - 'onionscan'
-    depends_on:
-      - 'tor'
-    build:
-      context: './src/onionscan'
-      dockerfile: './Dockerfile'
-      target: 'onionscan-server'
-    environment:
-      'UPSTREAM_SOCKS5_HOSTNAME': '10.5.3.2'
-    networks:
-      'tor':
-        ipv4_address: '10.5.3.253'
-  'onionscan':
-    container_name: 'onionscan'
-    restart: 'always'
-    profiles:
-      - 'production'
-      - 'onionscan'
-    depends_on:
-      - 'onionscan-server'
-    build:
-      context: './src/onionscan'
-      dockerfile: './Dockerfile'
-      target: 'onionscan'
-    env_file:
-      - './src/onionscan/.env'
-    environment:
-      - 'TOR_PROXY=10.5.3.253:9150'
-    networks:
-      'tor':
-        ipv4_address: '10.5.3.254'
   'nginx':
     container_name: 'nginx'
     depends_on:
@@ -204,6 +168,27 @@ services:
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
+  'onionscan':
+    container_name: 'onionscan'
+    restart: 'always'
+    profiles:
+      - 'production'
+      - 'onionscan'
+    build:
+      context: './src/onionscan'
+      dockerfile: './Dockerfile'
+      target: 'onionscan'
+    env_file:
+      - './src/onionscan/.env'
+    environment:
+      - 'TOR_PROXY=10.5.3.2:9050'
+    volumes:
+      - type: 'volume'
+        source: 'onionscan-db'
+        target: '/project/onionscandb/'
+    networks:
+      'tor':
+        ipv4_address: '10.5.3.254'
   'license-report':
     container_name: 'license-report'
     profiles:
@@ -223,6 +208,7 @@ volumes:
   'tor-data':
   'mongo-db':
   'mongo-configdb':
+  'onionscan-db':
 secrets:
   'express':
     file: './src/express/secrets/'

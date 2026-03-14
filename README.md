@@ -109,7 +109,7 @@ as does `express` if `mongo` restarts.
 
 ## Credits
 
-- [onionscan](https://github.com/harr1424/onionscan)
+- [OnionScan](https://github.com/harr1424/onionscan)
 - [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
   modified to lint and prettify this Node project
 - Many more projects we explicitly or inadvertently depend on

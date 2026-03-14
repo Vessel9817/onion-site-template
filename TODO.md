@@ -16,12 +16,12 @@
   primarily in the case of plaintext mongo passwords
 - Add tests
 - Add healthchecks:
-  - `tor` service: `curl -s --socks5 10.5.3.2:9050 [...]`
+  - `tor` service: `curl -s --socks5 10.5.3.2:9050 mydomain.onion`
 - Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
 - Update README:
   - Add usage instructions for each npm command
-- Fix onionscan:
+- Fix OnionScan:
   - `-timeout 1` doesn't prevent hanging after results are output
   - Validate environment variables
 - Integrate code coverage tool

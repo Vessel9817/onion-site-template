@@ -10,7 +10,7 @@ RUN \
     apk add --no-cache socat
 COPY --link [ "./", "./" ]
 
-# Redirecting traffic from localhost to the NGINX container
+# Redirecting traffic from localhost to the nginx container
 # Note: requires env var FORWARD_ADDR
 EXPOSE ${EXPOSE_PORT}
 ENTRYPOINT [ "./index.sh" ]
