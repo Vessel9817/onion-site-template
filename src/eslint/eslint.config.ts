@@ -1,11 +1,9 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import { defineConfig } from 'eslint/config';
+import { type Config, defineConfig } from 'eslint/config';
 import globals from 'globals';
 import path from 'node:path';
 import tseslint from 'typescript-eslint';
-
-/** @typedef {import('eslint/config').Config} Config */
 
 const JS_FILE_GLOBS = [
     '**/*.js',
@@ -13,18 +11,17 @@ const JS_FILE_GLOBS = [
     '**/*.mjs',
     '**/*.ts',
     '**/*.cts',
-    '**/*.mts'
+    '**/*.mts',
 ];
 
 const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.js',
     '**/mongo/**/*.cjs',
     '**/mongo/**/*.ts',
-    '**/mongo/**/*.cts'
+    '**/mongo/**/*.cts',
 ];
 
-/** @type {Config} */
-const IGNORE_FILE_CONFIG = {
+const IGNORE_FILE_CONFIG: Config = {
     ignores: [
         // Development
         '**/coverage/**',
@@ -64,8 +61,8 @@ const IGNORE_FILE_CONFIG = {
         '**/*.env.*',
         '**/secrets.json',
         '**/secrets.*.json',
-        '**/secrets/**'
-    ]
+        '**/secrets/**',
+    ],
 };
 
 // https://typescript-eslint.io/users/configs/
@@ -78,23 +75,27 @@ const DEFAULT_JS_CONFIGS = defineConfig([
         languageOptions: {
             // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
-                tsconfigRootDir: path.resolve(import.meta.dirname, '..', '..', 'tsconfig.json'),
+                tsconfigRootDir: path.resolve(
+                    import.meta.dirname,
+                    '..',
+                    '..',
+                    'tsconfig.json',
+                ),
                 projectService: {
-                    allowDefaultProject: [import.meta.filename]
-                }
+                    allowDefaultProject: [import.meta.filename],
+                },
             },
             globals: {
-                ...globals.node
-            }
-        }
-    }
+                ...globals.node,
+            },
+        },
+    },
 ]);
 
-/** @type {Config} */
-const JS_CONFIG = {
+const JS_CONFIG: Config = {
     files: JS_FILE_GLOBS,
     rules: {
-        // https://eslint.org/docs/latest/rules/prefer-const
+    // https://eslint.org/docs/latest/rules/prefer-const
         'prefer-const': ['warn'],
         // https://eslint.style/rules/js/no-unexpected-multiline
         'no-unexpected-multiline': ['error'],
@@ -110,8 +111,8 @@ const JS_CONFIG = {
             'error',
             {
                 allowInterfaces: 'with-single-extends',
-                allowWithName: '^props$'
-            }
+                allowWithName: '^props$',
+            },
         ],
         // https://typescript-eslint.io/rules/no-namespace
         '@typescript-eslint/no-namespace': ['off'],
@@ -126,8 +127,8 @@ const JS_CONFIG = {
             'always',
             {
                 omitLastInOneLineBlock: true,
-                omitLastInOneLineClassBody: true
-            }
+                omitLastInOneLineClassBody: true,
+            },
         ],
         // https://eslint.style/rules/js/no-extra-semi
         '@stylistic/no-extra-semi': ['warn'],
@@ -143,13 +144,13 @@ const JS_CONFIG = {
             {
                 singleline: {
                     delimiter: 'semi',
-                    requireLast: false
+                    requireLast: false,
                 },
                 multiline: {
                     delimiter: 'semi',
-                    requireLast: true
-                }
-            }
+                    requireLast: true,
+                },
+            },
         ],
         // https://eslint.style/rules/js/quotes
         '@stylistic/quotes': [
@@ -157,36 +158,34 @@ const JS_CONFIG = {
             'single',
             {
                 avoidEscape: true,
-                allowTemplateLiterals: 'always'
-            }
+                allowTemplateLiterals: 'always',
+            },
         ],
         // https://eslint.style/rules/js/jsx-quotes
         '@stylistic/jsx-quotes': ['warn', 'prefer-single'],
         // https://eslint.style/rules/jsx/jsx-indent-props
         '@stylistic/jsx-indent-props': ['off'],
         // https://eslint.style/rules/jsx/jsx-one-expression-per-line
-        '@stylistic/jsx-one-expression-per-line': ['off']
-    }
+        '@stylistic/jsx-one-expression-per-line': ['off'],
+    },
 };
 
-/** @type {Config} */
-const MONGO_JS_CONFIG = {
+const MONGO_JS_CONFIG: Config = {
     files: MONGO_JS_FILE_GLOBS,
     languageOptions: {
         globals: {
             ...globals.mongo,
             db: 'writable',
-            disableTelemetry: 'readonly'
-        }
-    }
+            disableTelemetry: 'readonly',
+        },
+    },
 };
 
-/** @type {Config[]} */
-const CONFIG = [
+const CONFIG: Config[] = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
     JS_CONFIG,
-    MONGO_JS_CONFIG
+    MONGO_JS_CONFIG,
 ];
 
 export default CONFIG;

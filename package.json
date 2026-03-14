@@ -21,7 +21,7 @@
         "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
         "onionscan": "docker compose up -d onionscan",
-        "eslint": "eslint . -c ./src/eslint/eslint.config.mjs",
+        "eslint": "eslint . -c ./src/eslint/eslint.config.ts",
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report"
     },
@@ -41,6 +41,7 @@
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "globals": "^17.4.0",
+        "jiti": "^2.6.1",
         "ts-node": "^10.9.2",
         "tslib": "^2.8.1",
         "typescript": "^5.9.3",
