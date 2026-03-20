@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
-
-const HTTP_BAD_REQUEST = 400;
+import { http } from './constants';
 
 export function validationWrapper<T extends RequestHandler>(
     callback: T
@@ -12,7 +11,7 @@ export function validationWrapper<T extends RequestHandler>(
                 await callback(req, res, next);
             }
             else {
-                res.status(HTTP_BAD_REQUEST);
+                res.status(http.BAD_REQUEST);
                 validationResult(req).throw();
             }
         }

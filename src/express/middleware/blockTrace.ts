@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import { http } from '../utils/constants';
 
 /**
  * For security reasons, blocks the TRACE method
@@ -7,8 +8,8 @@ import { RequestHandler } from 'express';
  * @param next The callback function for the next middleware
  */
 export const blockTrace: RequestHandler = (req, res, next) => {
-    if (req.method.trim().toLowerCase() === 'trace') {
-        res.status(405).send('Method Not Allowed');
+    if (req.method === 'TRACE') {
+        res.status(http.METHOD_NOT_ALLOWED).send('Method Not Allowed');
     }
     next();
 };
