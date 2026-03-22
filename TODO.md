@@ -5,6 +5,7 @@
 - Express should serve 503 Service Unavailable on DB disconnect
 - Express should attempt to reconnect to DB upon disconnect
 - Express should handle expected errors accordingly
+- ObjectId served to `/chat` endpoint is a possible fingerprinting vector (Mongo)
 - Fix frontend CSS
 - Replace the Bootstrap dependency with something locally hosted
 - Document methods and classes

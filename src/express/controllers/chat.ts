@@ -28,7 +28,7 @@ export const getChat: RequestHandler = async (req, res) => {
 };
 
 export const sendMsg: RequestHandler = async (req, res, next) => {
-    // Placeholder
+    // Placeholder error page
     if (!validationResult(req).isEmpty()) {
         res.statusCode = http.codes.BAD_REQUEST;
         next(validationResult(req).array()[0]);
@@ -50,7 +50,7 @@ export const sendMsg: RequestHandler = async (req, res, next) => {
 };
 
 export const editMsg: RequestHandler = async (req, res, next) => {
-    // Placeholder
+    // Placeholder error page
     if (!validationResult(req).isEmpty()) {
         res.statusCode = http.codes.BAD_REQUEST;
         next(validationResult(req).array()[0]);
@@ -73,7 +73,14 @@ export const editMsg: RequestHandler = async (req, res, next) => {
     res.redirect('/chat');
 };
 
-export const deleteMsg: RequestHandler = async (req, res) => {
+export const deleteMsg: RequestHandler = async (req, res, next) => {
+    // Placeholder error page
+    if (!validationResult(req).isEmpty()) {
+        res.statusCode = http.codes.BAD_REQUEST;
+        next(validationResult(req).array()[0]);
+        return;
+    }
+
     const params = req.body as { id: string };
     const id = new ObjectId(params.id);
 
