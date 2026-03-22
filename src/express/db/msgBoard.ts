@@ -1,7 +1,5 @@
-import mongoose, { PipelineStage, Schema } from 'mongoose';
 import { ObjectId, WithId } from 'mongodb';
-
-const MAX_INT64 = Number.MAX_SAFE_INTEGER; // mongo uses 64-bit integers, but JS requires BigInt to represent that upper bound
+import mongoose, { PipelineStage, Schema } from 'mongoose';
 
 export interface Msg {
     name: string;
@@ -44,7 +42,7 @@ export async function idExists(id: ObjectId): Promise<boolean> {
  * @returns A message batch, paged by most recent
  */
 export async function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
-    const skip = Math.min(MAX_INT64, MSG_PAGE_SIZE * (page - 1));
+    const skip = MSG_PAGE_SIZE * (page - 1);
     const rawPipeline: (PipelineStage | null)[] = [
         { $sort: { lastModified: -1 } },
         // This is O(m+n), where m is the page size and n is the total documents skipped.

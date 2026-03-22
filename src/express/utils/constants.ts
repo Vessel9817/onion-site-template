@@ -318,7 +318,7 @@ const NETWORK_AUTHENTICATION_REQUIRED = 511;
 /**
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}
  */
-export const http = {
+const codes = {
     // 10X
     CONTINUE,
     SWITCHING_PROTOCOLS,
@@ -390,3 +390,71 @@ export const http = {
     NOT_EXTENDED,
     NETWORK_AUTHENTICATION_REQUIRED
 };
+
+const names: Record<number, string> = {
+    [codes.CONTINUE]: 'Continue',
+    [codes.SWITCHING_PROTOCOLS]: 'Switching Protocols',
+    [codes.PROCESSING]: 'Processing',
+    [codes.EARLY_HINTS]: 'Early Hints',
+    [codes.OK]: 'OK',
+    [codes.CREATED]: 'Created',
+    [codes.ACCEPTED]: 'Accepted',
+    [codes.NON_AUTHORITATIVE_INFORMATION]: 'Non-Authoritative Information',
+    [codes.NO_CONTENT]: 'No Content',
+    [codes.RESET_CONTENT]: 'Reset Content',
+    [codes.PARTIAL_CONTENT]: 'Partial Content',
+    [codes.MULTI_STATUS]: 'Multi-Status',
+    [codes.ALREADY_REPORTED]: 'Already Reported',
+    [codes.IM_USED]: 'IM Used',
+    [codes.MULTIPLE_CHOICES]: 'Multiple Choices',
+    [codes.MOVED_PERMANENTLY]: 'Moved Permanently',
+    [codes.FOUND]: 'Found',
+    [codes.SEE_OTHER]: 'See Other',
+    [codes.NOT_MODIFIED]: 'Not Modified',
+    [codes.USE_PROXY]: 'Use Proxy',
+    [codes.UNUSED]: 'Unused',
+    [codes.TEMPORARY_REDIRECT]: 'Temporary Redirect',
+    [codes.PERMANENT_REDIRECT]: 'Permanent Redirect',
+    [codes.BAD_REQUEST]: 'Bad Request',
+    [codes.UNAUTHORIZED]: 'Unauthorized',
+    [codes.PAYMENT_REQUIRED]: 'Payment Required',
+    [codes.FORBIDDEN]: 'Forbidden',
+    [codes.NOT_FOUND]: 'Not Found',
+    [codes.METHOD_NOT_ALLOWED]: 'Method Not Allowed',
+    [codes.NOT_ACCEPTABLE]: 'Not Acceptable',
+    [codes.PROXY_AUTHENTICATION_REQUIRED]: 'Proxy Authentication Required',
+    [codes.REQUEST_TIMEOUT]: 'Request Timeout',
+    [codes.CONFLICT]: 'Conflict',
+    [codes.GONE]: 'Gone',
+    [codes.LENGTH_REQUIRED]: 'Length Required',
+    [codes.PRECONDITION_FAILED]: 'Precondition Failed',
+    [codes.CONTENT_TOO_LARGE]: 'Content Too Large',
+    [codes.URI_TOO_LONG]: 'URI Too Long',
+    [codes.UNSUPPORTED_MEDIA_TYPE]: 'Unsupported Media Type',
+    [codes.RANGE_NOT_SATISFIABLE]: 'Range Not Satisfiable',
+    [codes.EXPECTATION_FAILED]: 'Expectation Failed',
+    [codes.IM_A_TEAPOT]: "I'm a Teapot",
+    [codes.MISDIRECTED_REQUEST]: 'Misdirected Request',
+    [codes.UNPROCESSABLE_CONTENT]: 'Unprocessable Content',
+    [codes.LOCKED]: 'Locked',
+    [codes.FAILED_DEPENDENCY]: 'Failed Dependency',
+    [codes.TOO_EARLY]: 'Too Early',
+    [codes.UPGRADE_REQUIRED]: 'Upgrade Required',
+    [codes.PRECONDITION_REQUIRED]: 'Precondition Required',
+    [codes.TOO_MANY_REQUESTS]: 'Too Many Requests',
+    [codes.REQUEST_HEADER_FIELDS_TOO_LARGE]: 'Request Header Fields Too Large',
+    [codes.UNAVAILABLE_FOR_LEGAL_REASONS]: 'Unavailable For Legal Reasons',
+    [codes.INTERNAL_SERVER_ERROR]: 'Internal Server Error',
+    [codes.NOT_IMPLEMENTED]: 'Not Implemented',
+    [codes.BAD_GATEWAY]: 'Bad Gateway',
+    [codes.SERVICE_UNAVAILABLE]: 'Service Unavailable',
+    [codes.GATEWAY_TIMEOUT]: 'Gateway Timeout',
+    [codes.HTTP_VERSION_NOT_SUPPORTED]: 'HTTP Version Not Supported',
+    [codes.VARIANT_ALSO_NEGOTIATES]: 'Variant Also Negotiates',
+    [codes.INSUFFICIENT_STORAGE]: 'Insufficient Storage',
+    [codes.LOOP_DETECTED]: 'Loop Detected',
+    [codes.NOT_EXTENDED]: 'Not Extended',
+    [codes.NETWORK_AUTHENTICATION_REQUIRED]: 'Network Authentication Required'
+};
+
+export const http = { codes, names };

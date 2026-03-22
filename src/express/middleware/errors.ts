@@ -1,17 +1,5 @@
 import { ErrorRequestHandler, RequestHandler } from 'express';
-import { http } from '../utils/constants';
-
-// Same error codes as in nginx config
-const KNOWN_ERRORS = Object.keys(http).map(Number).filter((c) => c >= 400 && c <= 599);
-const DEFAULT_EXPLANATIONS: Iterable<[number, string]> = KNOWN_ERRORS.keys().map(
-    (code) => [code, 'Please try again later.']
-);
-const ERROR_EXPLANATIONS = new Map<number, string>([
-    ...DEFAULT_EXPLANATIONS,
-    [http.INTERNAL_SERVER_ERROR, 'Server has an outage, likely for maintenance.'],
-    [http.NOT_IMPLEMENTED, 'Under construction.'],
-    [http.BAD_GATEWAY, 'Server has a temporary outage, likely for maintenance.']
-]);
+import { http } from '../utils';
 
 /**
  * Displays an internal error page
@@ -20,17 +8,45 @@ const ERROR_EXPLANATIONS = new Map<number, string>([
  * @param res The response
  * @param next The callback function for the next middleware
  */
-export const errorHandler: ErrorRequestHandler = (err, req, res) => {
-    // Logging stack trace internally, NOT handing over to client
-    console.error('Express handled uncaught error:', err);
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    // Logging stack trace internally, NOT handing over to client.
+    // More advanced error handling could be used
+    // (e.g, for nested validation errors)
+    let newErr: unknown = err;
 
-    const explanation
-        = (ERROR_EXPLANATIONS.get(res.statusCode) ?? "We're not sure what happened.")
-          + ' If you believe this to be an error, contact the website maintainers.';
+    if (typeof newErr === 'object' && newErr != null) {
+        if ('msg' in newErr) {
+            // Likely a validation error
+            newErr = newErr.msg;
+        }
+        else if (newErr instanceof Error) {
+            newErr = newErr.message;
+        }
+    }
+    else if (typeof newErr === 'string') {
+        newErr = newErr.trim();
+    }
+
+    if (newErr == null) {
+        next();
+        return;
+    }
+
+    console.error('Handled uncaught error:', newErr);
+
+    // Giving limited error information to the client
+    // res.statusMessage can be undefined
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    res.statusMessage ??= http.names[res.statusCode];
+
+    if (res.statusCode < 400 || res.statusCode >= 600) {
+        res.statusCode = http.codes.INTERNAL_SERVER_ERROR;
+        res.statusMessage = http.names[http.codes.INTERNAL_SERVER_ERROR];
+    }
+
     const args = {
-        code: res.statusCode,
-        msg: res.statusMessage,
-        explanation
+        code: res.statusCode, // Default: 404
+        name: res.statusMessage
     };
 
     res.render('pages/home/error', args);
@@ -43,6 +59,8 @@ export const errorHandler: ErrorRequestHandler = (err, req, res) => {
  * @param next The callback function for the next middleware
  */
 export const errorPage: RequestHandler = (req, res, next) => {
-    res.status(http.NOT_FOUND);
-    next(errorHandler);
+    res.status(http.codes.NOT_FOUND);
+    res.statusMessage = http.names[http.codes.NOT_FOUND];
+
+    next(`Path not found: ${req.url}`);
 };

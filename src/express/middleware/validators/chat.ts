@@ -48,14 +48,14 @@ const contentValidator = check('content')
     )
     .bail();
 
-export const sendMsgValidator = [
+export const sendMsgValidators = [
     nameValidator,
     contentValidator
 ];
 
-export const editMsgValidator = [
-    ...sendMsgValidator,
+export const editMsgValidators = [
+    ...sendMsgValidators,
     idValidator,
 ];
 
-export const deleteMsgValidator = [idValidator];
+export const deleteMsgValidators = [idValidator];

@@ -2,8 +2,9 @@
 
 - `mongo-express` image deprecated due to maintainer inactivity:
   fork or find alternative
-- If Express cannot complete a DB action, an error should be served to the user
-- Fix error page
+- Express should serve 503 Service Unavailable on DB disconnect
+- Express should attempt to reconnect to DB upon disconnect
+- Express should handle expected errors accordingly
 - Fix frontend CSS
 - Replace the Bootstrap dependency with something locally hosted
 - Document methods and classes

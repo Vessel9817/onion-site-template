@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-import { errorWrapper } from '../utils';
 
-export const getHome: RequestHandler = errorWrapper((req, res) => {
+export const getHome: RequestHandler = (req, res) => {
     res.render('pages/home/index');
-});
+};

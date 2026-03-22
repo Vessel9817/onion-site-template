@@ -95,11 +95,13 @@ const DEFAULT_JS_CONFIGS = defineConfig([
 const JS_CONFIG: Config = {
     files: JS_FILE_GLOBS,
     rules: {
-    // https://eslint.org/docs/latest/rules/prefer-const
+        // https://eslint.org/docs/latest/rules/prefer-const
         'prefer-const': ['warn'],
         // https://eslint.style/rules/js/no-unexpected-multiline
         'no-unexpected-multiline': ['error'],
 
+        // https://typescript-eslint.io/rules/no-non-null-assertion
+        '@typescript-eslint/no-non-null-assertion': ['off'],
         // https://typescript-eslint.io/rules/no-require-imports
         '@typescript-eslint/no-require-imports': ['off'],
         // https://typescript-eslint.io/rules/prefer-includes

@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { http } from '../utils/constants';
+import { http } from '../utils';
 
 /**
  * For security reasons, blocks the TRACE method
@@ -9,7 +9,7 @@ import { http } from '../utils/constants';
  */
 export const blockTrace: RequestHandler = (req, res, next) => {
     if (req.method === 'TRACE') {
-        res.status(http.METHOD_NOT_ALLOWED).send('Method Not Allowed');
+        res.status(http.codes.METHOD_NOT_ALLOWED).send(http.names[http.codes.METHOD_NOT_ALLOWED]);
     }
     next();
 };

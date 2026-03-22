@@ -1,9 +1,10 @@
 import { RequestHandler } from 'express';
+import { validationResult } from 'express-validator';
 import { ObjectId, WithId } from 'mongodb';
 import { MsgBoard } from '../db';
-import { errorWrapper, validationWrapper } from '../utils';
+import { http } from '../utils';
 
-export const getChat: RequestHandler = errorWrapper(async (req, res) => {
+export const getChat: RequestHandler = async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
     const page = Number.isFinite(rawPage) ? Math.min(1, rawPage) : 1;
@@ -24,9 +25,16 @@ export const getChat: RequestHandler = errorWrapper(async (req, res) => {
     };
 
     res.render('pages/chat', args);
-});
+};
 
-export const sendMsg: RequestHandler = validationWrapper(async (req, res) => {
+export const sendMsg: RequestHandler = async (req, res, next) => {
+    // Placeholder
+    if (!validationResult(req).isEmpty()) {
+        res.statusCode = http.codes.BAD_REQUEST;
+        next(validationResult(req).array()[0]);
+        return;
+    }
+
     const params = req.body as {
         name: string;
         content: string;
@@ -39,9 +47,16 @@ export const sendMsg: RequestHandler = validationWrapper(async (req, res) => {
     await MsgBoard.createMsg(msg);
 
     res.redirect('/chat');
-});
+};
 
-export const editMsg: RequestHandler = validationWrapper(async (req, res) => {
+export const editMsg: RequestHandler = async (req, res, next) => {
+    // Placeholder
+    if (!validationResult(req).isEmpty()) {
+        res.statusCode = http.codes.BAD_REQUEST;
+        next(validationResult(req).array()[0]);
+        return;
+    }
+
     const params = req.body as {
         name: string;
         content: string;
@@ -56,13 +71,13 @@ export const editMsg: RequestHandler = validationWrapper(async (req, res) => {
     await MsgBoard.editMsg(newMsg);
 
     res.redirect('/chat');
-});
+};
 
-export const deleteMsg: RequestHandler = validationWrapper(async (req, res) => {
+export const deleteMsg: RequestHandler = async (req, res) => {
     const params = req.body as { id: string };
     const id = new ObjectId(params.id);
 
     await MsgBoard.deleteMsg(id);
 
     res.redirect('/chat');
-});
+};
