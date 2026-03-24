@@ -21,6 +21,6 @@
     },
     "devDependencies": {
         "@types/node": "^25.5.0",
-        "mongodb": "^7.1.0"
+        "mongodb": "^7.1.1"
     }
 }
