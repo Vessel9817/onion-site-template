@@ -2,15 +2,18 @@ ARG ALPINE_VERSION=alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a207
 
 FROM ${ALPINE_VERSION}
 
-ENV EXPOSE_PORT=80
 
-WORKDIR /usr/app/
-RUN \
-    apk update && \
-    apk add --no-cache socat
-COPY --link [ "./", "./" ]
+WORKDIR /project/
+RUN apk update \
+    && apk add --no-cache socat
+
+ARG USER=1000:1000
+COPY --link --chown=${USER} [ "./index.sh", "./" ]
+USER ${USER}
+
+ENV EXPOSE_PORT=80
+EXPOSE ${EXPOSE_PORT}
 
 # Redirecting traffic from localhost to the nginx container
 # Note: requires env var FORWARD_ADDR
-EXPOSE ${EXPOSE_PORT}
-ENTRYPOINT [ "./index.sh" ]
+ENTRYPOINT [ "/project/index.sh" ]

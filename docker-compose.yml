@@ -113,7 +113,7 @@ services:
       dockerfile: './Dockerfile'
     secrets:
       - source: 'express'
-        target: '/usr/app/src/secrets/'
+        target: '/project/src/secrets/'
     networks:
       'express':
         ipv4_address: '10.5.2.2'

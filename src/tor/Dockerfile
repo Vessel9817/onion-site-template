@@ -8,7 +8,7 @@ ARG DEBIAN_VERSION=debian:trixie-slim@sha256:1d3c811171a08a5adaa4a163fbafd96b61b
 # Modifies volume permissions: https://stackoverflow.com/a/73255981
 FROM ${ALPINE_VERSION} AS init
 
-WORKDIR /usr/app/
+WORKDIR /project/
 COPY --link --chmod="+x" [ "./init.sh", "./" ]
 
 VOLUME [ "/secrets/" ]
