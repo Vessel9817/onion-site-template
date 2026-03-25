@@ -9,8 +9,9 @@ We officially support recent versions of Node and npm
 (consequently also npx) for up-to-date security releases.
 As such, other Node package managers (e.g, yarn, pnpm)
 may not be supported. Where possible, package manager commands are replaced
-in the source code with an equivalent Node CLI command.
+in the *source code* with an equivalent Node CLI command.
 (I.e, `npm run ABC` is equivalent to `node --run=ABC`)
+For ease of use, *documentation* still uses npm.
 
 ## Licenses
 
@@ -156,3 +157,9 @@ npm run eslint:fix
 ## Issues and Contribution
 
 See: [CONTRIBUTING](./CONTRIBUTING.md)
+
+Regarding the [compatibility](#compatibility) section, pull requests for adding
+support for other Node package ecosystems are welcome if you include
+maintenance steps. (E.g, if we have to synchronize multiple version lock files,
+we want to know.) It would be greatly appreciated if a minimal
+[CI workflow](./.github/workflows) were included for verification.
