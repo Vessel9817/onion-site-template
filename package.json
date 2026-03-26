@@ -18,7 +18,7 @@
         "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
         "start:prod": "docker compose --profile production up -d vanguards",
         "start:dev": "docker compose --profile development up -d",
-        "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm website_tor-data",
+        "stop": "docker compose --profile production --profile development down --remove-orphans && docker volume rm -f website_tor-data",
         "mongosh": "node --env-file=\"./src/mongo/debug/secrets/.env\" -r ts-node/register ./src/mongo/debug/mongosh.ts",
         "onionscan": "docker compose up -d onionscan",
         "eslint": "eslint . -c ./src/eslint/eslint.config.ts",
