@@ -28,7 +28,7 @@ npm run license-report
 
 ### Installing Dependencies
 
-- Clone this repository
+- Clone this repository and its submodules
 - Install Docker Desktop
 
 ### Configuring Secrets
