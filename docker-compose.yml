@@ -156,8 +156,16 @@ services:
         target: '/data/configdb'
     env_file: './src/mongo/secrets/.env'
     secrets:
-      - source: 'mongo'
-        target: '/run/secrets/'
+      - source: 'mongo-config'
+        target: '/run/secrets/.env'
+      - source: 'mongo-root-username'
+        target: '/run/secrets/root/username.txt'
+      - source: 'mongo-root-password'
+        target: '/run/secrets/root/password.txt'
+      - source: 'mongo-username'
+        target: '/run/secrets/express/username.txt'
+      - source: 'mongo-password'
+        target: '/run/secrets/express/password.txt'
     networks:
       - 'mongo'
   'mongo-debug':
@@ -173,8 +181,30 @@ services:
     image: 'mongo-express:latest@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64'
     ports:
       - ':8081'
-    env_file:
-      - './src/mongo/debug/secrets/.env'
+    environment:
+      # Standard configuration details
+      'ME_CONFIG_BASICAUTH_ENABLED': 'true'
+      'ME_CONFIG_MONGODB_AUTHDB': 'admin'
+      'ME_CONFIG_MONGODB_CONTAINERNAME': 'mongo'
+      'ME_CONFIG_MONGODB_SERVER': 'mongo'
+      # Administrator credentials
+      'ME_CONFIG_MONGODB_ADMINUSERNAME_FILE': '/run/secrets/root/username.txt'
+      'ME_CONFIG_MONGODB_ADMINPASSWORD_FILE': '/run/secrets/root/password.txt'
+      # Dev credentials used to log into the web UI
+      'ME_CONFIG_BASICAUTH_USERNAME_FILE': '/run/secrets/dev/username.txt'
+      'ME_CONFIG_BASICAUTH_PASSWORD_FILE': '/run/secrets/dev/password.txt'
+      # Theme demo:
+      # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
+      'ME_CONFIG_OPTIONS_EDITORTHEME': 'tomorrow-night-bright'
+    secrets:
+      - source: 'mongo-root-username'
+        target: '/run/secrets/root/username.txt'
+      - source: 'mongo-root-password'
+        target: '/run/secrets/root/password.txt'
+      - source: 'mongo-dev-username'
+        target: '/run/secrets/dev/username.txt'
+      - source: 'mongo-dev-password'
+        target: '/run/secrets/dev/password.txt'
     networks:
       'mongo':
         ipv4_address: '10.5.1.254'
@@ -222,8 +252,20 @@ volumes:
 secrets:
   'express':
     file: './src/express/secrets/'
-  'mongo':
-    file: './src/mongo/secrets/'
+  'mongo-config':
+    file: './src/mongo/secrets/.env'
+  'mongo-root-username':
+    file: './src/mongo/secrets/root/username.txt'
+  'mongo-root-password':
+    file: './src/mongo/secrets/root/password.txt'
+  'mongo-username':
+    file: './src/mongo/secrets/express/username.txt'
+  'mongo-password':
+    file: './src/mongo/secrets/express/password.txt'
+  'mongo-dev-username':
+    file: './src/mongo/secrets/dev/username.txt'
+  'mongo-dev-password':
+    file: './src/mongo/secrets/dev/password.txt'
 networks:
   'tor':
     driver: 'bridge'

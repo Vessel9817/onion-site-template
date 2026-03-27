@@ -38,13 +38,16 @@ npm run license-report
 Rename the following files to remove the `.example` postfix:
 
 - [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
-- [./src/mongo/debug/secrets/.env.example](./src/mongo/debug/secrets/.env.example)
-- [./src/mongo/secrets/root_username.txt.example](./src/mongo/secrets/root_username.txt.example)
-- [./src/mongo/secrets/root_password.txt.example](./src/mongo/secrets/root_password.txt.example)
-- [./src/mongo/secrets/username.txt.example](./src/mongo/secrets/username.txt.example)
-- [./src/mongo/secrets/password.txt.example](./src/mongo/secrets/password.txt.example)
-- [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
+- [./src/mongo/secrets/root/username.txt.example](./src/mongo/secrets/root/username.txt.example)
+- [./src/mongo/secrets/root/password.txt.example](./src/mongo/secrets/root/password.txt.example)
+- [./src/mongo/secrets/express/username.txt.example](./src/mongo/secrets/express/username.txt.example)
+- [./src/express/secrets/express/password.txt.example](./src/express/secrets/express/password.txt.example)
 - [./src/onionscan/.env.example](./src/onionscan/.env.example)
+
+The same goes with these files, except that these values should be memorable:
+
+- [./src/express/secrets/dev/username.txt.example](./src/express/secrets/dev/username.txt.example)
+- [./src/express/secrets/dev/password.txt.example](./src/express/secrets/dev/password.txt.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**

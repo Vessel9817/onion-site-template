@@ -24,8 +24,6 @@
   - `-timeout 1` doesn't prevent hanging after results are output
   - Add webui command, if possible
 - Integrate code coverage tool
-- Former `mongosh` npm command:
-  - Migrate to a Docker command
 - Add ESLint precommit hook
 - Add SonarLint precommit hook
 - Add static `Onion-Location` header through nginx and domain environment variable
