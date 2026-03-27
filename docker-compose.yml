@@ -106,9 +106,11 @@ services:
         ipv4_address: '10.5.0.254'
   'express':
     container_name: 'express'
-    links:
-      - 'mongo' # Implicit depends_on
     restart: 'on-failure'
+    depends_on:
+      'mongo':
+        condition: 'service_healthy'
+        required: false
     build:
       context: './src/express'
       dockerfile: './Dockerfile'
@@ -159,7 +161,9 @@ services:
     profiles:
       - 'development'
     depends_on:
-      - 'mongo'
+      'mongo':
+        condition: 'service_healthy'
+        required: true
     restart: 'on-failure'
     image: 'mongo-express:latest@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64'
     ports:

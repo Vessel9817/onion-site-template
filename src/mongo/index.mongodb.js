@@ -15,6 +15,8 @@ admin.auth(env.admin.username, env.admin.password);
 disableTelemetry();
 
 // Creating unprivileged user and database
+// NOTE: Databases and collections are hidden until data
+// is added to them, by default
 const MSG_BOARD = admin.getSiblingDB(env.dbName);
 
 MSG_BOARD.createUser({
@@ -27,7 +29,3 @@ MSG_BOARD.createUser({
         }
     ]
 });
-
-// NOTE: Databases and collections are hidden until data
-// is added to them, by default
-MSG_BOARD.createCollection(env.collectionName);
