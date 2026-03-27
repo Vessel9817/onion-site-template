@@ -35,10 +35,12 @@ npm run license-report
 
 #### General
 
-Rename the following files from `.env.example` to `.env`:
+Rename the following files to remove the `.example` postfix:
 
 - [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
 - [./src/mongo/debug/secrets/.env.example](./src/mongo/debug/secrets/.env.example)
+- [./src/mongo/secrets/root_user.txt.example](./src/mongo/secrets/root_user.txt.example)
+- [./src/mongo/secrets/root_password.txt.example](./src/mongo/secrets/root_password.txt.example)
 - [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
 - [./src/onionscan/.env.example](./src/onionscan/.env.example)
 

@@ -154,6 +154,9 @@ services:
         source: 'mongo-configdb'
         target: '/data/configdb'
     env_file: './src/mongo/secrets/.env'
+    secrets:
+      - source: 'mongo'
+        target: '/run/secrets/'
     networks:
       - 'mongo'
   'mongo-debug':
@@ -163,7 +166,7 @@ services:
     depends_on:
       'mongo':
         condition: 'service_healthy'
-        required: true
+        required: false
     restart: 'on-failure'
     image: 'mongo-express:latest@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64'
     ports:
@@ -217,6 +220,8 @@ volumes:
 secrets:
   'express':
     file: './src/express/secrets/'
+  'mongo':
+    file: './src/mongo/secrets/'
 networks:
   'tor':
     driver: 'bridge'

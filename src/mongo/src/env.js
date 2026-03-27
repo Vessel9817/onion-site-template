@@ -3,44 +3,57 @@
  */
 
 const assert = require('node:assert');
+const fs = require('node:fs');
 
-require('dotenv').config({ path: ['./secrets/.env'] });
+require('dotenv').config({ path: ['/run/secrets/.env'] });
 
 // https://hub.docker.com/_/mongo#initializing-a-fresh-instance
-const DB_NAME = process.env.MONGO_INITDB_DATABASE ?? 'test';
+const dbName = process.env.MONGO_INITDB_DATABASE ?? 'test';
 
 assert.ok(
-    process.env.MONGO_INITDB_ROOT_USERNAME,
-    'MONGO_INITDB_ROOT_USERNAME is missing from env'
+    process.env.MONGO_INITDB_ROOT_USERNAME_FILE,
+    'MONGO_INITDB_ROOT_USERNAME_FILE is missing from env'
 );
-const ADMIN_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
+assert.ok(
+    fs.existsSync(process.env.MONGO_INITDB_ROOT_USERNAME_FILE),
+    "MONGO_INITDB_ROOT_USERNAME_FILE doesn't exist"
+);
+const adminUsernameFile = process.env.MONGO_INITDB_ROOT_USERNAME_FILE;
+const adminUsername = fs.readFileSync(adminUsernameFile).toString();
+assert.ok(adminUsername, 'Admin username is missing');
 
 assert.ok(
-    process.env.MONGO_INITDB_ROOT_PASSWORD,
-    'MONGO_INITDB_ROOT_PASSWORD is missing from env'
+    process.env.MONGO_INITDB_ROOT_PASSWORD_FILE,
+    'MONGO_INITDB_ROOT_PASSWORD_FILE is missing from env'
 );
-const ADMIN_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
+assert.ok(
+    fs.existsSync(process.env.MONGO_INITDB_ROOT_PASSWORD_FILE),
+    "MONGO_INITDB_ROOT_PASSWORD_FILE doesn't exist"
+);
+const adminPasswordFile = process.env.MONGO_INITDB_ROOT_PASSWORD_FILE;
+const adminPassword = fs.readFileSync(adminPasswordFile).toString();
+assert.ok(adminPassword, 'Admin password is missing');
 
 assert.ok(
-    process.env.MONGO_INITDB_USERNAME,
-    'MONGO_INITDB_USERNAME is missing from env'
+    process.env.USERNAME,
+    'USERNAME is missing from env'
 );
-const USER_USERNAME = process.env.MONGO_INITDB_USERNAME;
+const userUsername = process.env.USERNAME;
 
 assert.ok(
-    process.env.MONGO_INITDB_PASSWORD,
-    'MONGO_INITDB_PASSWORD is missing from env'
+    process.env.PASSWORD,
+    'PASSWORD is missing from env'
 );
-const USER_PASSWORD = process.env.MONGO_INITDB_PASSWORD;
+const userPassword = process.env.PASSWORD;
 
 module.exports = {
-    dbName: DB_NAME,
+    dbName: dbName,
     admin: {
-        username: ADMIN_USERNAME,
-        password: ADMIN_PASSWORD
+        username: adminUsername,
+        password: adminPassword
     },
     user: {
-        username: USER_USERNAME,
-        password: USER_PASSWORD
+        username: userUsername,
+        password: userPassword
     }
 };
