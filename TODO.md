@@ -14,8 +14,7 @@
   - Create self-signed TLS certificates for container network security
   - Perform a test run of swarm mode
 - Create webpack configurations instead of using ts-node in production
-- [Encrypt secrets](https://dotenvx.com/docs/quickstart),
-  primarily in the case of plaintext mongo passwords
+- [Encrypt secrets](https://dotenvx.com/docs/quickstart)
 - Add tests
 - Add healthchecks:
   - `tor` service: `curl -s --socks5 10.5.3.2:9050 mydomain.onion`

@@ -1,31 +1,40 @@
-// This and all other JS files should be treated as CommonJS:
+// This and all other .js files should be treated as CommonJS:
 // https://www.mongodb.com/docs/mongodb-shell/write-scripts/
 
 // NOTE: This script will only run when the DB volume hasn't been previously initialized
 
-const env = require('./src/env');
+try {
+    // For some reason, environment variables aren't included in this process
+    require('dotenv').config({ path: ['/run/secrets/.env'] });
 
-// Authenticating
-const admin = connect('localhost:27017/admin');
+    const env = require('./src/env');
 
-admin.auth(env.admin.username, env.admin.password);
+    // Authenticating
+    const admin = connect('localhost:27017/admin');
 
-// Disabling telemetry globally
-// (config doesn't seem to exist here)
-disableTelemetry();
+    admin.auth(env.admin.username, env.admin.password);
 
-// Creating unprivileged user and database
-// NOTE: Databases and collections are hidden until data
-// is added to them, by default
-const MSG_BOARD = admin.getSiblingDB(env.dbName);
+    // Disabling telemetry globally
+    // (config doesn't seem to exist here)
+    disableTelemetry();
 
-MSG_BOARD.createUser({
-    user: env.user.username,
-    pwd: env.user.password,
-    roles: [
-        {
-            role: 'readWrite',
-            db: env.dbName
-        }
-    ]
-});
+    // Creating unprivileged user and database
+    // NOTE: Databases and collections are hidden until data
+    // is added to them, by default
+    const msgBoard = admin.getSiblingDB(env.dbName);
+
+    msgBoard.createUser({
+        user: env.user.username,
+        pwd: env.user.password,
+        roles: [
+            {
+                role: 'readWrite',
+                db: env.dbName
+            }
+        ]
+    });
+}
+catch (err) {
+    console.error('Failed to create user:', err);
+    throw err;
+}

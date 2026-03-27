@@ -109,6 +109,7 @@ services:
     restart: 'on-failure'
     depends_on:
       'mongo':
+        # mongo will restart on its first run, causing this check to fail
         condition: 'service_healthy'
         required: false
     build:
@@ -165,6 +166,7 @@ services:
       - 'development'
     depends_on:
       'mongo':
+        # mongo will restart on its first run, causing this check to fail
         condition: 'service_healthy'
         required: false
     restart: 'on-failure'
