@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // Global variable type information:
 // https://www.mongodb.com/docs/manual/reference/method/
 declare global {
