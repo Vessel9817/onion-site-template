@@ -1,2 +1,7 @@
-// eslint-disable-next-line no-undef
-config.set('enableTelemetry', false);
+try {
+    disableTelemetry();
+}
+catch (err) {
+    console.error('Failed to disable telemetry:', err);
+    throw err;
+}

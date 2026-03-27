@@ -4,7 +4,10 @@
 // NOTE: This script will only run when the DB volume hasn't been previously initialized
 
 try {
-    // For some reason, environment variables aren't included in this process
+    // Disabling telemetry locally
+    disableTelemetry();
+
+    // For some reason, environment variables set by Docker need to be manually included
     require('dotenv').config({ path: ['/run/secrets/.env'] });
 
     const env = require('./src/env');
@@ -15,7 +18,6 @@ try {
     admin.auth(env.admin.username, env.admin.password);
 
     // Disabling telemetry globally
-    // (config doesn't seem to exist here)
     disableTelemetry();
 
     // Creating unprivileged user and database
