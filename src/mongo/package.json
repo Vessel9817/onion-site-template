@@ -14,7 +14,8 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "tsc": "tsc --noEmit"
     },
     "dependencies": {
         "dotenv": "^17.3.1",

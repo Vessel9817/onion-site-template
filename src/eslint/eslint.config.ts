@@ -76,13 +76,13 @@ const DEFAULT_JS_CONFIGS = defineConfig([
             // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
                 tsconfigRootDir: path.resolve(
-                    import.meta.dirname,
+                    __dirname,
                     '..',
                     '..',
                     'tsconfig.json',
                 ),
                 projectService: {
-                    allowDefaultProject: [import.meta.filename],
+                    allowDefaultProject: [__filename],
                 },
             },
             globals: {
