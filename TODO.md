@@ -20,4 +20,3 @@
 - Integrate code coverage tool
 - Add ESLint precommit hook
 - Add SonarLint precommit hook
-- Add static `Onion-Location` header through nginx and domain environment variable
