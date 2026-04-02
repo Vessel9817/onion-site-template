@@ -27,7 +27,6 @@ RUN apt-get update -qq \
 COPY --link --chown=101:103 [ "./torrc", "/etc/tor/" ]
 
 # Running tor as a non-root user
-VOLUME [ "/var/lib/tor/website/" ]
 USER debian-tor
 ENTRYPOINT [ "tor" ]
 ENV SOCKS_PORT=9050

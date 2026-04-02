@@ -1,0 +1,107 @@
+services:
+  tor-init:
+    container_name: tor-init
+    restart: no
+    build:
+      context: ./tor
+      dockerfile: ./Dockerfile
+      target: init
+    network_mode: none
+  tor:
+    container_name: tor
+    build:
+      context: ./tor
+      dockerfile: ./Dockerfile
+      target: run
+  vanguards:
+    container_name: vanguards
+    build:
+      context: ./vanguards
+      dockerfile: ./Dockerfile
+    network_mode: container:tor
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+      target: openresty-gixy
+    secrets:
+      - source: tor-hostname
+        target: /run/secrets/hostname
+  express:
+    container_name: express
+    restart: on-failure
+    build:
+      context: ./express
+      dockerfile: ./Dockerfile
+  mongo:
+    container_name: mongo
+    restart: on-failure
+    # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
+    mem_swappiness: 1
+    build:
+      context: ./mongo
+      dockerfile: ./Dockerfile
+      target: run
+    secrets:
+      - source: mongo-config
+        target: /run/secrets/.env
+      - source: mongo-root-username
+        target: /run/secrets/root/username.txt
+      - source: mongo-root-password
+        target: /run/secrets/root/password.txt
+      - source: mongo-username
+        target: /run/secrets/express/username.txt
+      - source: mongo-password
+        target: /run/secrets/express/password.txt
+  mongo-debug:
+    container_name: mongo-debug
+    restart: on-failure
+    image: mongo-express@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64
+    secrets:
+      - source: mongo-root-username
+        target: /run/secrets/root/username.txt
+      - source: mongo-root-password
+        target: /run/secrets/root/password.txt
+      - source: mongo-dev-username
+        target: /run/secrets/dev/username.txt
+      - source: mongo-dev-password
+        target: /run/secrets/dev/password.txt
+  onionscan:
+    container_name: onionscan
+    restart: on-failure
+    build:
+      context: ./onionscan
+      dockerfile: ./Dockerfile
+      target: onionscan
+  license-report:
+    container_name: license-report
+    build:
+      context: ..
+      dockerfile: ./src/license-report/Dockerfile
+    # If we have node modules installed, inspect them.
+    # If we don't, only inspect package.json
+    working_dir: /project/packages/
+  container-link:
+    build:
+      context: ./container-link
+      dockerfile: ./Dockerfile
+secrets:
+  tor-hostname:
+    file: ./tor/secrets/hostname
+  express:
+    file: ./express/secrets/
+  mongo-config:
+    file: ./mongo/secrets/.env
+  mongo-root-username:
+    file: ./mongo/secrets/root/username.txt
+  mongo-root-password:
+    file: ./mongo/secrets/root/password.txt
+  mongo-username:
+    file: ./mongo/secrets/express/username.txt
+  mongo-password:
+    file: ./mongo/secrets/express/password.txt
+  mongo-dev-username:
+    file: ./mongo/secrets/dev/username.txt
+  mongo-dev-password:
+    file: ./mongo/secrets/dev/password.txt
