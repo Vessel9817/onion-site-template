@@ -1,22 +1,14 @@
 # TODOs
 
-- Fix frontend CSS
-- Replace the Bootstrap dependency with something locally hosted
-- Document methods and classes
+- Document Express methods and classes
 - Env file safety check ([dotenvx prebuild](https://dotenvx.com/features/prebuild))
 - Support Docker swarm mode:
   - Create self-signed TLS certificates for container network security
   - Perform a test run of swarm mode
 - Create webpack configurations instead of using ts-node in production
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart)
-- Add tests
-- Add healthchecks:
-  - `tor` service: `curl -s --socks5 10.5.3.2:9050 mydomain.onion`
-- Configure [Onionprobe](https://onionservices.torproject.org/apps/web/onionprobe/standalone/)
 - Configure ratelimiting
 - OnionScan:
   - `-timeout 1` doesn't prevent hanging after results are output
   - Add webui command, if possible
-- Integrate code coverage tool
-- Add ESLint precommit hook
-- Add SonarLint precommit hook
+- Use bind mounts to store logs on host
