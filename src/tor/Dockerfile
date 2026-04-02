@@ -1,9 +1,9 @@
-ARG ALPINE_VERSION=alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+ARG ALPINE_VERSION=alpine:3.23.3
 
 # Using latest stable Debian image (LTS EOL: 30 June 2030)
 # https://www.debian.org/releases
 # https://wiki.debian.org/LTS
-ARG DEBIAN_VERSION=debian:trixie-slim@sha256:1d3c811171a08a5adaa4a163fbafd96b61b87aa871bbc7aa15431ac275d3d430
+ARG DEBIAN_VERSION=debian:trixie-slim
 
 # Modifies volume permissions: https://stackoverflow.com/a/73255981
 FROM ${ALPINE_VERSION} AS init

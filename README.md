@@ -116,6 +116,9 @@ npm run stop
 To update the website, run the following command in the project directory:
 
 ```shell
+# Pull dependent images
+npm run pull
+# Build compose project
 npm run build
 ```
 

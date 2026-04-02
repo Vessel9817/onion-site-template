@@ -1,4 +1,4 @@
-ARG OPENRESTY_VERSION=openresty/openresty:1.29.2.2-noble@sha256:844b3d2c5e151acbfbfb3605131cac504e25ad27e1cd389307d92ab499f5ea93
+ARG OPENRESTY_VERSION=openresty/openresty:1.29.2.2-noble
 
 FROM ${OPENRESTY_VERSION} AS openresty-gixy
 
