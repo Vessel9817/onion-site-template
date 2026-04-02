@@ -55,8 +55,18 @@ in each of these files, **for your own security, please change them.**
 
 #### tor
 
-If you have an existing onion domain, the public/private keys and other
-secrets can be placed in [`./src/tor/secrets/`](./src/tor/secrets).
+If you don't have an onion domain, run the following in the project directory
+to generate one:
+
+```shell
+docker compose -f ./src/tor/docker-compose.yml up -d
+docker compose -f ./src/tor/docker-compose.yml down
+docker volume rm website_tor-data
+```
+
+If you do have an existing onion domain, such as through [OnionMine][onionmine],
+the public/private keys and other secrets can be placed in
+[`./src/tor/secrets/`](./src/tor/secrets).
 If you don't, one will automatically be generated for you in the aforementioned
 directory. Your website domain will be found in `./src/tor/secrets/hostname`,
 following the following format: (Onion v3 address)
@@ -71,7 +81,7 @@ This domain should also be specified in
 ### Production
 
 For production mode, run **one** of the following equivalent commands
-in the top-level directory:
+in the project directory:
 
 ```shell
 npm start
@@ -82,7 +92,7 @@ npm run start:prod
 ### Development
 
 To attach all debugging containers intended for development-only use,
-run the following command in the top-level directory:
+run the following command in the project directory:
 
 ```shell
 npm run start:dev
@@ -94,7 +104,7 @@ as they collectively depend on all production containers unrelated to tor.
 ### Shutdown
 
 To stop the website, run **one** of the following equivalent commands
-in the top-level directory:
+in the project directory:
 
 ```shell
 npm stop
@@ -103,7 +113,7 @@ npm run stop
 
 ### Updating
 
-To update the website, run the following command in the top-level directory:
+To update the website, run the following command in the project directory:
 
 ```shell
 npm run build
@@ -157,8 +167,8 @@ npm run eslint:fix
 
 ## Credits
 
-- [OnionScan](https://github.com/harr1424/onionscan)
-- [boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
+- [OnionScan][onionscan]
+- [Boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
   modified to lint and prettify this Node project
 - Many more projects we explicitly or inadvertently depend on
 
@@ -171,3 +181,6 @@ support for other Node package ecosystems are welcome if you include
 maintenance steps. (E.g, if we have to synchronize multiple version lock files,
 we want to know.) It would be greatly appreciated if a minimal
 [CI workflow](./.github/workflows) were included for verification.
+
+[onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
+[onionscan]: https://github.com/harr1424/onionscan

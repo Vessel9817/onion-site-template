@@ -4,38 +4,22 @@ name: website
 services:
   tor-init:
     extends:
-      file: ./src/docker-compose.yml
+      file: ./src/tor/docker-compose.yml
       service: tor-init
     profiles:
       - production
-    volumes:
-      - type: bind
-        source: ./src/tor/secrets/
-        target: /secrets/
   tor:
     extends:
-      file: ./src/docker-compose.yml
+      file: ./src/tor/docker-compose.yml
       service: tor
     profiles:
       - production
     depends_on:
-      tor-init:
-        condition: service_completed_successfully
       nginx:
         condition: service_started
-    # Volume locations are defined by torrc
-    volumes:
-      - type: bind
-        source: ./src/tor/secrets/
-        target: /var/lib/tor/website/
-      - type: volume
-        source: tor-data
-        target: /var/lib/tor/
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
-      tor:
-        ipv4_address: 10.5.3.2
       nginx:
   vanguards:
     extends:

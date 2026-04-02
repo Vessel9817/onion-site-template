@@ -1,0 +1,36 @@
+name: website
+services:
+  tor-init:
+    extends:
+      file: ../docker-compose.yml
+      service: tor-init
+    volumes:
+      - type: bind
+        source: ./secrets/
+        target: /secrets/
+  tor:
+    extends:
+      file: ../docker-compose.yml
+      service: tor
+    depends_on:
+      tor-init:
+        condition: service_completed_successfully
+    # Volume locations are defined by torrc
+    volumes:
+      - type: bind
+        source: ./secrets/
+        target: /var/lib/tor/website/
+      - type: volume
+        source: tor-data
+        target: /var/lib/tor/
+    networks:
+      tor:
+        ipv4_address: 10.5.3.2
+volumes:
+  tor-data:
+networks:
+  tor:
+    ipam:
+      config:
+        - subnet: 10.5.3.0/24
+          gateway: 10.5.3.1
