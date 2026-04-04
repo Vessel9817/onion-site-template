@@ -2,12 +2,6 @@
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 name: website
 services:
-  tor-init:
-    extends:
-      file: ./src/tor/docker-compose.yml
-      service: tor-init
-    profiles:
-      - production
   tor:
     extends:
       file: ./src/tor/docker-compose.yml
@@ -17,6 +11,10 @@ services:
     depends_on:
       nginx:
         condition: service_started
+    volumes:
+      - type: volume
+        source: tor-data
+        target: /var/lib/tor/
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:

@@ -61,7 +61,6 @@ to generate one:
 ```shell
 docker compose -f ./src/tor/docker-compose.yml up -d
 docker compose -f ./src/tor/docker-compose.yml down
-docker volume rm website_tor-data
 ```
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],

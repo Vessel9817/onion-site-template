@@ -1,12 +1,4 @@
 services:
-  tor-init:
-    container_name: tor-init
-    restart: no
-    build:
-      context: ./tor
-      dockerfile: ./Dockerfile
-      target: init
-    network_mode: none
   tor:
     container_name: tor
     build:
