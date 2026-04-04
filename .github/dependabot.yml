@@ -13,12 +13,6 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
-  # Enable version updates for pip
-  - package-ecosystem: "pip"
-    # Look for `requirements.txt` files
-    directory: "/src/vanguards/"
-    schedule:
-      interval: "daily"
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     # Look for Dockerfiles

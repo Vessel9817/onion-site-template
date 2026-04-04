@@ -125,8 +125,7 @@ Then, stop and start the website.
 
 In general, you should be able to omit the shutdown procedure,
 but some services may not function correctly.
-For instance, `vanguards` currently requires a restart if `tor` restarts,
-as does `express` if `mongo` restarts.
+For instance, `express` currently requires a restart if `mongo` restarts.
 
 ## Maintenance
 

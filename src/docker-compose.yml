@@ -5,12 +5,6 @@ services:
       context: ./tor
       dockerfile: ./Dockerfile
       target: run
-  vanguards:
-    container_name: vanguards
-    build:
-      context: ./vanguards
-      dockerfile: ./Dockerfile
-    network_mode: container:tor
   nginx:
     container_name: nginx
     build:

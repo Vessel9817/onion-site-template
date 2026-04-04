@@ -11,27 +11,10 @@ services:
     depends_on:
       nginx:
         condition: service_started
-    volumes:
-      - type: volume
-        source: tor-data
-        target: /var/lib/tor/
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
       nginx:
-  vanguards:
-    extends:
-      file: ./src/docker-compose.yml
-      service: vanguards
-    profiles:
-      - production
-    depends_on:
-      - tor
-    volumes:
-      - type: volume
-        source: tor-data
-        target: /var/lib/tor/
-        read_only: true
   nginx:
     extends:
       file: ./src/docker-compose.yml
@@ -183,7 +166,6 @@ services:
         target: '/project/packages/node_modules/'
         read_only: true
 volumes:
-  tor-data:
   mongo-db:
   mongo-configdb:
   onionscan-db:
