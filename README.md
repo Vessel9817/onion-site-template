@@ -175,13 +175,18 @@ npm run eslint:fix
 
 ## Issues and Contribution
 
-See: [CONTRIBUTING](./CONTRIBUTING.md)
+1. See the [Contributing guidelines](./CONTRIBUTING.md).
+1. Regarding the [compatibility](#compatibility) section, pull requests for adding
+    support for other Node package ecosystems are welcome if you include
+    maintenance steps. (E.g, if we have to synchronize multiple version lock files,
+    we want to know.) It would be greatly appreciated if a minimal
+    [CI workflow](./.github/workflows) were included for verification.
+1. Git hooks are located in [.githooks](./.githooks).
+    This means your Git config should be set as follows:
 
-Regarding the [compatibility](#compatibility) section, pull requests for adding
-support for other Node package ecosystems are welcome if you include
-maintenance steps. (E.g, if we have to synchronize multiple version lock files,
-we want to know.) It would be greatly appreciated if a minimal
-[CI workflow](./.github/workflows) were included for verification.
+    ```shell
+    git config core.hooksPath .githooks
+    ```
 
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
 [onionscan]: https://github.com/harr1424/onionscan
