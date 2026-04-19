@@ -30,6 +30,7 @@
         "importHelpers": true,
         "newLine": "lf",
         "stripInternal": true,
+        "rootDir": "./src",
         "outDir": "./dist" // Unused: https://stackoverflow.com/a/48798945
     },
     "include": ["./src/eslint/**/*"],
