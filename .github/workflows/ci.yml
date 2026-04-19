@@ -7,12 +7,14 @@ env:
   DOCKER_COMPOSE_VERSION: v5.1.1
 
 jobs:
+  # Builds Docker compose services
   build:
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
       - name: Checkout
@@ -27,12 +29,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Build Compose stack
         run: npm run build
+  # Runs a linting check
   eslint:
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v6
@@ -44,12 +48,14 @@ jobs:
         run: npm i
       - name: Run eslint
         run: npm run eslint
+  # Runs a TypeScript type check
   tsc:
     permissions:
       contents: read
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v6
