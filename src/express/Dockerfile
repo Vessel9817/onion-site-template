@@ -7,7 +7,7 @@ RUN apk update \
     && apk add --no-cache curl
 WORKDIR /project/src/
 COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
-RUN npm i
+RUN npm i --no-fund
 
 # Copying source files
 # 1000:1000 corresponds to user "node"

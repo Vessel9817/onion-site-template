@@ -6,7 +6,7 @@ FROM ${NODE_VERSION} AS build
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
-RUN npm i --omit=dev
+RUN npm i --no-fund --omit=dev
 
 # Running MongoDB
 FROM ${MONGO_VERSION} AS run
