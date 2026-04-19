@@ -37,18 +37,18 @@ npm run license-report
 
 Rename the following files to remove the `.example` postfix:
 
-- [./src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
-- [./src/mongo/secrets/root/username.txt.example](./src/mongo/secrets/root/username.txt.example)
-- [./src/mongo/secrets/root/password.txt.example](./src/mongo/secrets/root/password.txt.example)
-- [./src/mongo/secrets/express/username.txt.example](./src/mongo/secrets/express/username.txt.example)
-- [./src/mongo/secrets/express/password.txt.example](./src/mongo/secrets/express/password.txt.example)
-- [./src/express/secrets/.env.example](./src/express/secrets/.env.example)
-- [./src/onionscan/.env.example](./src/onionscan/.env.example)
+- [src/mongo/secrets/.env.example](./src/mongo/secrets/.env.example)
+- [src/mongo/secrets/root/username.txt.example](./src/mongo/secrets/root/username.txt.example)
+- [src/mongo/secrets/root/password.txt.example](./src/mongo/secrets/root/password.txt.example)
+- [src/mongo/secrets/express/username.txt.example](./src/mongo/secrets/express/username.txt.example)
+- [src/mongo/secrets/express/password.txt.example](./src/mongo/secrets/express/password.txt.example)
+- [src/express/secrets/.env.example](./src/express/secrets/.env.example)
+- [src/onionscan/.env.example](./src/onionscan/.env.example)
 
 The same goes with these files, except that these values should be memorable:
 
-- [./src/mongo/secrets/dev/username.txt.example](./src/mongo/secrets/dev/username.txt.example)
-- [./src/mongo/secrets/dev/password.txt.example](./src/mongo/secrets/dev/password.txt.example)
+- [src/mongo/secrets/dev/username.txt.example](./src/mongo/secrets/dev/username.txt.example)
+- [src/mongo/secrets/dev/password.txt.example](./src/mongo/secrets/dev/password.txt.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
@@ -65,15 +65,15 @@ docker compose -f ./src/tor/docker-compose.yml down
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in
-[`./src/tor/secrets/`](./src/tor/secrets).
+[`src/tor/secrets/`](./src/tor/secrets).
 If you don't, one will automatically be generated for you in the aforementioned
-directory. Your website domain will be found in `./src/tor/secrets/hostname`,
-following the following format: (Onion v3 address)
+directory. Your website domain will be found in `src/tor/secrets/hostname`,
+abiding by the following regex: (Onion v3 address)
 
-`abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion`
+`[a-z0-9]{56}\.onion`
 
 This domain should also be specified in
-[./src/onionscan/.env](./src/onionscan/.env)
+[src/onionscan/.env](./src/onionscan/.env)
 
 ## Running
 
