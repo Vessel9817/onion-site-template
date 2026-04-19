@@ -5,15 +5,16 @@ ARG MONGO_VERSION=mongo:8.2.5
 FROM ${NODE_VERSION} AS build
 
 WORKDIR /docker-entrypoint-initdb.d/
-COPY [ "package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./" ]
-RUN npm i --no-fund --omit=dev
+COPY [ "./src/mongo/package.json", "./" ]
+COPY [ "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
+RUN npm ci --no-fund --omit=dev
 
 # Running MongoDB
 FROM ${MONGO_VERSION} AS run
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link [ "./", "./" ]
+COPY --link [ "./src/mongo/", "./" ]
 
 HEALTHCHECK \
     --interval=5s \

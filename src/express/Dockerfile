@@ -6,12 +6,13 @@ FROM ${NODE_VERSION}
 RUN apk update \
     && apk add --no-cache curl
 WORKDIR /project/src/
-COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
-RUN npm i --no-fund
+COPY [ "./src/express/package.json", "./" ]
+COPY [ "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
+RUN npm ci --no-fund
 
 # Copying source files
 # 1000:1000 corresponds to user "node"
-COPY --link --chown=1000:1000 [ "./", "./" ]
+COPY --link --chown=1000:1000 [ "./src/express/", "./" ]
 
 # Running app
 USER node

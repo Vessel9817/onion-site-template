@@ -18,16 +18,16 @@ services:
     container_name: express
     restart: on-failure
     build:
-      context: ./express
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./src/express/Dockerfile
   mongo:
     container_name: mongo
     restart: on-failure
     # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
     mem_swappiness: 1
     build:
-      context: ./mongo
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./src/mongo/Dockerfile
       target: run
     secrets:
       - source: mongo-config

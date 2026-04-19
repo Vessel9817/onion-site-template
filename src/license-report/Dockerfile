@@ -13,7 +13,7 @@ COPY [ \
 ]
 
 COPY --link [ "./src/license-report/package.json", "./src/license-report/" ]
-RUN npm i --no-fund -w ./src/license-report/
+RUN npm ci --no-fund -w ./src/license-report/
 
 COPY --link [ "./src/express/package.json", "./packages/express.json" ]
 COPY --link [ "./src/mongo/package.json", "./packages/mongo.json" ]
