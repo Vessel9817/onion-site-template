@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install node modules
-        run: npm i
+        run: npm ci
       - name: Run eslint
         run: npm run eslint
   # Runs a TypeScript type check
@@ -64,7 +64,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install node modules
-        run: npm i
+        run: npm ci
       - name: Run tsc
         run: npm run tsc
   # Runs pre-commit hooks
@@ -83,6 +83,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install node modules
-        run: npm i
+        run: npm ci
       - name: Run pre-commit hooks
-        run: ./.githooks/pre-commit
+        run: |
+          chmod +x ./.githooks/pre-commit
+          ./.githooks/pre-commit
