@@ -7,6 +7,7 @@ FROM ${PYTHON_VERSION} AS vanguards
 
 RUN apt-get update -qq \
     && apt-get install -yqq --no-install-recommends \
+        curl \
         git \
         python3-stem \
     && apt-get clean -qq
@@ -20,7 +21,12 @@ RUN git clone https://github.com/mikeperry-tor/vanguards \
     && git switch local \
     && pip install -r "./requirements.txt"
 
-ENTRYPOINT [ "python3", "/project/vanguards/src/vanguards.py" ]
+ARG DOTENVX_VERSION=1.61.1
+RUN \
+    curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
+ENTRYPOINT [ "dotenvx", "run", "--", "python3", "/project/vanguards/src/vanguards.py" ]
 
 FROM vanguards AS run
 
@@ -33,8 +39,10 @@ RUN apt-get update -qq \
     && chown -R debian-tor:debian-tor "/var/lib/tor" \
     && chown -R debian-tor:debian-tor "/etc/tor"
 
-COPY --link --chmod="+x" [ "./init.sh", "./" ]
+COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
-ENTRYPOINT [ "/project/init.sh" ]
+RUN dotenvx ext prebuild
+
+ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
 ENV SOCKS_PORT=9050
 EXPOSE "${SOCKS_PORT}"

@@ -21,6 +21,13 @@ COPY --link [ "./package.json", "./packages/website.json" ]
 # 1000:1000 corresponds to user "node"
 COPY --link --chown=1000:1000 [ "./src/license-report/", "./packages/" ]
 
+ARG DOTENVX_VERSION=1.61.1
+RUN \
+    apk update \
+    && apk add --no-cache curl \
+    && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
 # Running app
 USER node
-ENTRYPOINT [ "/project/packages/index.sh" ]
+ENTRYPOINT [ "dotenvx", "run", "--", "/project/packages/index.sh" ]

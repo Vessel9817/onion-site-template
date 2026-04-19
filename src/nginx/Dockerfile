@@ -15,5 +15,10 @@ ADD --checksum="${GIXY_CHECKSUM}" --chmod="+x" [ \
 # Configuring nginx to run after Gixy
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
-ENTRYPOINT [ "/project/entrypoint.sh" ]
+ARG DOTENVX_VERSION="1.61.1"
+RUN \
+    curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
+ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
 CMD [ "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]

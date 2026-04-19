@@ -9,6 +9,15 @@ COPY [ "./src/mongo/package.json", "./" ]
 COPY [ "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
 RUN npm ci --no-fund --omit=dev
 
+ARG DOTENVX_VERSION=1.61.1
+RUN \
+    apk update \
+    && apk add --no-cache curl \
+    && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
+ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
+
 # Running MongoDB
 FROM ${MONGO_VERSION} AS run
 

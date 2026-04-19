@@ -14,9 +14,16 @@ RUN npm ci --no-fund
 # 1000:1000 corresponds to user "node"
 COPY --link --chown=1000:1000 [ "./src/express/", "./" ]
 
+ARG DOTENVX_VERSION=1.61.1
+RUN \
+    apk update \
+    && apk add --no-cache curl \
+    && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
 # Running app
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \
     CMD [ "curl", "-f", "localhost:3000" ]
-CMD [ "npm", "start" ]
+ENTRYPOINT [ "dotenvx", "run", "--", "npm", "start" ]

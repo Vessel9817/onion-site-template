@@ -10,7 +10,14 @@ WORKDIR /project/
 RUN ln -s '${GOPATH}/bin/onionscan'
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
-ENTRYPOINT [ "/project/entrypoint.sh" ]
+ARG DOTENVX_VERSION="1.61.1"
+RUN \
+    apk update \
+    && apk add --no-cache curl \
+    && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && dotenvx ext prebuild
+
+ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
 ENV WEB_PORT=8080
 CMD [ "--verbose" ]
 EXPOSE "${WEB_PORT}"

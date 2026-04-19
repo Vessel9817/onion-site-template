@@ -3,8 +3,9 @@
 **/*.env.*
 **/secrets/
 **/Dockerfile
-**/docker-compose.yml
-**/docker-compose.yaml
+**/docker-compose*
 **/*.dockerfile
-proxy/
-server/
+**/.dockerignore
+**/dist/
+**/debug/
+**/*.example
