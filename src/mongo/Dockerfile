@@ -16,7 +16,7 @@ RUN \
     && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
     && dotenvx ext prebuild
 
-ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
+ENTRYPOINT [ "dotenvx", "run", "--", "node" ]
 
 # Running MongoDB
 FROM ${MONGO_VERSION} AS run
