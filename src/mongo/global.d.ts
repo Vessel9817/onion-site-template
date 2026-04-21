@@ -10,14 +10,14 @@ declare global {
 interface Db {
     auth: (username: string, password: string) => void;
     createCollection: (name: string) => void;
-    createUser: {
+    createUser: (options: {
         user: string;
         pwd: string;
         roles?: {
             role: string;
             db: string;
         }[];
-    };
+    }) => void;
     getSiblingDB: (name: string) => Db;
 }
 
