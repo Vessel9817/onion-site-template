@@ -1,5 +1,5 @@
-import { ObjectId, WithId } from 'mongodb';
-import mongoose, { PipelineStage, Schema } from 'mongoose';
+import { ObjectId, type WithId } from 'mongodb';
+import mongoose, { type PipelineStage, Schema } from 'mongoose';
 
 export interface Msg {
     name: string;

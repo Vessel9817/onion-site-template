@@ -1,6 +1,6 @@
-import { RequestHandler } from 'express';
+import { type RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
-import { ObjectId, WithId } from 'mongodb';
+import { ObjectId, type WithId } from 'mongodb';
 import { MsgBoard } from '../db';
 import { http } from '../utils';
 
