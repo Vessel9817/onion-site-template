@@ -10,11 +10,17 @@ WORKDIR /project/
 RUN ln -s '${GOPATH}/bin/onionscan'
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
-ARG DOTENVX_VERSION="1.61.1"
+ARG DOTENVX_VERSION=1.61.1
+ARG DOTENVX_CHECKSUM=sha256:a780992276e8b67dd6b5dd5d9223215ed99a0a4d3b18e0275b22ce44c90b8125
+ADD --chmod='+x' --checksum="${DOTENVX_CHECKSUM}" [ \
+    "https://dotenvx.sh/?version=${DOTENVX_VERSION}", \
+    "./dotenvx.sh" \
+]
 RUN \
     apk update \
     && apk add --no-cache curl \
-    && curl -fsS "https://dotenvx.sh/?version=${DOTENVX_VERSION}" | sh \
+    && sh './dotenvx.sh' \
+    && rm './dotenvx.sh' \
     && dotenvx ext prebuild
 
 ENTRYPOINT [ "dotenvx", "run", "--", "/project/entrypoint.sh" ]
