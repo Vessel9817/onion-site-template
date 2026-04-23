@@ -12,14 +12,17 @@ COPY [ \
     "./" \
 ]
 
-COPY --link [ "./src/license-report/package.json", "./src/license-report/" ]
-RUN npm ci --no-fund -w ./src/license-report/
+ARG LICENSE_REPORT_APP_PATH="./src/license-report"
+COPY --link [ "${LICENSE_REPORT_APP_PATH}/package.json", "./src/license-report/" ]
+RUN npm ci --no-fund -w "${LICENSE_REPORT_APP_PATH}"
 
-COPY --link [ "./src/express/package.json", "./packages/express.json" ]
-COPY --link [ "./src/mongo/package.json", "./packages/mongo.json" ]
+ARG EXPRESS_APP_PATH="./src/express"
+COPY --link [ "${EXPRESS_APP_PATH}/package.json", "./packages/express.json" ]
+ARG MONGO_APP_PATH="./src/mongo"
+COPY --link [ "${MONGO_APP_PATH}/package.json", "./packages/mongo.json" ]
 COPY --link [ "./package.json", "./packages/website.json" ]
 # 1000:1000 corresponds to user "node"
-COPY --link --chown=1000:1000 [ "./src/license-report/", "./packages/" ]
+COPY --link --chown=1000:1000 [ "${LICENSE_REPORT_APP_PATH}", "./packages/" ]
 
 ARG DOTENVX_VERSION=1.61.1
 ARG DOTENVX_CHECKSUM=sha256:a780992276e8b67dd6b5dd5d9223215ed99a0a4d3b18e0275b22ce44c90b8125
