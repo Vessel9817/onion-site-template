@@ -143,6 +143,8 @@ services:
     profiles:
       - production
       - onionscan
+    depends_on:
+      - tor
     env_file:
       - ./src/onionscan/.env
     environment:
