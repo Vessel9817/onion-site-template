@@ -1,4 +1,4 @@
-ARG OPENRESTY_VERSION=openresty/openresty:1.29.2.2-noble
+ARG OPENRESTY_VERSION=openresty/openresty:noble
 
 FROM ${OPENRESTY_VERSION} AS openresty-gixy
 
