@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Build Compose stack
-        run: npm run build
+        run: npm run build -- --pull
   # Checks for dependency conflicts that `npm ci` would miss
   npm:
     permissions:
