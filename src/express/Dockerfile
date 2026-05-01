@@ -22,8 +22,6 @@ ADD --chmod='+x' --checksum="${DOTENVX_CHECKSUM}" [ \
     "./dotenvx.sh" \
 ]
 RUN \
-    apk update \
-    && apk add --no-cache curl \
     && sh './dotenvx.sh' \
     && rm './dotenvx.sh' \
     && dotenvx ext prebuild

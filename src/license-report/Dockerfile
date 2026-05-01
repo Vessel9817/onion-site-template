@@ -5,12 +5,7 @@ FROM ${NODE_VERSION}
 WORKDIR /project/
 
 # Installing license-report dependencies
-COPY [ \
-    "./package.json", \
-    "./package-lock.json*", \
-    "./npm-shrinkwrap.json*", \
-    "./" \
-]
+COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
 
 ARG LICENSE_REPORT_APP_PATH="./src/license-report"
 COPY --link [ "${LICENSE_REPORT_APP_PATH}/package.json", "./src/license-report/" ]
