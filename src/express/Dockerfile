@@ -22,7 +22,7 @@ ADD --chmod='+x' --checksum="${DOTENVX_CHECKSUM}" [ \
     "./dotenvx.sh" \
 ]
 RUN \
-    && sh './dotenvx.sh' \
+    sh './dotenvx.sh' \
     && rm './dotenvx.sh' \
     && dotenvx ext prebuild
 
