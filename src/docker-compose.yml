@@ -20,6 +20,7 @@ services:
     build:
       context: ./express
       dockerfile: ./Dockerfile
+      target: run
   mongo:
     container_name: mongo
     restart: on-failure

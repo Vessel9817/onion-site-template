@@ -4,7 +4,6 @@
 - Support Docker swarm mode:
   - Create self-signed TLS certificates for container network security
   - Perform a test run of swarm mode
-- Create webpack configurations instead of using ts-node in production
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart)
 - Configure ratelimiting
 - OnionScan:

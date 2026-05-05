@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "license": "MIT",
     "main": "app.ts",
+    "type": "module",
     "private": true,
     "repository": {
         "type": "git",
@@ -16,7 +17,10 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node --env-file=./secrets/.env -r ts-node/register ./app.ts",
+        "start": "node ./dist/index.cjs",
+        "build": "node --run=build:prod",
+        "build:prod": "cross-env NODE_ENV=\"production\" NODE_OPTIONS=\"--no-experimental-strip-types --import tsx\" webpack -c ./webpack/webpack.config.ts",
+        "build:dev": "cross-env NODE_ENV=\"development\" NODE_OPTIONS=\"--no-experimental-strip-types --import tsx\" webpack -c ./webpack/webpack.config.ts",
         "tsc": "tsc --noEmit"
     },
     "dependencies": {
@@ -31,8 +35,14 @@
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
         "@types/node": "^25.6.0",
-        "ts-node": "^10.9.2",
+        "clean-webpack-plugin": "^4.0.0",
+        "cross-env": "^10.1.0",
+        "terser-webpack-plugin": "^5.5.0",
+        "ts-loader": "^9.5.7",
         "tslib": "^2.8.1",
-        "typescript": "^6.0.3"
+        "tsx": "^4.21.0",
+        "typescript": "^6.0.3",
+        "webpack": "^5.106.2",
+        "webpack-cli": "^7.0.2"
     }
 }

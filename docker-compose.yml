@@ -69,7 +69,7 @@ services:
         required: false
     secrets:
       - source: express
-        target: /project/src/secrets/
+        target: /project/secrets/
     networks:
       express:
         ipv4_address: 10.5.2.2
