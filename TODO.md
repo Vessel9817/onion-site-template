@@ -1,11 +1,7 @@
 # TODOs
 
 - Document Express methods and classes
-- Support Docker swarm mode:
-  - Create self-signed TLS certificates for container network security
-  - Perform a test run of swarm mode
 - [Encrypt secrets](https://dotenvx.com/docs/quickstart)
-- Configure ratelimiting
 - OnionScan:
   - `-timeout 1` doesn't prevent hanging after results are output
   - Add webui command, if possible
