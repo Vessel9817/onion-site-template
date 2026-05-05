@@ -2,7 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import { MONGODB_URI } from './env';
-import { blockTrace } from './middleware';
 import { APP_ROUTER, NOT_FOUND_ROUTER } from './routes';
 
 const APP = express();
@@ -14,7 +13,6 @@ APP.set('view engine', 'ejs');
 APP.disable('x-powered-by');
 
 // Setting global app middleware
-APP.use(blockTrace); // Blocks TRACE requests
 APP.use(cors()); // Sets CORS policy
 APP.use(express.json()); // Parse Content-Type: json
 APP.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
