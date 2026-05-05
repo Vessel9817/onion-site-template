@@ -1,5 +1,6 @@
 import { ObjectId, type WithId } from 'mongodb';
 import mongoose, { type PipelineStage, Schema } from 'mongoose';
+import { dateNow } from '../utils/shims';
 
 export interface Msg {
     name: string;
@@ -24,7 +25,7 @@ function hydrateMsg(partialMsg: Msg): HydratedMsg {
         // Developers can specify WithId<HydratedMsg> instead
         name: partialMsg.name,
         content: partialMsg.content,
-        lastModified: Date.now()
+        lastModified: dateNow()
     };
 
     return msg;
