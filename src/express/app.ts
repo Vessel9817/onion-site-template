@@ -10,6 +10,9 @@ const PORT = 3000;
 
 APP.set('view engine', 'ejs');
 
+// Removing fingerprintable headers
+APP.disable('x-powered-by');
+
 // Setting global app middleware
 APP.use(blockTrace); // Blocks TRACE requests
 APP.use(cors()); // Sets CORS policy
@@ -19,15 +22,13 @@ APP.use('/', APP_ROUTER); // Serves app
 APP.use('/', NOT_FOUND_ROUTER); // Catches errors
 
 // Starting server
-void (async () => {
-    try {
-        await mongoose.connect(MONGODB_URI);
-    }
-    catch (err) {
-        console.error('Failed to connect to database:', err);
-    }
+try {
+    await mongoose.connect(MONGODB_URI);
+}
+catch (err) {
+    console.error('Failed to connect to database:', err);
+}
 
-    APP.listen(PORT, () => {
-        console.log('Server is running!');
-    });
-})();
+APP.listen(PORT, () => {
+    console.log('Server is running!');
+});

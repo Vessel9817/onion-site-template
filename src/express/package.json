@@ -17,7 +17,7 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node ./dist/index.cjs",
+        "start": "node ./dist/index.cjs --env-file=./secrets/.env",
         "build": "node --run=build:prod",
         "build:prod": "cross-env NODE_ENV=\"production\" NODE_OPTIONS=\"--no-experimental-strip-types --import tsx\" webpack -c ./webpack/webpack.config.ts",
         "build:dev": "cross-env NODE_ENV=\"development\" NODE_OPTIONS=\"--no-experimental-strip-types --import tsx\" webpack -c ./webpack/webpack.config.ts",
