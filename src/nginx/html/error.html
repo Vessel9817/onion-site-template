@@ -4,14 +4,27 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style>
-            html {
+            :root {
                 color-scheme: light dark;
-                background-color: light-dark(white, black);
-                color: light-dark(black, white);
+                --light-mode: initial;
+                --dark-mode: ;
             }
-
-            /* Default nginx CSS */
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --light-mode: ;
+                    --dark-mode: initial;
+                }
+            }
+            html {
+                --bg_light: white;
+                --bg_dark: black;
+                --font_light: black;
+                --font_dark: white;
+            }
             body {
+                background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
+                color: var(--light-mode, var(--font_light)) var(--dark-mode, var(--font_dark));
+                /* Default nginx CSS */
                 width: 35em;
                 margin: 0 auto;
                 font-family: Tahoma, Verdana, Arial, sans-serif;
