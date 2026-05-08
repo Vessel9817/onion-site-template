@@ -107,3 +107,24 @@ jobs:
         run: |
           chmod +x ./.githooks/pre-commit
           ./.githooks/pre-commit
+  # Checks that npm workspaces are synchronized with the top-level lockfile
+  workspaces:
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        node-version: [24.x]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install node modules
+        run: npm ci --no-fund
+      - name: Check workspace lockfile synchronization
+        run: |
+          chmod +x ./.github/workflows/workspaces.sh
+          ./.github/workflows/workspaces.sh
