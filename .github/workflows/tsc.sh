@@ -18,4 +18,4 @@ if ! npm -w './src/license-report' run tsc; then
     fail=$((fail | 8))
 fi
 
-exit "$fail"
+exit $fail
