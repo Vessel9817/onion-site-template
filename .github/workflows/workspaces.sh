@@ -4,18 +4,23 @@ SCRIPT_DIR="$(dirname "$0")"
 PROJECT_ROOT="${SCRIPT_DIR}/../.."
 
 function check-workspace {
-    workspace="$1"
-    dir="$(pwd)"
+    local workspace="$1"
+    # shellcheck disable=SC2155
+    local dir="$(pwd)"
+    local fail=0
+
+    cd "${workspace}" || return 4
 
     # Checking workspace lockfile matches generated
-    cd "${workspace}" || exit 1
     mv package-lock.json package-lock.json.old
     npm i --package-lock-only --workspaces false
-    cmp package-lock.json package-lock.json.old
+    cmp package-lock.json package-lock.json.old || fail=1
 
     # Cleanup
     rm package-lock.json.old
-    cd "${dir}" || exit 1
+    cd "${dir}" || fail=$((fail | 2))
+
+    return ${fail}
 }
 
 fail=0
@@ -32,4 +37,4 @@ if ! check-workspace "${PROJECT_ROOT}/src/license-report"; then
     fail=$((fail | 4))
 fi
 
-exit "$fail"
+exit $fail
