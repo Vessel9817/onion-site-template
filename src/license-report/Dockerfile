@@ -19,19 +19,6 @@ COPY --link [ "./package.json", "./packages/website.json" ]
 # 1000:1000 corresponds to user "node"
 COPY --link --chown=1000:1000 [ "${LICENSE_REPORT_APP_PATH}", "./packages/" ]
 
-ARG DOTENVX_VERSION=1.61.1
-ARG DOTENVX_CHECKSUM=sha256:a780992276e8b67dd6b5dd5d9223215ed99a0a4d3b18e0275b22ce44c90b8125
-ADD --chmod='+x' --checksum="${DOTENVX_CHECKSUM}" [ \
-    "https://dotenvx.sh/?version=${DOTENVX_VERSION}", \
-    "./dotenvx.sh" \
-]
-RUN \
-    apk update \
-    && apk add --no-cache curl \
-    && sh './dotenvx.sh' \
-    && rm './dotenvx.sh' \
-    && dotenvx ext prebuild
-
 # Running app
 USER node
-ENTRYPOINT [ "dotenvx", "run", "--", "/project/packages/index.sh" ]
+ENTRYPOINT [ "/project/packages/index.sh" ]
