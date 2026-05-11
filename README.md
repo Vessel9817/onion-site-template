@@ -73,7 +73,8 @@ abiding by the following regex: (Onion v3 address)
 `[a-z0-9]{56}\.onion`
 
 This domain should also be specified in
-[src/onionscan/.env](./src/onionscan/.env)
+[src/onionscan/.env](./src/onionscan/.env) and
+[src/express/.env](./src/onionscan/.env)
 
 ## Running
 
