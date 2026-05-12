@@ -64,6 +64,17 @@ services:
     secrets:
       - source: tor-hostname
         target: /run/secrets/hostname
+  onionscan-ui:
+    container_name: onionscan-ui
+    restart: on-failure
+    build:
+      context: ./onionscan
+      dockerfile: ./Dockerfile
+      target: onionscan
+    command: [
+      "--verbose",
+      "--mode", "analysis"
+    ]
   license-report:
     container_name: license-report
     build:

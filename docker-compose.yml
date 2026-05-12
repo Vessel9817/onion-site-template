@@ -157,6 +157,28 @@ services:
     networks:
       tor:
         ipv4_address: 10.5.3.254
+  onionscan-ui:
+    extends:
+      file: ./src/docker-compose.yml
+      service: onionscan-ui
+    profiles:
+      - production
+      - onionscan
+    depends_on:
+      onionscan:
+        # If the crawl DB already exists, we can search it.
+        # If not, Onionscan should make one
+        condition: service_started
+        required: false
+    ports:
+      - :8080
+    volumes:
+      - type: volume
+        source: onionscan-db
+        target: /project/onionscandb/
+    networks:
+      tor:
+        ipv4_address: 10.5.3.253
   license-report:
     extends:
       file: ./src/docker-compose.yml

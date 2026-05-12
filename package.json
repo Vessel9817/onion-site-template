@@ -20,7 +20,7 @@
         "start:prod": "docker compose --profile production up -d tor",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans",
-        "onionscan": "docker compose up -d onionscan",
+        "onionscan": "docker compose up -d onionscan-ui",
         "tsc": "tsc --noEmit",
         "eslint": "eslint . -c ./src/eslint/eslint.config.ts",
         "eslint:fix": "node --run=eslint -- --fix",
