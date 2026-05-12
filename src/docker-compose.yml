@@ -61,6 +61,9 @@ services:
       context: ./onionscan
       dockerfile: ./Dockerfile
       target: onionscan
+    secrets:
+      - source: tor-hostname
+        target: /run/secrets/hostname
   license-report:
     container_name: license-report
     build:

@@ -1,6 +1,4 @@
 # TODOs
 
-- OnionScan:
-  - `-timeout 1` doesn't prevent hanging after results are output
-  - Add webui command, if possible
+- Add Onionscan command to make use of `-mode analysis -webport 8080`
 - Use bind mounts to store logs on host
