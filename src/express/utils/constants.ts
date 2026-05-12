@@ -9,12 +9,6 @@ const CONTINUE = 100;
 const SWITCHING_PROTOCOLS = 101;
 
 /**
- * @deprecated
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/102}
- */
-const PROCESSING = 102;
-
-/**
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/103}
  */
 const EARLY_HINTS = 103;
@@ -93,12 +87,6 @@ const SEE_OTHER = 303;
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/304}
  */
 const NOT_MODIFIED = 304;
-
-/**
- * @deprecated
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/305}
- */
-const USE_PROXY = 305;
 
 /**
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/306}
@@ -322,8 +310,6 @@ const codes = {
     // 10X
     CONTINUE,
     SWITCHING_PROTOCOLS,
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    PROCESSING, // NOSONAR typescript:S1874
     EARLY_HINTS,
     // 20X
     OK,
@@ -342,8 +328,6 @@ const codes = {
     FOUND,
     SEE_OTHER,
     NOT_MODIFIED,
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    USE_PROXY, // NOSONAR typescript:S1874
     UNUSED,
     TEMPORARY_REDIRECT,
     PERMANENT_REDIRECT,
