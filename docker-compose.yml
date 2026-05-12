@@ -145,9 +145,11 @@ services:
       - onionscan
     depends_on:
       - tor
-    build:
-      args:
-        - TOR_PROXY=10.5.3.2:9050
+    command: [
+      "--verbose",
+      "--torProxyAddress", "10.5.3.2:9050",
+      "--list", "/run/secrets/hostname"
+    ]
     volumes:
       - type: volume
         source: onionscan-db
