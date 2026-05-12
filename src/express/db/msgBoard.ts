@@ -2,6 +2,8 @@ import { ObjectId, type WithId } from 'mongodb';
 import mongoose, { type PipelineStage, Schema } from 'mongoose';
 import { dateNow } from '../utils/shims';
 
+const MSG_PAGE_SIZE = 10;
+
 export interface Msg {
     name: string;
     content: string;
@@ -13,16 +15,20 @@ export interface HydratedMsg extends Msg {
 
 export const MsgSchema = new Schema({
     name: String,
-    lastModified: Number,
-    content: String
+    content: String,
+    lastModified: Number
 });
 
 export const MsgModel = mongoose.model('messages', MsgSchema);
 
+/**
+ * Transforms (hydrates) a partial record into a full record
+ * @param partialMsg The partial record
+ * @returns A record ready to be inserted into the database
+ */
 function hydrateMsg(partialMsg: Msg): HydratedMsg {
     const msg: HydratedMsg = {
         // No rest parameter, since partialMsg could be of type WithId<Msg>.
-        // Developers can specify WithId<HydratedMsg> instead
         name: partialMsg.name,
         content: partialMsg.content,
         lastModified: dateNow()
@@ -31,8 +37,11 @@ function hydrateMsg(partialMsg: Msg): HydratedMsg {
     return msg;
 }
 
-const MSG_PAGE_SIZE = 10;
-
+/**
+ * Attempts to retrieve a record of the given `ObjectId`
+ * @param id The record's `ObjectId`
+ * @returns `true` if the record exists, `false` otherwise
+ */
 export async function idExists(id: ObjectId): Promise<boolean> {
     return (await MsgModel.findById(id)) != null;
 }
@@ -62,18 +71,30 @@ export async function getMsgs(page: number): Promise<WithId<HydratedMsg>[]> {
     return msgs;
 }
 
+/**
+ * Hydrates and inserts the given record
+ * @param partialMsg The partial record
+ */
 export async function createMsg(partialMsg: Msg): Promise<void> {
     const msg = hydrateMsg(partialMsg);
 
     await MsgModel.insertOne(msg);
 }
 
+/**
+ * Hydrates and updates the given record based on its ObjectId
+ * @param newMsg The record
+ */
 export async function editMsg(newMsg: WithId<Msg>): Promise<void> {
     const newMsgWithoutId: HydratedMsg = hydrateMsg(newMsg);
 
     await MsgModel.findByIdAndUpdate(newMsg._id, newMsgWithoutId);
 }
 
+/**
+ * Deletes a record based on the given ObjectId
+ * @param id The ObjectId of the record to delete
+ */
 export async function deleteMsg(id: ObjectId): Promise<void> {
     await MsgModel.findByIdAndDelete(id).exec();
 }

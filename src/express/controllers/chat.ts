@@ -4,6 +4,11 @@ import { ObjectId, type WithId } from 'mongodb';
 import { MsgBoard } from '../db';
 import { http } from '../utils';
 
+/**
+ * Displays the chat home page
+ * @param req The request
+ * @param res The response
+ */
 export const getChat: RequestHandler = async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
@@ -27,6 +32,12 @@ export const getChat: RequestHandler = async (req, res) => {
     res.render('pages/chat', args);
 };
 
+/**
+ * Creates a new message
+ * @param req The request
+ * @param res The response
+ * @param next The callback function for the next middleware
+ */
 export const sendMsg: RequestHandler = async (req, res, next) => {
     // Placeholder error page
     if (!validationResult(req).isEmpty()) {
@@ -49,6 +60,12 @@ export const sendMsg: RequestHandler = async (req, res, next) => {
     res.redirect('/chat');
 };
 
+/**
+ * Updates a message
+ * @param req The request
+ * @param res The response
+ * @param next The callback function for the next middleware
+ */
 export const editMsg: RequestHandler = async (req, res, next) => {
     // Placeholder error page
     if (!validationResult(req).isEmpty()) {
@@ -73,6 +90,12 @@ export const editMsg: RequestHandler = async (req, res, next) => {
     res.redirect('/chat');
 };
 
+/**
+ * Deletes a message
+ * @param req The request
+ * @param res The response
+ * @param next The callback function for the next middleware
+ */
 export const deleteMsg: RequestHandler = async (req, res, next) => {
     // Placeholder error page
     if (!validationResult(req).isEmpty()) {
