@@ -1,5 +1,7 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import { importX } from 'eslint-plugin-import-x';
 import { type Config, defineConfig } from 'eslint/config';
 import globals from 'globals';
 import path from 'node:path';
@@ -71,8 +73,11 @@ const DEFAULT_JS_CONFIGS = defineConfig([
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
     tseslint.configs.stylisticTypeChecked,
+    importX.flatConfigs.recommended,
+    importX.flatConfigs.typescript,
     {
         languageOptions: {
+            parser: tsParser,
             // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
                 tsconfigRootDir: path.resolve(
@@ -84,6 +89,8 @@ const DEFAULT_JS_CONFIGS = defineConfig([
                 projectService: {
                     allowDefaultProject: [__filename],
                 },
+                ecmaVersion: 'latest',
+                sourceType: 'module',
             },
             globals: {
                 ...globals.node,
@@ -169,6 +176,11 @@ const JS_CONFIG: Config = {
         '@stylistic/jsx-indent-props': ['off'],
         // https://eslint.style/rules/jsx/jsx-one-expression-per-line
         '@stylistic/jsx-one-expression-per-line': ['off'],
+
+        // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-named-as-default-member.md
+        'import-x/no-named-as-default-member': ['off'],
+        // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-named-as-default.md
+        'import-x/no-named-as-default': ['off'],
     },
 };
 
