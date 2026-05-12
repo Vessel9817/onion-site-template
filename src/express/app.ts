@@ -13,7 +13,7 @@ APP.set('view engine', 'ejs');
 APP.disable('x-powered-by');
 
 // Setting global app middleware
-APP.use(cors({ origin: DOMAIN })); // Sets CORS policy
+APP.use(cors({ origin: `https://${DOMAIN}` })); // Sets CORS policy
 APP.use(express.json()); // Parse Content-Type: json
 APP.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
 APP.use('/', APP_ROUTER); // Serves app
