@@ -378,7 +378,6 @@ const codes = {
 const names: Record<number, string> = {
     [codes.CONTINUE]: 'Continue',
     [codes.SWITCHING_PROTOCOLS]: 'Switching Protocols',
-    [codes.PROCESSING]: 'Processing',
     [codes.EARLY_HINTS]: 'Early Hints',
     [codes.OK]: 'OK',
     [codes.CREATED]: 'Created',
@@ -395,7 +394,6 @@ const names: Record<number, string> = {
     [codes.FOUND]: 'Found',
     [codes.SEE_OTHER]: 'See Other',
     [codes.NOT_MODIFIED]: 'Not Modified',
-    [codes.USE_PROXY]: 'Use Proxy',
     [codes.UNUSED]: 'Unused',
     [codes.TEMPORARY_REDIRECT]: 'Temporary Redirect',
     [codes.PERMANENT_REDIRECT]: 'Permanent Redirect',
