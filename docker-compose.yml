@@ -37,6 +37,9 @@ services:
         source: ./src/nginx/html/
         target: /usr/local/openresty/nginx/html/
         read_only: true
+    secrets:
+      - source: tor-hostname
+        target: /run/secrets/hostname
     networks:
       nginx:
         ipv4_address: 10.5.0.2
