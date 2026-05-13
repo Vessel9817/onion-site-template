@@ -2,6 +2,7 @@ import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import { importX } from 'eslint-plugin-import-x';
+import sonarjs from 'eslint-plugin-sonarjs';
 import { type Config, defineConfig } from 'eslint/config';
 import globals from 'globals';
 import path from 'node:path';
@@ -69,6 +70,7 @@ const IGNORE_FILE_CONFIG: Config = {
 
 // https://typescript-eslint.io/users/configs/
 const DEFAULT_JS_CONFIGS = defineConfig([
+    sonarjs.configs.recommended,
     eslint.configs.recommended,
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
