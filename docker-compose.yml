@@ -170,6 +170,8 @@ services:
         # If not, Onionscan should make one
         condition: service_started
         required: false
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "localhost:8080" ]
     ports:
       - :8080
     volumes:
