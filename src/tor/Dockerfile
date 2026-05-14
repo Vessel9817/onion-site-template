@@ -25,7 +25,9 @@ ENTRYPOINT [ "python3", "/project/vanguards/src/vanguards.py" ]
 FROM vanguards AS run
 
 RUN apt-get update -qq \
-    && apt-get install -yqq --no-install-recommends tor \
+    && apt-get install -yqq --no-install-recommends \
+        curl \
+        tor \
     && apt-get clean \
     && chmod 700 -R "/var/lib/tor" \
     && chown -R debian-tor:debian-tor "/var/lib/tor" \

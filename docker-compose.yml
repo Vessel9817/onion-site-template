@@ -11,6 +11,15 @@ services:
     depends_on:
       nginx:
         condition: service_started
+    healthcheck:
+      # Makes sure the hidden service is reachable
+      test: [
+        'CMD-SHELL',
+        'curl -s --socks4a 10.5.3.2:9050 "$(cat /var/lib/tor/website/hostname)" >/dev/null'
+      ]
+      interval: 10s
+      timeout: 120s
+      start_period: 20s
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
