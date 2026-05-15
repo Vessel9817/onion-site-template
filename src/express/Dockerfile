@@ -11,7 +11,7 @@ RUN npm ci --no-fund
 COPY [ "./", "./" ]
 ARG WEBPACK_CONFIG='./webpack/webpack.config.ts'
 ENV NODE_ENV='production'
-ENV NODE_OPTIONS='--no-experimental-strip-types --import tsx'
+ENV NODE_OPTIONS='--no-strip-types --import tsx'
 RUN npx webpack -c "${WEBPACK_CONFIG}"
 
 FROM ${NODE_VERSION} AS run
