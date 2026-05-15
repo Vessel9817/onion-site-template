@@ -23,7 +23,7 @@ const config: webpack.Configuration = {
     },
     output: {
         filename: '[name].cjs',
-        path: path.join(PROJECT_ROOT, OUTPUT_DIR),
+        path: path.resolve(PROJECT_ROOT, OUTPUT_DIR),
         clean: true,
         publicPath: '/'
     },
