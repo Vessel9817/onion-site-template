@@ -64,9 +64,9 @@ const config: webpack.Configuration = {
     },
     module: {
         rules: [
-            // TS/TSX (must come before JS/JSX)
+            // TS (must come before JS)
             {
-                test: /\.(mts|ts|tsx)$/,
+                test: /\.(mts|ts)$/,
                 exclude: /node_modules/,
                 use: [
                     {
