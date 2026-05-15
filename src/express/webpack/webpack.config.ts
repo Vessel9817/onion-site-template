@@ -1,15 +1,15 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import { NODE_ENV } from './env';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const require = createRequire(__filename);
-const PROJECT_ROOT = path.join(__dirname, '..');
+const PROJECT_ROOT = process.cwd();
 const OUTPUT_DIR = 'dist';
 
 const config: webpack.Configuration = {
