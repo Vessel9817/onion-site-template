@@ -9,7 +9,10 @@ RUN npm ci --no-fund
 
 # Building app
 COPY [ "./", "./" ]
-RUN npm run build
+ARG WEBPACK_CONFIG='./webpack/webpack.config.ts'
+ENV NODE_ENV='production'
+ENV NODE_OPTIONS='--no-experimental-strip-types --import tsx'
+RUN npx webpack -c "${WEBPACK_CONFIG}"
 
 FROM ${NODE_VERSION} AS run
 
@@ -29,3 +32,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \
     CMD [ "curl", "-f", "localhost:3000" ]
 CMD [ "--env-file=./secrets/.env", "index.cjs" ]
+ENV PROJECT_ROOT="."
