@@ -4,12 +4,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
-import { NODE_ENV } from './env';
+import { NODE_ENV, PROJECT_ROOT } from './env';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const require = createRequire(__filename);
-const PROJECT_ROOT = path.join(__dirname, '..');
 const OUTPUT_DIR = 'dist';
 
 const config: webpack.Configuration = {

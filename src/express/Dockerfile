@@ -29,3 +29,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \
     CMD [ "curl", "-f", "localhost:3000" ]
 CMD [ "--env-file=./secrets/.env", "index.cjs" ]
+ENV PROJECT_ROOT="."
