@@ -5,7 +5,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
-import { NODE_ENV } from './env';
+import { NODE_ENV } from './env.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const require = createRequire(__filename);
