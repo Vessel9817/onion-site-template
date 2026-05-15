@@ -70,7 +70,7 @@ const IGNORE_FILE_CONFIG: Config = {
 
 // https://typescript-eslint.io/users/configs/
 const DEFAULT_JS_CONFIGS = defineConfig([
-    sonarjs.configs.recommended,
+    sonarjs.configs!.recommended as Config,
     eslint.configs.recommended,
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
