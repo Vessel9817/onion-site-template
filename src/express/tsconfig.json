@@ -39,7 +39,6 @@
         "**/secrets/",
         "**/temp/",
         "**/tmp/",
-        "**/dist/",
-        "webpack"
+        "**/dist/"
     ]
 }
