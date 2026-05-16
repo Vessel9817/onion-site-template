@@ -5,6 +5,9 @@
         "no-hard-tabs": true
     },
     "globs": [
+        "**/*.md",
+        "!**/node_modules",
+        "!**/bower_components",
         // Ignore LICENSE files, because they shouldn't be modified
         "!**/LICENSE",
         "!**/LICENSE.md",
