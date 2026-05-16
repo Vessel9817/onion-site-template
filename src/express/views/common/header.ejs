@@ -1,5 +1,5 @@
 <head>
-    <%# Accessibility and Search Engine Optimization (SEO) %>
+    <%# a11y and SEO %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta title="<%= title %>" />
@@ -12,4 +12,30 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
         crossorigin="anonymous"
     />
+
+    <%# light-dark polyfill %>
+    <%# https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark %>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --light-mode: initial;
+            --dark-mode: ;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light-mode: ;
+                --dark-mode: initial;
+            }
+        }
+        html {
+            --bg_light: white;
+            --bg_dark: black;
+            --font_light: black;
+            --font_dark: white;
+        }
+        body {
+            background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
+            color: var(--light-mode, var(--font_light)) var(--dark-mode, var(--font_dark));
+        }
+    </style>
 </head>

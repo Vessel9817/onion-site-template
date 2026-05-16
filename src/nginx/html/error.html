@@ -24,17 +24,13 @@
             body {
                 background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
                 color: var(--light-mode, var(--font_light)) var(--dark-mode, var(--font_dark));
-                /* Default nginx CSS */
-                width: 35em;
-                margin: 0 auto;
-                font-family: Tahoma, Verdana, Arial, sans-serif;
             }
         </style>
         <title>Error</title>
     </head>
     <body>
-        <h1>Error <!--@NGINX_ERROR_CODE--></h1>
-        <h2><!--@NGINX_ERROR_MESSAGE--></h2>
+        <h1>Error <!--@ERROR_CODE--></h1>
+        <h2><!--@ERROR_MESSAGE--></h2>
         <p>If you believe this to be an error, contact the website maintainers.</p>
     </body>
 </html>
