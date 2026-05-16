@@ -3,7 +3,7 @@ HiddenServiceDir /var/lib/tor/website/
 
 # Redirecting requests to nginx
 HiddenServicePort 80 10.5.0.2:80
-#HiddenServicePort 443 10.5.0.2:443
+HiddenServicePort 443 10.5.0.2:443
 
 # Configuring Vanguards
 ControlPort 9051
