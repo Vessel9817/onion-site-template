@@ -56,9 +56,14 @@ services:
     build:
       context: ./onionprobe/onionprobe
       dockerfile: ./containers/onionprobe/Dockerfile
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3-distroless
+    restart: unless-stopped
   grafana:
     container_name: grafana
     image: grafana/grafana:13.0.1
+    restart: unless-stopped
     environment:
       GF_ANALYTICS_REPORTING_ENABLED: false # No anonymous usage statistics
   onionscan:

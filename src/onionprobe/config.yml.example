@@ -85,14 +85,14 @@ metrics_port_policy: 'reject *'
 prometheus_exporter: true
 
 # Prometheus exporter port
-prometheus_exporter_port: 9090
+prometheus_exporter_port: 9935
 
 # Max time in seconds between probing each endpoint
 interval: 5
 
 # Max time in seconds to wait between each round of tests (a round = a
 # pass among all defined endpoints)
-sleep: 30
+sleep: 10
 
 # Whether to shuffle list to scramble the ordering of the probe to avoid
 # the endpoint list to be guessed by a third party.

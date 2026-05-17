@@ -16,4 +16,4 @@ datasources:
     implementation: prometheus
     prometheusVersion: 3.10.0
     access: proxy
-    url: http://onionprobe:9090
+    url: http://prometheus:9090

@@ -172,6 +172,34 @@ services:
       tor:
         ipv4_address: 10.5.3.252
       metrics:
+  prometheus:
+    extends:
+      file: ./src/docker-compose.yml
+      service: prometheus
+    profiles:
+      - production
+    depends_on:
+      onionprobe:
+        condition: service_started
+        required: false
+    volumes:
+      - type: volume
+        source: prometheus
+        target: /prometheus/
+      - type: bind
+        source: ./src/onionprobe/onionprobe/configs/prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        read_only: true
+      - type: bind
+        source: ./src/onionprobe/onionprobe/configs/prometheus/prometheus-rules.yml
+        target: /etc/prometheus/prometheus-rules.yml
+        read_only: true
+      - type: bind
+        source: ./src/onionprobe/onionprobe/configs/prometheus/prometheus-tests.yml
+        target: /etc/prometheus/prometheus-tests.yml
+        read_only: true
+    networks:
+      - metrics
   grafana:
     extends:
       file: ./src/docker-compose.yml
@@ -179,7 +207,7 @@ services:
     profiles:
       - production
     depends_on:
-      onionprobe:
+      prometheus:
         condition: service_started
         required: false
     ports:
@@ -187,17 +215,22 @@ services:
     # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/home.json
       - GF_SECURITY_ADMIN_USER=$$__file{/run/secrets/username.txt}
       - GF_SECURITY_ADMIN_PASSWORD=$$__file{/run/secrets/password.txt}
       - GF_SECURITY_ADMIN_EMAIL=$$__file{/run/secrets/email.txt}
     volumes:
+      - type: volume
+        source: grafana-storage
+        target: /var/lib/grafana/
       - type: bind
         source: ./src/grafana/datasources.yml
         target: /etc/grafana/provisioning/datasources/datasources.yml
         read_only: true
-      - type: volume
-        source: grafana-storage
-        target: /var/lib/grafana/
+      - type: bind
+        source: ./src/onionprobe/onionprobe/configs/grafana/home.json
+        target: /etc/grafana/home.json
+        read_only: true
     secrets:
       - source: grafana-admin-username
         target: /run/secrets/username.txt
@@ -267,6 +300,7 @@ services:
 volumes:
   mongo-db:
   mongo-configdb:
+  prometheus:
   grafana-storage:
   onionscan-db:
 secrets:
