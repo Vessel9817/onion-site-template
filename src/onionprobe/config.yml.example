@@ -1,5 +1,5 @@
 # Log level: debug, info, warning, error or critical
-log_level: 'info'
+log_level: 'debug'
 
 # Whether to launch it's own Tor daemon (set to false to use the system-wide Tor service)
 launch_tor: true
@@ -81,7 +81,7 @@ metrics_port: ''
 metrics_port_policy: 'reject *'
 
 # Whether to enable Prometheus exporter functionality
-# Setting it to true automatically enables countinuos run (loop)
+# Setting it to true automatically enables countinuous run (loop)
 prometheus_exporter: true
 
 # Prometheus exporter port
@@ -92,7 +92,7 @@ interval: 5
 
 # Max time in seconds to wait between each round of tests (a round = a
 # pass among all defined endpoints)
-sleep: 5
+sleep: 30
 
 # Whether to shuffle list to scramble the ordering of the probe to avoid
 # the endpoint list to be guessed by a third party.
@@ -129,7 +129,7 @@ http_connect_max_retries: 3
 http_read_timeout: 30
 
 # Whether to get a new circuit for every stream
-new_circuit: true
+new_circuit: false
 
 # Sets how many seconds until a stream is detached from a circuit and try a new
 # circuit (CircuitStreamTimeout Tor daemon config)
