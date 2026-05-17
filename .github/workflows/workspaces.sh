@@ -13,7 +13,7 @@ function check-workspace {
 
     # Checking workspace lockfile matches generated
     mv package-lock.json package-lock.json.old
-    npm i --package-lock-only --workspaces false
+    npm ci --package-lock-only --workspaces false
     cmp package-lock.json package-lock.json.old || fail=1
 
     # Cleanup
