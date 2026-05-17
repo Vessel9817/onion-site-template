@@ -5,20 +5,16 @@ PROJECT_ROOT="${SCRIPT_DIR}/../.."
 
 function check-workspace {
     local workspace="$1"
-    # shellcheck disable=SC2155
-    local dir="$(pwd)"
     local fail=0
 
-    cd "${workspace}" || return 4
-
     # Checking workspace lockfile matches generated
-    mv package-lock.json package-lock.json.old
-    npm i --package-lock-only --workspaces false
-    cmp package-lock.json package-lock.json.old || fail=1
+    mv "${workspace}/package-lock.json" "${workspace}/package-lock.json.old"
+    npm i --package-lock-only --workspaces false --prefix "${workspace}"
+    cmp "${workspace}/package-lock.json" "${workspace}/package-lock.json.old" || fail=1
 
     # Cleanup
-    rm package-lock.json.old
-    cd "${dir}" || fail=$((fail | 2))
+    rm "${workspace}/package-lock.json"
+    mv "${workspace}/package-lock.json.old" "${workspace}/package-lock.json"
 
     return ${fail}
 }
