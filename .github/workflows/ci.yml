@@ -138,6 +138,8 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install node modules
+        run: npm ci --no-fund
       - name: Check workspace lockfile synchronization
         run: |
           chmod +x ./.github/workflows/workspaces.sh
