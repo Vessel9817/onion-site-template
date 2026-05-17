@@ -1,0 +1,170 @@
+# Log level: debug, info, warning, error or critical
+log_level: 'info'
+
+# Whether to launch it's own Tor daemon (set to false to use the system-wide Tor service)
+launch_tor: true
+
+# Tor listening address if the system-wide service is used
+#tor_address: 'tor'
+tor_address: '127.0.0.1'
+
+# Tor SOCKS port
+#
+# Use a non-default Tor SOCKS port to avoid conflict with any existing
+# system-wide Tor process listening at TCP port 9050.
+#socks_port: 9050
+socks_port: 19050
+
+# Tor control port
+#
+# Use a non-default Tor control port to avoid conflict with any existing
+# system-wide Tor process listening at TCP port 9051.
+#control_port: 9051
+control_port: 19051
+
+# Tor control password
+#
+# Set to false to
+#
+# * Use a temporary auto-generated password when using the built-in Tor
+#   service.
+# * Show a password prompt when using the system-wide Tor service.
+#
+# Do not use the example value in production, as this password is available
+# publicly
+#control_password: false
+#control_password: 'hackedpasswdbSkUMOr2vIlL5u2YEMA1YpwKj08'
+
+# Whether to run continuously
+loop: true
+
+# Tor Metrics port (MetricsPort)
+# An empty value means it is disabled
+#
+# WARNING: Before enabling this, it is important to understand that exposing
+# tor metrics publicly is dangerous to the Tor network users. Please take extra
+# precaution and care when opening this port. Set a very strict access policy
+# with `metrics_port_policy` and consider using your operating systems firewall
+# features for defense in depth.
+#
+# We recommend, for the prometheus format, that the only address that can
+# access this port should be the Prometheus server itself. Remember that the
+# connection is unencrypted (HTTP) hence consider using a tool like stunnel to
+# secure the link from this port to the server.
+#
+# Example settings for the metrics_port parameter:
+#
+#   metrics_port: '9936'         # localhost only on port 9936
+#   metrics_port: '0.0.0.0:9936' # binds to all IPv4 addresses in the host
+#
+metrics_port: ''
+
+# Tor Metrics port policy (MetricsPortPolicy)
+# An empty value means it is disabled
+#
+# Example settings for the metrics_port_policy parameter:
+#
+#   metrics_port_policy: 'accept 172.19.0.100'
+#   metrics_port_policy: 'accept 127.0.0.1,accept 172.19.0.100'
+#   metrics_port_policy: 'accept *'
+#
+# This should work by default for Docker containers in the 172.16.0.0/12 subnet
+# (not recommended):
+#
+#   metrics_port_policy: 'accept 172.16.0.0/12'
+#
+# This should work by default for a local network, including local Docker
+# containers (not recommended):
+#
+#   metrics_port_policy: 'accept 192.168.0.0/16,accept 10.0.0.0/8,accept 172.16.0.0/12'
+#
+metrics_port_policy: 'reject *'
+
+# Whether to enable Prometheus exporter functionality
+# Setting it to true automatically enables countinuos run (loop)
+prometheus_exporter: true
+
+# Prometheus exporter port
+prometheus_exporter_port: 9090
+
+# Max time in seconds between probing each endpoint
+interval: 5
+
+# Max time in seconds to wait between each round of tests (a round = a
+# pass among all defined endpoints)
+sleep: 5
+
+# Whether to shuffle list to scramble the ordering of the probe to avoid
+# the endpoint list to be guessed by a third party.
+#
+# This shuffles the list every time Onionprobe starts a new round of
+# tests.
+shuffle: true
+
+# Whether to randomize both the interval and the sleep time for privacy
+# concerns and to avoid systematic errors
+randomize: true
+
+# Run only a limited number of rounds (i.e., the number of times that
+# Onionprobe tests all the configured endpoints).
+# Requires the "loop" option to be enabled.
+# Set to 0 to disable this limit.
+rounds: 0
+
+# Max retries when fetching a descriptor
+# By default it is set to the number of HSDirs the client usually fetch minus one
+# See discussion at https://gitlab.torproject.org/tpo/network-health/analysis/-/issues/28
+descriptor_max_retries: 5
+
+# Timeout in seconds when retrieving an Onion Service descriptor
+descriptor_timeout: 30
+
+# Connection timeout for HTTP/HTTPS requests
+http_connect_timeout: 30
+
+# Max retries when doing a HTTP/HTTPS connection to an Onion Service
+http_connect_max_retries: 3
+
+# Read timeout for HTTP/HTTPS requests
+http_read_timeout: 30
+
+# Whether to get a new circuit for every stream
+new_circuit: true
+
+# Sets how many seconds until a stream is detached from a circuit and try a new
+# circuit (CircuitStreamTimeout Tor daemon config)
+circuit_stream_timeout: 60
+
+# Whether to verify TLS/HTTPS certificates
+tls_verify: true
+
+# Whether to run a specific test for TLS endpoints
+test_tls_connection: true
+
+# Whether to get certificate information when testing TLS/HTTPS endpoints.
+# Requires "test_tls_connection" set to true to take effect.
+get_certificate_info: true
+
+# Connection timeout for TLS connections
+tls_connect_timeout: 30
+
+# Max retries when doing a TLS connection to an Onion Service
+tls_connect_max_retries: 3
+
+# The list of endpoints to be tested
+endpoints:
+  website:
+    address: abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+    port: 80
+    protocol: http
+    paths:
+        # Specifying a per-path pattern makes Onionprobe look for it in the
+        # request and hence operating like a basic check if the endpoint
+        # is operational.
+      - path: /
+        # Accepts patterns using Python's regex format
+        #pattern: 'Tor Project'
+        # The allowed HTTP status codes for this endpoint
+        # Any code not in this list will set an unexpected status code metric
+        allowed_statuses:
+          - 200

@@ -151,6 +151,62 @@ services:
     networks:
       mongo:
         ipv4_address: 10.5.1.254
+  onionprobe:
+    extends:
+      file: ./src/docker-compose.yml
+      service: onionprobe
+    profiles:
+      - production
+    environment:
+      - ONIONPROBE_CONFIG=/project/config.yml
+    volumes:
+      - type: bind
+        source: ./src/onionprobe/config.yml
+        target: /project/config.yml
+        read_only: true
+    depends_on:
+      tor:
+        condition: service_healthy
+        required: false
+    networks:
+      tor:
+        ipv4_address: 10.5.3.252
+      metrics:
+  grafana:
+    extends:
+      file: ./src/docker-compose.yml
+      service: grafana
+    profiles:
+      - production
+    depends_on:
+      onionprobe:
+        condition: service_started
+        required: false
+    ports:
+      - ':3000'
+    # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+      - GF_SECURITY_ADMIN_USER=$$__file{/run/secrets/username.txt}
+      - GF_SECURITY_ADMIN_PASSWORD=$$__file{/run/secrets/password.txt}
+      - GF_SECURITY_ADMIN_EMAIL=$$__file{/run/secrets/email.txt}
+    volumes:
+      - type: bind
+        source: ./src/grafana/datasources.yml
+        target: /etc/grafana/provisioning/datasources/datasources.yml
+        read_only: true
+      - type: volume
+        source: grafana-storage
+        target: /var/lib/grafana/
+    secrets:
+      - source: grafana-admin-username
+        target: /run/secrets/username.txt
+      - source: grafana-admin-password
+        target: /run/secrets/password.txt
+      - source: grafana-admin-email
+        target: /run/secrets/email.txt
+    networks:
+      - metrics
   onionscan:
     extends:
       file: ./src/docker-compose.yml
@@ -211,6 +267,7 @@ services:
 volumes:
   mongo-db:
   mongo-configdb:
+  grafana-storage:
   onionscan-db:
 secrets:
   tor-hostname:
@@ -231,6 +288,12 @@ secrets:
     file: ./src/mongo/secrets/dev/username.txt
   mongo-dev-password:
     file: ./src/mongo/secrets/dev/password.txt
+  grafana-admin-username:
+    file: ./src/grafana/secrets/username.txt
+  grafana-admin-password:
+    file: ./src/grafana/secrets/password.txt
+  grafana-admin-email:
+    file: ./src/grafana/secrets/email.txt
 networks:
   tor:
     enable_ipv6: true
@@ -253,3 +316,8 @@ networks:
       config:
         - subnet: 10.5.1.0/24
           gateway: 10.5.1.1
+  metrics:
+    ipam:
+      config:
+        - subnet: 10.5.4.0/24
+          gateway: 10.5.4.1

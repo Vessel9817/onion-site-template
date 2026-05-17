@@ -1,6 +1,6 @@
 # Onion Site Template
 
-[![CI](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml)
+[![CI][ci-badge]][ci-workflow]
 
 ## Compatibility
 
@@ -13,7 +13,7 @@ in the *source code* with an equivalent Node CLI command.
 (I.e, `npm run ABC` is equivalent to `node --run=ABC`)
 For ease of use, *documentation* still uses npm.
 
-## Licenses
+## Licensing
 
 This project is licensed under the [MIT](./LICENSE.md) license.
 
@@ -23,6 +23,11 @@ run the following command:
 ```shell
 npm run license-report
 ```
+
+This does not include the licenses of submodules, Docker dependencies,
+or others. If you intend to use this project in a corporate environment,
+please consult a lawyer to investigate terms that would satisfy
+the licensing of this repository's various modules and their dependencies.
 
 ## Installation
 
@@ -44,11 +49,15 @@ Rename the following files to remove the `.example` postfix:
 - [src/mongo/secrets/express/password.txt.example](./src/mongo/secrets/express/password.txt.example)
 - [src/express/secrets/.env.example](./src/express/secrets/.env.example)
 - [src/onionscan/.env.example](./src/onionscan/.env.example)
+- [src/onionprobe/config.yml.example](./src/onionprobe/config.yml.example)
 
 The same goes with these files, except that these values should be memorable:
 
 - [src/mongo/secrets/dev/username.txt.example](./src/mongo/secrets/dev/username.txt.example)
 - [src/mongo/secrets/dev/password.txt.example](./src/mongo/secrets/dev/password.txt.example)
+- [src/grafana/secrets/username.txt.example](./src/grafana/secrets/username.txt.example)
+- [src/grafana/secrets/password.txt.example](./src/grafana/secrets/password.txt.example)
+- [src/grafana/secrets/email.txt.example](./src/grafana/secrets/email.txt.example)
 
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
@@ -73,7 +82,8 @@ abiding by the following regex: (Onion v3 address)
 `[a-z0-9]{56}\.onion`
 
 This domain should also be specified in
-[src/express/.env](./src/onionscan/.env)
+`src/onionscan/.env`, `src/express/.env` and `src/onionprobe/config.yml`
+where the placeholder onion address is present.
 
 ## Running
 
@@ -166,8 +176,9 @@ npm run eslint:fix
 
 ## Credits
 
+- [OnionProbe](./src/onionprobe/onionprobe/)
 - [OnionScan][onionscan]
-- [Boilerplate](https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate),
+- [Anonymous-Humanoid/chromium-extension-boilerplate][boilerplate],
   modified to lint and prettify this Node project
 - Many more projects we explicitly or inadvertently depend on
 
@@ -186,5 +197,8 @@ npm run eslint:fix
     git config core.hooksPath .githooks
     ```
 
+[ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
+[ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
 [onionscan]: https://github.com/harr1424/onionscan
+[boilerplate]: https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate
