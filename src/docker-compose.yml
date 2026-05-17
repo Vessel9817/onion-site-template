@@ -51,6 +51,21 @@ services:
         target: /run/secrets/dev/username.txt
       - source: mongo-dev-password
         target: /run/secrets/dev/password.txt
+  onionprobe:
+    container_name: onionprobe
+    build:
+      context: ./onionprobe/onionprobe
+      dockerfile: ./containers/onionprobe/Dockerfile
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3-distroless
+    restart: unless-stopped
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:13.0.1
+    restart: unless-stopped
+    environment:
+      GF_ANALYTICS_REPORTING_ENABLED: false # No anonymous usage statistics
   onionscan:
     container_name: onionscan
     restart: on-failure

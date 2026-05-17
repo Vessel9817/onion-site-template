@@ -17,7 +17,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node --run=start:prod",
         "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
-        "start:prod": "docker compose --profile production up -d tor",
+        "start:prod": "docker compose --profile production up -d grafana",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans",
         "onionscan": "docker compose up -d onionscan-ui",

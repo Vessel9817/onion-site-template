@@ -1,0 +1,3 @@
+[submodule "src/onionprobe/onionprobe"]
+	path = src/onionprobe/onionprobe
+	url = https://gitlab.torproject.org/tpo/onion-services/onionprobe
