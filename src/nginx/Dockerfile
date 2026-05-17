@@ -15,5 +15,6 @@ ADD --checksum="${GIXY_CHECKSUM}" --chmod="+x" [ \
 # Configuring nginx to run after Gixy
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
+# Depends on PROXY_ADDRESS env var
 ENTRYPOINT [ "/project/entrypoint.sh" ]
 CMD [ "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]
