@@ -161,8 +161,8 @@ npm stop
 
 A code linter. Used to prettify code, ensuring teams conform to the same
 stylistic standards. Also used to address potential errors, such as
-[the many edge cases of JavaScript](https://github.com/denysdovhan/wtfjs)
-that make the language infamous for being poorly designed.
+[the many edge cases of JavaScript][wtfjs] that make the language infamous
+for being initially built on hasty designs.
 
 Usage:
 
@@ -176,7 +176,7 @@ npm run eslint:fix
 
 ## Credits
 
-- [OnionProbe](./src/onionprobe/onionprobe/)
+- [OnionProbe][onionprobe]
 - [OnionScan][onionscan]
 - [Anonymous-Humanoid/chromium-extension-boilerplate][boilerplate],
   modified to lint and prettify this Node project
@@ -200,5 +200,7 @@ npm run eslint:fix
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
+[wtfjs]: https://github.com/denysdovhan/wtfjs
+[onionprobe]: https://gitlab.torproject.org/tpo/onion-services/onionprobe
 [onionscan]: https://github.com/harr1424/onionscan
 [boilerplate]: https://github.com/Anonymous-Humanoid/chromium-extension-boilerplate
