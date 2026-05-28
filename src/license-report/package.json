@@ -20,7 +20,7 @@
         "tsc": "tsc --noEmit"
     },
     "dependencies": {
-        "license-report": "^6.8.2"
+        "license-report": "^6.8.5"
     },
     "devDependencies": {
         "typescript": "^6.0.3"
