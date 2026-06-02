@@ -62,7 +62,7 @@ services:
     restart: unless-stopped
   grafana:
     container_name: grafana
-    image: grafana/grafana:13.0.1
+    image: grafana/grafana-oss:13.0.1-security-01
     restart: unless-stopped
     environment:
       GF_ANALYTICS_REPORTING_ENABLED: false # No anonymous usage statistics
