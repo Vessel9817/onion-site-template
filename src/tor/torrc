@@ -17,3 +17,10 @@ TestSocks 1
 
 # Disabling all connections that leak DNS queries
 SafeSocks 1
+
+# Reducing fingerprintability
+AvoidDiskWrites 1
+
+# Reducing fingerprintability at the cost of bandwidth
+ConnectionPadding 1
+ReducedConnectionPadding 0
