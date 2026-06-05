@@ -80,10 +80,8 @@ services:
       file: ./src/docker-compose.yml
       service: express
     depends_on:
-      mongo:
-        # mongo will restart on its first run, causing this check to fail
-        condition: service_healthy
-        required: false
+      mongo-init:
+        condition: service_completed_successfully
     secrets:
       - source: express
         target: /project/secrets/
@@ -108,20 +106,61 @@ services:
     networks:
       express:
         ipv4_address: 10.5.2.254
-  mongo:
+  mongo-init:
+    extends:
+      file: ./src/docker-compose.yml
+      service: mongo-init
+    depends_on:
+      mongo-1:
+        condition: service_healthy
+      mongo-2:
+        condition: service_healthy
+        required: false
+      mongo-3:
+        condition: service_healthy
+        required: false
+    networks:
+      - mongo
+  mongo-1:
     extends:
       file: ./src/docker-compose.yml
       service: mongo
+    container_name: mongo-1
     volumes:
-      - type: 'volume'
-        source: 'mongo-db'
-        target: '/data/db'
-      - type: 'volume'
-        source: 'mongo-configdb'
-        target: '/data/configdb'
-    env_file: './src/mongo/secrets/.env'
+      - type: volume
+        source: mongo-db-1
+        target: /data/db
+        # Only necessary if sharding is used
+      - type: volume
+        source: mongo-configdb
+        target: /data/configdb
+    env_file: ./src/mongo/secrets/.env
     networks:
-      - 'mongo'
+      - mongo
+  mongo-2:
+    extends:
+      file: ./src/docker-compose.yml
+      service: mongo
+    container_name: mongo-2
+    volumes:
+      - type: volume
+        source: mongo-db-2
+        target: /data/db
+    env_file: ./src/mongo/secrets/.env
+    networks:
+      - mongo
+  mongo-3:
+    extends:
+      file: ./src/docker-compose.yml
+      service: mongo
+    container_name: mongo-3
+    volumes:
+      - type: volume
+        source: mongo-db-3
+        target: /data/db
+    env_file: ./src/mongo/secrets/.env
+    networks:
+      - mongo
   mongo-debug:
     extends:
       file: ./src/docker-compose.yml
@@ -129,10 +168,8 @@ services:
     profiles:
       - development
     depends_on:
-      mongo:
-        # mongo will restart on its first run, causing this check to fail
-        condition: service_healthy
-        required: false
+      mongo-init:
+        condition: service_completed_successfully
     ports:
       - :8081
     environment:
@@ -300,8 +337,10 @@ services:
         target: '/project/packages/node_modules/'
         read_only: true
 volumes:
-  mongo-db:
   mongo-configdb:
+  mongo-db-1:
+  mongo-db-2:
+  mongo-db-3:
   prometheus:
   grafana-storage:
   onionscan-db:

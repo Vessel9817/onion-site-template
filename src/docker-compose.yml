@@ -18,9 +18,15 @@ services:
       context: ./express
       dockerfile: ./Dockerfile
       target: run
-  mongo:
-    container_name: mongo
+  mongo-init:
+    extends: mongo
     restart: on-failure
+    build:
+      context: ./mongo
+      dockerfile: ./Dockerfile
+      target: init
+  mongo:
+    restart: unless-stopped
     # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
     mem_swappiness: 1
     build:

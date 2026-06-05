@@ -1,3 +1,5 @@
+// NOTE: These types are extremely incomplete and only serve this project's needs
+
 // Global variable type information:
 // https://www.mongodb.com/docs/manual/reference/method/
 declare global {
@@ -5,6 +7,7 @@ declare global {
     var db: Db;
     const disableTelemetry: () => void;
     const load: (path: string) => void;
+    const rs: Rs;
 }
 
 interface Db {
@@ -19,6 +22,19 @@ interface Db {
         }[];
     }) => void;
     getSiblingDB: (name: string) => Db;
+}
+
+interface Rs {
+    initiate: (config?: RsInitiateConfig) => void;
+}
+
+interface RsInitiateConfig {
+    _id: string;
+    members: {
+        _id: number;
+        host: string;
+        priority?: number;
+    }[];
 }
 
 export { };
