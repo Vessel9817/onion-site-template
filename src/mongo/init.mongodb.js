@@ -1,4 +1,10 @@
+// This and all other .js files should be treated as CommonJS:
+// https://www.mongodb.com/docs/mongodb-shell/write-scripts/
+
 try {
+    // Disabling telemetry locally
+    disableTelemetry();
+
     rs.initiate({
         _id: 'dataset',
         members: [
