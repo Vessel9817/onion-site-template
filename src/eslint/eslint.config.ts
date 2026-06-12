@@ -183,6 +183,9 @@ const JS_CONFIG: Config = {
         'import-x/no-named-as-default-member': ['off'],
         // https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-named-as-default.md
         'import-x/no-named-as-default': ['off'],
+
+        // https://sonarsource.github.io/rspec/#/rspec/S1135/javascript
+        'tsonarjs/todo-tag': ['off']
     },
 };
 
