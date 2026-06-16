@@ -35,7 +35,7 @@
         ]
     },
     "devDependencies": {
-        "@dotenvx/dotenvx": "^1.71.3",
+        "@dotenvx/dotenvx": "^1.72.0",
         "@eslint/js": "^10.0.1",
         "@eslint/json": "^2.0.0",
         "@stylistic/eslint-plugin": "^5.10.0",
