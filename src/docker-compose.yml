@@ -34,6 +34,8 @@ services:
       dockerfile: ./Dockerfile
       target: run
     secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
       - source: mongo-config
         target: /run/secrets/.env
       - source: mongo-root-username
@@ -112,6 +114,8 @@ secrets:
     file: ./express/secrets/
   mongo-config:
     file: ./mongo/secrets/.env
+  mongo-keyfile:
+    file: ./src/mongo/secrets/keyFile.pem
   mongo-root-username:
     file: ./mongo/secrets/root/username.txt
   mongo-root-password:

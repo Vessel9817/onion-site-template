@@ -13,12 +13,15 @@ FROM ${MONGO_VERSION} AS run
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link --exclude=init.mongodb.js [ "./", "./" ]
+COPY --link --exclude=*.cjs --exclude=replicas.json [ "./", "./" ]
 
-# mongod doesn't natively support *_FILE env vars,
-# the built-in Docker shim does
-ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
-CMD [ "mongod", "--replSet", "dataset" ]
+CMD [ \
+    "mongod", \
+    "--replSet", "dataset", \
+    "--clusterAuthMode", "keyFile", \
+    "--keyFile", "/run/secrets/keyFile.pem", \
+    "--bind_ip_all" \
+]
 HEALTHCHECK \
     --interval=5s \
     --timeout=5s \
@@ -30,8 +33,18 @@ HEALTHCHECK \
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./init.mongodb.js", "./" ]
+COPY --link [ "./healthcheck.sh", "./replicas.json", "./" ]
 
-ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
-ENV REPLICA_HOST='mongo-1:27017'
-CMD [ "mongod", "--host", "${REPLICA_HOST}", "-f", "/project/init.mongodb.js" ]
+CMD [ \
+    "mongod", \
+    "--replSet", "dataset", \
+    "--clusterAuthMode", "keyFile", \
+    "--keyFile", "/run/secrets/keyFile.pem", \
+    "--bind_ip_all" \
+]
+HEALTHCHECK \
+    --interval=15s \
+    --timeout=10s \
+    --start-period=20s \
+    --retries=3 \
+    CMD [ "/project/healthcheck.sh" ]

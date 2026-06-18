@@ -62,6 +62,13 @@ The same goes with these files, except that these values should be memorable:
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
 
+Finally, also create a key file for MongoDB replicas by running
+the following command in the project root:
+
+```shell
+openssl rand -base64 756 > ./src/mongo/secrets/keyFile.pem
+```
+
 #### tor
 
 If you don't have an onion domain, run the following in the project directory

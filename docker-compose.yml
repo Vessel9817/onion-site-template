@@ -111,14 +111,9 @@ services:
       file: ./src/docker-compose.yml
       service: mongo-init
     depends_on:
-      mongo-1:
-        condition: service_healthy
-      mongo-2:
-        condition: service_healthy
-        required: false
-      mongo-3:
-        condition: service_healthy
-        required: false
+      - mongo-1
+      - mongo-2
+      - mongo-3
     networks:
       - mongo
   mongo-1:
@@ -351,6 +346,8 @@ secrets:
     file: ./src/express/secrets/
   mongo-config:
     file: ./src/mongo/secrets/.env
+  mongo-keyfile:
+    file: ./src/mongo/secrets/keyFile.pem
   mongo-root-username:
     file: ./src/mongo/secrets/root/username.txt
   mongo-root-password:
