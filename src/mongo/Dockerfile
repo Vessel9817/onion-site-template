@@ -13,7 +13,7 @@ FROM ${MONGO_VERSION} AS run
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link --exclude=*.cjs --exclude=replicas.json [ "./", "./" ]
+COPY --link --exclude=replicas.json [ "./", "./" ]
 
 CMD [ \
     "mongod", \
@@ -33,7 +33,7 @@ HEALTHCHECK \
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./healthcheck.sh", "./replicas.json", "./" ]
+COPY --link [ "./healthcheck.sh", "./" ]
 
 CMD [ \
     "mongod", \

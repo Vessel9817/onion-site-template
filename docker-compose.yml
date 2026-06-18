@@ -331,6 +331,9 @@ services:
         source: './node_modules/'
         target: '/project/packages/node_modules/'
         read_only: true
+configs:
+  mongo-replicas:
+    file: ./src/mongo/replicas.json
 volumes:
   mongo-configdb:
   mongo-db-1:

@@ -25,6 +25,9 @@ services:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: init
+    configs:
+      - source: mongo-replicas
+        target: /project/replicas.json
   mongo:
     restart: unless-stopped
     # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
@@ -33,6 +36,9 @@ services:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: run
+    configs:
+      - source: mongo-replicas
+        target: /docker-entrypoint-initdb.d/replicas.json
     secrets:
       - source: mongo-keyfile
         target: /run/secrets/keyFile.pem
@@ -107,6 +113,9 @@ services:
     build:
       context: ./container-link
       dockerfile: ./Dockerfile
+configs:
+  mongo-replicas:
+    file: ./mongo/replicas.json
 secrets:
   tor-hostname:
     file: ./tor/secrets/hostname
