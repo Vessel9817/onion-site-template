@@ -69,6 +69,29 @@ the following command in the project root:
 openssl rand -base64 756 > ./src/mongo/secrets/keyFile.pem
 ```
 
+And set its Linux permissions:
+
+```sh
+chmod 0400 ./src/mongo/secrets/keyFile.pem
+stat -c %a ./src/mongo/secrets/keyFile.pem # Should print 400
+```
+
+If you're using WSL and the output doesn't match (e.g, 555), then you'll need
+to add the following setting in `/etc/wsl.conf`:
+
+```ini
+[automount]
+options = "metadata"
+```
+
+Then restart WSL:
+
+```shell
+wsl --shutdown
+```
+
+And try setting the permissions again.
+
 #### tor
 
 If you don't have an onion domain, run the following in the project directory
