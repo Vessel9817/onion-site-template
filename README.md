@@ -92,6 +92,13 @@ wsl --shutdown
 
 And try setting the permissions again.
 
+The remaining permissions are as follows:
+
+```sh
+sudo chown 999:999 ./src/mongo/secrets/keyFile.pem
+stat -c %u:%g ./src/mongo/secrets/keyFile.pem # Should print 999:999
+```
+
 #### tor
 
 If you don't have an onion domain, run the following in the project directory

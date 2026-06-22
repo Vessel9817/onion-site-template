@@ -28,6 +28,12 @@ services:
     configs:
       - source: mongo-replicas
         target: /project/replicas.json
+    secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
   mongo:
     restart: unless-stopped
     # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
@@ -42,6 +48,9 @@ services:
     secrets:
       - source: mongo-keyfile
         target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
       - source: mongo-config
         target: /run/secrets/.env
       - source: mongo-root-username
