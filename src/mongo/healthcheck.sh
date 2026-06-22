@@ -5,7 +5,7 @@
 
 if ! mongosh --quiet --eval "try{disableTelemetry();return rs.status().ok;}catch(err){console.error(err);throw err;}" &> /dev/null; then
     echo "Replica set not initialized, attempting to initiate..."
-    if ! mongosh --quiet --eval "try{rs.initiate(require('./replicas.json'));}catch(err){console.error(err);throw err;}"; then
+    if ! mongosh --quiet --eval "try{disableTelemetry();rs.initiate(require('./replicas.json'));}catch(err){console.error(err);throw err;}"; then
         echo "Failed to initiate replica set" >&2
         exit 1
     fi
