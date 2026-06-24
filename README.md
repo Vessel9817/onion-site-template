@@ -190,12 +190,6 @@ npm run eslint:fix
     maintenance steps. (E.g, if we have to synchronize multiple version lock files,
     we want to know.) It would be greatly appreciated if a minimal
     [CI workflow](./.github/workflows) were included for verification.
-1. Git hooks are located in [.githooks](./.githooks).
-    This means that, optionally, your Git config can be set as follows:
-
-    ```shell
-    git config core.hooksPath .githooks
-    ```
 
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
