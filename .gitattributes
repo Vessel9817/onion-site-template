@@ -99,3 +99,6 @@
 
 # Apply override to all files in the directory
 *.md linguist-detectable
+
+# Secrets
+*.pem      text eol=lf

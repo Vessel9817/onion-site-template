@@ -18,16 +18,39 @@ services:
       context: ./express
       dockerfile: ./Dockerfile
       target: run
-  mongo:
-    container_name: mongo
+  mongo-init:
+    extends: mongo
     restart: on-failure
+    build:
+      context: ./mongo
+      dockerfile: ./Dockerfile
+      target: init
+    configs:
+      - source: mongo-replicas
+        target: /project/replicas.json
+    secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
+  mongo:
+    restart: unless-stopped
     # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
     mem_swappiness: 1
     build:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: run
+    configs:
+      - source: mongo-replicas
+        target: /docker-entrypoint-initdb.d/replicas.json
     secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
       - source: mongo-config
         target: /run/secrets/.env
       - source: mongo-root-username
@@ -99,6 +122,9 @@ services:
     build:
       context: ./container-link
       dockerfile: ./Dockerfile
+configs:
+  mongo-replicas:
+    file: ./mongo/replicas.json
 secrets:
   tor-hostname:
     file: ./tor/secrets/hostname
@@ -106,6 +132,8 @@ secrets:
     file: ./express/secrets/
   mongo-config:
     file: ./mongo/secrets/.env
+  mongo-keyfile:
+    file: ./src/mongo/secrets/keyFile.pem
   mongo-root-username:
     file: ./mongo/secrets/root/username.txt
   mongo-root-password:
