@@ -3,6 +3,8 @@
 // Global variable type information:
 // https://www.mongodb.com/docs/manual/reference/method/
 declare global {
+    const __dirname: string;
+    const __filename: string;
     const connect: (uri: string) => Db;
     var db: Db;
     const disableTelemetry: () => void;
@@ -10,7 +12,8 @@ declare global {
     const rs: Rs;
 }
 
-interface Db {
+export interface Db {
+    adminCommand: (command: 'ping') => { ok: number };
     auth: (username: string, password: string) => void;
     createCollection: (name: string) => void;
     createUser: (options: {
@@ -22,13 +25,19 @@ interface Db {
         }[];
     }) => void;
     getSiblingDB: (name: string) => Db;
+    getUsers: () => { ok: number; users: User[] };
+    hello: () => Hello;
 }
 
-interface Rs {
+export interface Hello {
+    isWritablePrimary: boolean;
+}
+
+export interface Rs {
     initiate: (config?: RsInitiateConfig) => void;
 }
 
-interface RsInitiateConfig {
+export interface RsInitiateConfig {
     _id: string;
     members: {
         _id: number;
@@ -37,4 +46,6 @@ interface RsInitiateConfig {
     }[];
 }
 
-export { };
+export interface User {
+    user: string;
+}

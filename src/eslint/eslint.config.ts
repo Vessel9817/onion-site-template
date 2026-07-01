@@ -194,6 +194,8 @@ const MONGO_JS_CONFIG: Config = {
     languageOptions: {
         globals: {
             ...globals.mongo,
+            __dirname: 'readonly',
+            __filename: 'readonly',
             db: 'writable',
             disableTelemetry: 'readonly',
         },
