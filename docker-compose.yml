@@ -111,9 +111,12 @@ services:
       file: ./src/docker-compose.yml
       service: mongo-init
     depends_on:
+      # Replicas will not be healthy until this service initializes the replica set
       - mongo-1
       - mongo-2
       - mongo-3
+    environment:
+      - HOST=mongo-1
     networks:
       - mongo
   mongo-1:

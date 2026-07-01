@@ -1,7 +1,7 @@
 ARG NODE_VERSION=node:lts-alpine
 ARG MONGO_VERSION=mongo:8
 
-# Instals dependencies
+# Installs dependencies
 FROM ${NODE_VERSION} AS build
 
 WORKDIR /docker-entrypoint-initdb.d/
@@ -13,38 +13,36 @@ FROM ${MONGO_VERSION} AS run
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link --exclude=replicas.json [ "./", "./" ]
+COPY --link --exclude=*.sh [ "./", "./" ]
 
+USER 999:999
 CMD [ \
     "mongod", \
-    "--replSet", "dataset", \
-    "--clusterAuthMode", "keyFile", \
-    "--keyFile", "/run/secrets/keyFile.pem", \
-    "--bind_ip_all" \
+    "--replSet", "dataset" \
 ]
 HEALTHCHECK \
     --interval=5s \
     --timeout=5s \
     --start-period=10s \
     --retries=5 \
-    CMD [ "mongosh", "--eval", "try{disableTelemetry();db.adminCommand('ping');}catch(err){console.error(err);throw err;}" ]
+    CMD [ "mongosh", "--eval", \
+        "try { \
+            disableTelemetry(); \
+            db.adminCommand('ping'); \
+        } \
+        catch (err) { \
+            console.error(err); \
+            throw err; \
+        }" \
+    ]
 
 # Starts replica set
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./healthcheck.sh", "./" ]
+COPY [ "./index.sh", "./" ]
 
-CMD [ \
-    "mongod", \
-    "--replSet", "dataset", \
-    "--clusterAuthMode", "keyFile", \
-    "--keyFile", "/run/secrets/keyFile.pem", \
-    "--bind_ip_all" \
-]
-HEALTHCHECK \
-    --interval=15s \
-    --timeout=10s \
-    --start-period=20s \
-    --retries=3 \
-    CMD [ "/project/healthcheck.sh" ]
+USER 999:999
+ENTRYPOINT [ "/project/index.sh" ]
+ENV HOST=mongo
+ENV PORT=27017

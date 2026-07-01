@@ -62,14 +62,15 @@ The same goes with these files, except that these values should be memorable:
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
 
-Finally, also create a key file for MongoDB replicas by running
+Next, create a key file for MongoDB replicas by running
 the following command in the project root:
 
 ```shell
 openssl rand -base64 756 > ./src/mongo/secrets/keyFile.pem
 ```
 
-And set its Linux permissions:
+If you plan to run this project in swarm mode, you're done. If not,
+set its Linux permissions:
 
 ```sh
 chmod 0400 ./src/mongo/secrets/keyFile.pem
@@ -92,7 +93,7 @@ wsl --shutdown
 
 And try setting the permissions again.
 
-The remaining permissions are as follows:
+Finally, set the remaining permissions as follows:
 
 ```sh
 sudo chown 999:999 ./src/mongo/secrets/keyFile.pem
