@@ -130,7 +130,7 @@ services:
         target: /data/db
         # Only necessary if sharding is used
       - type: volume
-        source: mongo-configdb
+        source: mongo-configdb-1
         target: /data/configdb
     env_file: ./src/mongo/secrets/.env
     networks:
@@ -144,6 +144,10 @@ services:
       - type: volume
         source: mongo-db-2
         target: /data/db
+        # Only necessary if sharding is used
+      - type: volume
+        source: mongo-configdb-2
+        target: /data/configdb
     env_file: ./src/mongo/secrets/.env
     networks:
       - mongo
@@ -156,6 +160,10 @@ services:
       - type: volume
         source: mongo-db-3
         target: /data/db
+        # Only necessary if sharding is used
+      - type: volume
+        source: mongo-configdb-3
+        target: /data/configdb
     env_file: ./src/mongo/secrets/.env
     networks:
       - mongo
@@ -337,7 +345,9 @@ configs:
   mongo-replicas:
     file: ./src/mongo/replicas.json
 volumes:
-  mongo-configdb:
+  mongo-configdb-1:
+  mongo-configdb-2:
+  mongo-configdb-3:
   mongo-db-1:
   mongo-db-2:
   mongo-db-3:
