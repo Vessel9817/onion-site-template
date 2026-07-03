@@ -115,6 +115,14 @@ services:
       - mongo-1
       - mongo-2
       - mongo-3
+    volumes:
+      - type: volume
+        source: mongo-db-init
+        target: /data/db
+        # Only necessary if sharding is used
+      - type: volume
+        source: mongo-configdb-init
+        target: /data/configdb
     environment:
       - HOST=mongo-1
     networks:
@@ -345,9 +353,11 @@ configs:
   mongo-replicas:
     file: ./src/mongo/replicas.json
 volumes:
+  mongo-configdb-init:
   mongo-configdb-1:
   mongo-configdb-2:
   mongo-configdb-3:
+  mongo-db-init:
   mongo-db-1:
   mongo-db-2:
   mongo-db-3:

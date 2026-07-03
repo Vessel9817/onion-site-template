@@ -25,6 +25,8 @@ services:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: init
+    # Doesn't affect /proc/sys/vm/swappiness
+    mem_swappiness: 1
     # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
     stop_signal: SIGTERM
     configs:
@@ -42,12 +44,12 @@ services:
         target: /run/secrets/password.txt
   mongo:
     restart: unless-stopped
-    # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
-    mem_swappiness: 1
     build:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: run
+    # Doesn't affect /proc/sys/vm/swappiness
+    mem_swappiness: 1
     # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
     stop_signal: SIGTERM
     secrets:
