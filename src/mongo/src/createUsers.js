@@ -4,24 +4,26 @@ const env = /** @type {import('./env')} */ (require(`${__dirname}/env`));
 
 /**
  * Creates an administrator and a user, if they don't already exist.
- * Also authenticates as the administrator.
+ *
+ * Throws an error if the users don't exist and the connected node
+ * isn't a writable primary.
  * @param {import('../global').Db} adminDb
  */
 function createUsers(adminDb) {
-    // Only the primary node can create users
     const hello = adminDb.hello();
 
-    if (!hello.isWritablePrimary) {
-        console.log("Couldn't create user: not primary");
-        return;
-    }
+    assert.strictEqual(hello.ok, 1,
+        `Failed to ping node: ${JSON.stringify(hello)}`);
 
+    const canCreateUser = hello.isWritablePrimary;
     const adminUsers = adminDb.getUsers();
 
     assert.strictEqual(adminUsers.ok, 1,
         `Failed to fetch users from DB admin: ${JSON.stringify(adminUsers)}`);
 
     if (!adminUsers.users.map((user) => user.user).includes(env.admin.username)) {
+        assert.strictEqual(canCreateUser, true, "Administrator doesn't exist");
+
         adminDb.createUser({
             user: env.admin.username,
             pwd: env.admin.password,
@@ -35,7 +37,6 @@ function createUsers(adminDb) {
         console.log('Created administrator!');
     }
 
-    adminDb.auth(env.admin.username, env.admin.password);
     // Creating user
     // NOTE: Databases and collections are hidden
     // until data is added to them, by default
@@ -46,7 +47,12 @@ function createUsers(adminDb) {
         `Failed to fetch users from DB ${env.dbName}: ${JSON.stringify(dbUsers)}`);
 
     if (!dbUsers.users.map((user) => user.user).includes(env.user.username)) {
+        assert.strictEqual(canCreateUser, true,
+            `User of database ${env.dbName} doesn't exist`);
+
         // Creating user with database permissions
+        adminDb.auth(env.admin.username, env.admin.password);
+
         msgBoard.createUser({
             user: env.user.username,
             pwd: env.user.password,

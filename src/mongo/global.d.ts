@@ -31,6 +31,7 @@ export interface Db {
 
 export interface Hello {
     isWritablePrimary: boolean;
+    ok: number;
 }
 
 export interface Rs {

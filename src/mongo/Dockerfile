@@ -25,6 +25,7 @@ HEALTHCHECK \
     --interval=2s \
     --timeout=5s \
     --start-period=1s \
+    # Waits for election to complete
     --retries=10 \
     CMD [ "mongosh", "-f", "/docker-entrypoint-initdb.d/src/healthcheck.js" ]
 
