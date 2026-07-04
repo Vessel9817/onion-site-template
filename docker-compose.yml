@@ -82,6 +82,9 @@ services:
     depends_on:
       mongo-init:
         condition: service_completed_successfully
+      # Which node is irrelevant, as the healthcheck is consistent across all nodes
+      mongo-1:
+        condition: service_healthy
     secrets:
       - source: express
         target: /project/secrets/
