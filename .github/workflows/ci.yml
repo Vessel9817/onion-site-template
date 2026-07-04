@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  DOCKER_COMPOSE_VERSION: v5.1.4
+  DOCKER_COMPOSE_VERSION: v5.3.0
 
 jobs:
   # Builds Docker compose services
@@ -18,7 +18,7 @@ jobs:
         node-version: [24.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: true
       - name: Set up Docker Compose
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Build Compose stack
-        run: npm run build -- --pull
+        run: npm run build
   # Checks for dependency conflicts that `npm ci` would miss
   npm:
     permissions:
@@ -41,7 +41,7 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -58,8 +58,8 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
-      - uses: DavidAnson/markdownlint-cli2-action@v23
+      - uses: actions/checkout@v7
+      - uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           config: .markdownlint-cli2.jsonc
   # Runs a script linting check
@@ -72,7 +72,7 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -91,7 +91,7 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -112,7 +112,7 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -133,7 +133,7 @@ jobs:
         os: [ubuntu-24.04]
         node-version: [24.x]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
