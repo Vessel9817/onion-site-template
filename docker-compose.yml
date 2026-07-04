@@ -110,6 +110,7 @@ services:
     extends:
       file: ./src/docker-compose.yml
       service: mongo-init
+    container_name: mongo-init
     depends_on:
       # Replicas will die until this service initializes the replica set
       - mongo-1

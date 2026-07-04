@@ -19,15 +19,13 @@ COPY --link --exclude=*.sh [ "./", "./" ]
 
 # Corresponds to user mongodb
 USER 999:999
-CMD [ \
-    "mongod", \
-    "--replSet", "dataset" \
-]
+CMD [ "mongod", "--replSet", "dataset" ]
+# mongo recommends a minimum connection interval of 1s to avoid performance degradation
 HEALTHCHECK \
-    --interval=1s \
+    --interval=2s \
     --timeout=5s \
     --start-period=1s \
-    --retries=5 \
+    --retries=10 \
     CMD [ "mongosh", "-f", "/docker-entrypoint-initdb.d/src/healthcheck.js" ]
 
 # Initializes replica set

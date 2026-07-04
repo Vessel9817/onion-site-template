@@ -6,7 +6,10 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 
 // Environment variables need to be manually included, even when set by Docker
-require('dotenv').config({ path: ['/run/secrets/.env'] });
+require('dotenv').config({
+    path: ['/run/secrets/.env'],
+    quiet: true
+});
 
 // DB name
 // https://hub.docker.com/_/mongo#initializing-a-fresh-instance

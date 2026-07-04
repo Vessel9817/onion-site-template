@@ -10,15 +10,14 @@ try {
     const assert = require('node:assert');
 
     // Creating users, if they don't already exist
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { createUsers } = /** @type {import('./createUsers')} */ (require(`${__dirname}/createUsers`));
-
-    createUsers(db);
+    load(`${__dirname}/createUsers.js`);
 
     // Testing DB connection
     assert.strictEqual(db.adminCommand('ping').ok, 1);
+
+    console.log('OK');
 }
 catch (err) {
-    console.error('Failed to create user:', err);
+    console.error('Healthcheck failed:', err);
     throw err;
 }
