@@ -4,7 +4,7 @@
 
 ## Compatibility
 
-This project is OS-agnostic, being fully containerized.
+This project aims to be OS-agnostic and fully containerized.
 We officially support recent versions of Node and npm
 (consequently also npx) for up-to-date security releases.
 As such, other Node package managers (e.g, yarn, pnpm)
@@ -179,7 +179,7 @@ For instance, `express` currently requires a restart if `mongo` restarts.
 
 Performs a comprehensive scan of the website, identifying fingerprints
 and computing correlation vectors accordingly. It can also be used to find
-misconfigurations, as it checks for ports that may not meant to be publicly
+misconfigurations, as it checks for ports that may not have meant to be publicly
 exposed.
 
 Usage:
@@ -228,12 +228,6 @@ npm run eslint:fix
     maintenance steps. (E.g, if we have to synchronize multiple version lock files,
     we want to know.) It would be greatly appreciated if a minimal
     [CI workflow](./.github/workflows) were included for verification.
-1. Git hooks are located in [.githooks](./.githooks).
-    This means your Git config should be set as follows:
-
-    ```shell
-    git config core.hooksPath .githooks
-    ```
 
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
