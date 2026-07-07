@@ -10,7 +10,7 @@ RUN npm ci --no-fund
 # Building app
 COPY [ "./", "./" ]
 ARG WEBPACK_CONFIG='./webpack/webpack.config.ts'
-ENV NODE_ENV='development'
+ENV NODE_ENV='production'
 ENV NODE_OPTIONS='--import tsx'
 RUN npx webpack -c "${WEBPACK_CONFIG}"
 
