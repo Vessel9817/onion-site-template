@@ -18,16 +18,46 @@ services:
       context: ./express
       dockerfile: ./Dockerfile
       target: run
-  mongo:
-    container_name: mongo
+  mongo-init:
+    extends: mongo
     restart: on-failure
-    # Doesn't affect /proc/sys/vm/swappiness, so mongosh still gives a warning
+    build:
+      context: ./mongo
+      dockerfile: ./Dockerfile
+      target: init
+    # Doesn't affect /proc/sys/vm/swappiness
     mem_swappiness: 1
+    # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
+    stop_signal: SIGTERM
+    configs:
+      - source: mongo-replicas
+        target: /project/replicas.json
+    secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
+      - source: mongo-root-username
+        target: /run/secrets/username.txt
+      - source: mongo-root-password
+        target: /run/secrets/password.txt
+  mongo:
+    restart: unless-stopped
     build:
       context: ./mongo
       dockerfile: ./Dockerfile
       target: run
+    # Doesn't affect /proc/sys/vm/swappiness
+    mem_swappiness: 1
+    # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
+    stop_signal: SIGTERM
     secrets:
+      - source: mongo-keyfile
+        target: /run/secrets/keyFile.pem
+        mode: 0400
+        uid: '999'
+        gid: '999'
       - source: mongo-config
         target: /run/secrets/.env
       - source: mongo-root-username
@@ -99,6 +129,9 @@ services:
     build:
       context: ./container-link
       dockerfile: ./Dockerfile
+configs:
+  mongo-replicas:
+    file: ./mongo/replicas.json
 secrets:
   tor-hostname:
     file: ./tor/secrets/hostname
@@ -106,6 +139,8 @@ secrets:
     file: ./express/secrets/
   mongo-config:
     file: ./mongo/secrets/.env
+  mongo-keyfile:
+    file: ./mongo/secrets/keyFile.pem
   mongo-root-username:
     file: ./mongo/secrets/root/username.txt
   mongo-root-password:

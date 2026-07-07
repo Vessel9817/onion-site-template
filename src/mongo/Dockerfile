@@ -1,26 +1,42 @@
 ARG NODE_VERSION=node:lts-alpine
 ARG MONGO_VERSION=mongo:8
 
-# Installing dependencies
+# Installs dependencies
 FROM ${NODE_VERSION} AS build
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
 RUN npm ci --no-fund --omit=dev
 
-# Running MongoDB
+# Starts replica node
 FROM ${MONGO_VERSION} AS run
 
+# Top-level .js or .mongodb files will be run as startup scripts
+# on DB initialization only (first run), before the replica set is initialized
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link [ "./", "./" ]
+COPY --link --exclude=*.sh [ "./", "./" ]
 
-# mongod doesn't natively support _FILE env vars
-ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
-CMD [ "mongod" ]
+# Corresponds to user mongodb
+USER 999:999
+CMD [ "mongod", "--replSet", "dataset" ]
+# mongo recommends a minimum connection interval of 1s to avoid performance degradation
 HEALTHCHECK \
-    --interval=5s \
+    --interval=2s \
     --timeout=5s \
-    --start-period=10s \
-    --retries=5 \
-    CMD [ "mongosh", "--eval", "disableTelemetry();db.adminCommand('ping');" ]
+    --start-period=1s \
+    # Waits for election to complete
+    --retries=10 \
+    CMD [ "mongosh", "-f", "/docker-entrypoint-initdb.d/src/healthcheck.js" ]
+
+# Initializes replica set
+FROM ${MONGO_VERSION} AS init
+
+WORKDIR /project/
+COPY [ "./index.sh", "./" ]
+
+# Corresponds to user mongodb
+USER 999:999
+ENTRYPOINT [ "/project/index.sh" ]
+ENV HOST=mongo
+ENV PORT=27017

@@ -5,32 +5,38 @@
 const assert = require('node:assert');
 const fs = require('node:fs');
 
+// Environment variables need to be manually included, even when set by Docker
+require('dotenv').config({
+    path: ['/run/secrets/.env'],
+    quiet: true
+});
+
 // DB name
 // https://hub.docker.com/_/mongo#initializing-a-fresh-instance
 const dbName = process.env.MONGO_INITDB_DATABASE ?? 'test';
 
 // Admin username
-const adminUsernameFile = process.env.MONGO_INITDB_ROOT_USERNAME_FILE;
+const adminUsernameFile = process.env.ROOT_USERNAME_FILE;
 assert.ok(
     adminUsernameFile,
-    'MONGO_INITDB_ROOT_USERNAME_FILE is missing from env'
+    'ROOT_USERNAME_FILE is missing from env'
 );
 assert.ok(
     fs.existsSync(adminUsernameFile),
-    "MONGO_INITDB_ROOT_USERNAME_FILE doesn't exist"
+    "ROOT_USERNAME_FILE doesn't exist"
 );
 const adminUsername = fs.readFileSync(adminUsernameFile).toString();
 assert.ok(adminUsername, 'Admin username is missing');
 
 // Admin password
-const adminPasswordFile = process.env.MONGO_INITDB_ROOT_PASSWORD_FILE;
+const adminPasswordFile = process.env.ROOT_PASSWORD_FILE;
 assert.ok(
     adminPasswordFile,
-    'MONGO_INITDB_ROOT_PASSWORD_FILE is missing from env'
+    'ROOT_PASSWORD_FILE is missing from env'
 );
 assert.ok(
     fs.existsSync(adminPasswordFile),
-    "MONGO_INITDB_ROOT_PASSWORD_FILE doesn't exist"
+    "ROOT_PASSWORD_FILE doesn't exist"
 );
 const adminPassword = fs.readFileSync(adminPasswordFile).toString();
 assert.ok(adminPassword, 'Admin password is missing');
