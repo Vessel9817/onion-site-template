@@ -1,4 +1,3 @@
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
@@ -77,11 +76,6 @@ const config: webpack.Configuration = {
         ]
     },
     plugins: [
-        // Cleaning the build directory
-        new CleanWebpackPlugin({
-            verbose: false,
-            protectWebpackAssets: false
-        }),
         new webpack.ProgressPlugin(),
         // Resolving dynamic import with Express view engine
         // https://github.com/CorpGlory/express-webpack-example
