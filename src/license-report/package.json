@@ -23,6 +23,6 @@
         "license-report": "^6.8.5"
     },
     "devDependencies": {
-        "typescript": "^6.0.3"
+        "typescript": "^7.0.2"
     }
 }
