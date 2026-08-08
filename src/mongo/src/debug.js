@@ -7,7 +7,6 @@
 disableTelemetry();
 
 const assert = require('node:assert');
-const child_process = require('node:child_process');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 /** @type {import('semver')} */
@@ -31,14 +30,14 @@ async function readFile(file) {
 
 /**
  * Asserts string equality. Logs errors without terminating.
- * @param {string | undefined} actual The actual value
+ * @param {string} actual The actual value
  * @param {string} expected The expected value
  * @param {string} it The name of the value being tested
  * @returns {boolean} `true` if the strings are equal, otherwise `false`
  */
 function assertEqual(actual, expected, it) {
     if (actual !== expected) {
-        console.error(`${it}: expected ${expected}, got: ${String(actual)}`);
+        console.error(`${it}: expected ${expected}, got: ${actual}`);
 
         return false;
     }
@@ -54,13 +53,14 @@ async function diagnose() {
      * Can be changed in the container or by Docker
      */
 
-    const glicbTunables = process.env.GLIBC_TUNABLES;
+    const glicbTunables = process.env.GLIBC_TUNABLES ?? '';
 
     /*
      * Currently can't change these settings within a container, see:
      * https://docs.docker.com/reference/cli/docker/container/run/#currently-supported-sysctls
      */
 
+    const mounts = readFile('/proc/mounts');
     const enabled = readFile('/sys/kernel/mm/transparent_hugepage/enabled');
     const defrag = readFile('/sys/kernel/mm/transparent_hugepage/defrag');
     const maxPtesNone = readFile('/sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none');
@@ -74,7 +74,6 @@ async function diagnose() {
     // https://stackoverflow.com/questions/78473427/mongodb-docker-vm-max-map-count-is-too-low-even-if-set-to-524288
     const maxMapCount = readFile('/proc/sys/vm/max_map_count');
 
-    // Reference:
     // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance
     assertEqual(glicbTunables, 'glibc.pthread.rseq=0', 'GLIBC_TUNABLES');
     assertEqual(
@@ -103,12 +102,6 @@ async function diagnose() {
     const usingPerCPUCaches = /** @type {boolean} */ (stats.tcmalloc?.usingPerCPUCaches);
     const cpuFree = /** @type {number} */ (stats.tcmalloc?.tcmalloc.cpu_free);
     const maxConnections = stats.connections.current + stats.connections.available;
-    const fsType = child_process.execSync('/bin/stat -fc "%T"').toString();
-
-    // http://dochub.mongodb.org/core/prodnotes-filesystem
-    if (mongo_engine === 'wiredTiger' || Number.parseInt(await maxMapCount, 10) >= 2 * maxConnections) {
-        assertEqual(fsType, 'xfs', 'File system type');
-    }
 
     // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/#enable-per-cpu-caches
     if (usingPerCPUCaches) {
@@ -118,6 +111,37 @@ async function diagnose() {
     }
     else if (semver.compare(MIN_KERNEL_VERSION, os.release()) < 0) {
         console.log(`Linux kernel: expected version ${MIN_KERNEL_VERSION} or later, got: ${os.release()}`);
+    }
+
+    // https://stackoverflow.com/a/18169432
+    /** @type {string | undefined} */
+    let fsType;
+
+    for (const line of (await mounts).split('\n')) {
+        if (!line) {
+            continue;
+        }
+
+        const parts = line.split(/\s+/);
+
+        if (parts.length < 3) {
+            continue;
+        }
+
+        const mountpoint = parts[1];
+
+        if (mountpoint === '/') {
+            fsType = parts[2];
+            break;
+        }
+    }
+
+    // http://dochub.mongodb.org/core/prodnotes-filesystem
+    if (fsType === undefined) {
+        console.error('Could not determined file system type');
+    }
+    else if (mongo_engine === 'wiredTiger' || Number.parseInt(await maxMapCount, 10) >= 2 * maxConnections) {
+        assertEqual(fsType, 'xfs', 'File system type');
     }
 }
 
