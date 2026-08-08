@@ -27,11 +27,28 @@ export interface Db {
     getSiblingDB: (name: string) => Db;
     getUsers: () => { ok: number; users: User[] };
     hello: () => Hello;
+    // Simplified rundown of a highly extensible method
+    runCommand: (options: RunCommandOptions) => RunCommandOutputs;
 }
 
 export interface Hello {
     isWritablePrimary: boolean;
     ok: number;
+}
+
+export interface RunCommandOptions {
+    serverStatus?: number;
+    tcmalloc?: number;
+}
+
+export interface RunCommandOutputs {
+    ok?: number;
+    tcmalloc?: {
+        usingPerCPUCaches?: boolean;
+        tcmalloc?: {
+            cpu_free?: number;
+        };
+    };
 }
 
 export interface Rs {
