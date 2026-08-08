@@ -27,11 +27,34 @@ export interface Db {
     getSiblingDB: (name: string) => Db;
     getUsers: () => { ok: number; users: User[] };
     hello: () => Hello;
+    // Simplified rundown of a highly extensible method
+    serverStatus: (options: ServerStatusOptions) => ServerStatusOutputs;
 }
 
 export interface Hello {
     isWritablePrimary: boolean;
     ok: number;
+}
+
+export interface ServerStatusOptions {
+    tcmalloc?: number;
+}
+
+export interface ServerStatusOutputs {
+    ok: number;
+    storageEngine: {
+        name: string;
+    };
+    connections: {
+        current: number;
+        available: number;
+    };
+    tcmalloc?: {
+        usingPerCPUCaches: boolean;
+        tcmalloc: {
+            cpu_free: number;
+        };
+    };
 }
 
 export interface Rs {

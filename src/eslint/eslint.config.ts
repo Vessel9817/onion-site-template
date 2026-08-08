@@ -185,7 +185,7 @@ const JS_CONFIG: Config = {
         'import-x/no-named-as-default': ['off'],
 
         // https://sonarsource.github.io/rspec/#/rspec/S1135/javascript
-        'tsonarjs/todo-tag': ['off']
+        'sonarjs/todo-tag': ['off']
     },
 };
 
