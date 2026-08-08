@@ -94,30 +94,30 @@ async function diagnose() {
         `Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`
     );
 
-    if (connected) {
-        const MIN_KERNEL_VERSION = '4.18';
-        const mongo_engine = stats.storageEngine.name;
-        const usingPerCPUCaches = /** @type {boolean} */ (stats.tcmalloc?.usingPerCPUCaches);
-        const cpuFree = /** @type {number} */ (stats.tcmalloc?.tcmalloc.cpu_free);
-        const maxConnections = stats.connections.current + stats.connections.available;
-        const fsType = child_process
-            .execSync('/bin/df -P --output=fstype / | /bin/tail -n 1')
-            .toString(); // TODO Similar to: /bin/stat -fc "%T"
+    if (!connected) {
+        return;
+    }
 
-        // http://dochub.mongodb.org/core/prodnotes-filesystem
-        if (mongo_engine === 'wiredTiger' || Number.parseInt(await maxMapCount, 10) >= 2 * maxConnections) {
-            assertEqual(fsType, 'xfs', 'File system type');
-        }
+    const MIN_KERNEL_VERSION = '4.18';
+    const mongo_engine = stats.storageEngine.name;
+    const usingPerCPUCaches = /** @type {boolean} */ (stats.tcmalloc?.usingPerCPUCaches);
+    const cpuFree = /** @type {number} */ (stats.tcmalloc?.tcmalloc.cpu_free);
+    const maxConnections = stats.connections.current + stats.connections.available;
+    const fsType = child_process.execSync('/bin/stat -fc "%T"').toString();
 
-        // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/#enable-per-cpu-caches
-        if (usingPerCPUCaches) {
-            if (cpuFree < 1) {
-                console.error(`tcmalloc.tcmalloc.cpu_free: expected at least 1, got: ${cpuFree.toString()}`);
-            }
+    // http://dochub.mongodb.org/core/prodnotes-filesystem
+    if (mongo_engine === 'wiredTiger' || Number.parseInt(await maxMapCount, 10) >= 2 * maxConnections) {
+        assertEqual(fsType, 'xfs', 'File system type');
+    }
+
+    // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/#enable-per-cpu-caches
+    if (usingPerCPUCaches) {
+        if (cpuFree < 1) {
+            console.error(`tcmalloc.tcmalloc.cpu_free: expected at least 1, got: ${cpuFree.toString()}`);
         }
-        else if (semver.compare(MIN_KERNEL_VERSION, os.release()) < 0) {
-            console.log(`Linux kernel: expected version ${MIN_KERNEL_VERSION} or later, got: ${os.release()}`);
-        }
+    }
+    else if (semver.compare(MIN_KERNEL_VERSION, os.release()) < 0) {
+        console.log(`Linux kernel: expected version ${MIN_KERNEL_VERSION} or later, got: ${os.release()}`);
     }
 }
 
