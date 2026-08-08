@@ -7,6 +7,7 @@
 disableTelemetry();
 
 const assert = require('node:assert');
+const child_process = require('node:child_process');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 /** @type {import('semver')} */
@@ -70,6 +71,9 @@ async function diagnose() {
     // https://forums.docker.com/t/how-to-set-the-vm-overcommit-memory-parameter-when-running-docker-desktop-on-macos/139029
     const overcommitMemory = readFile('/proc/sys/vm/overcommit_memory');
 
+    // https://stackoverflow.com/questions/78473427/mongodb-docker-vm-max-map-count-is-too-low-even-if-set-to-524288
+    const maxMapCount = readFile('/proc/sys/vm/max_map_count');
+
     // Reference:
     // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance
     assertEqual(glicbTunables, 'glibc.pthread.rseq=0', 'GLIBC_TUNABLES');
@@ -83,20 +87,29 @@ async function diagnose() {
     assertEqual(await swappiness, '1', 'vm.swappiness');
     assertEqual(await overcommitMemory, '1', 'vm.overcommit_memory');
 
-    const stats = db.runCommand({ serverStatus: 1, tcmalloc: 1 });
+    const stats = db.serverStatus({ tcmalloc: 1 });
     const connected = assertEqual(
-        stats.ok?.toString(),
+        stats.ok.toString(),
         '1',
         `Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`
     );
 
     if (connected) {
-        const usingPerCPUCaches = /** @type {boolean} */ (stats.tcmalloc?.usingPerCPUCaches);
-        const cpuFree = /** @type {number} */ (stats.tcmalloc?.tcmalloc?.cpu_free);
         const MIN_KERNEL_VERSION = '4.18';
+        const mongo_engine = stats.storageEngine.name;
+        const usingPerCPUCaches = /** @type {boolean} */ (stats.tcmalloc?.usingPerCPUCaches);
+        const cpuFree = /** @type {number} */ (stats.tcmalloc?.tcmalloc.cpu_free);
+        const maxConnections = stats.connections.current + stats.connections.available;
+        const fsType = child_process
+            .execSync('/bin/df -P --output=fstype / | /bin/tail -n 1')
+            .toString(); // TODO Similar to: /bin/stat -fc "%T"
 
-        console.debug(`tcmalloc.usingPerCPUCaches is ${usingPerCPUCaches.toString()}}`);
+        // http://dochub.mongodb.org/core/prodnotes-filesystem
+        if (mongo_engine === 'wiredTiger' || Number.parseInt(await maxMapCount, 10) >= 2 * maxConnections) {
+            assertEqual(fsType, 'xfs', 'File system type');
+        }
 
+        // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance/#enable-per-cpu-caches
         if (usingPerCPUCaches) {
             if (cpuFree < 1) {
                 console.error(`tcmalloc.tcmalloc.cpu_free: expected at least 1, got: ${cpuFree.toString()}`);

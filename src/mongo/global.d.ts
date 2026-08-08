@@ -28,7 +28,7 @@ export interface Db {
     getUsers: () => { ok: number; users: User[] };
     hello: () => Hello;
     // Simplified rundown of a highly extensible method
-    runCommand: (options: RunCommandOptions) => RunCommandOutputs;
+    serverStatus: (options: ServerStatusOptions) => ServerStatusOutputs;
 }
 
 export interface Hello {
@@ -36,17 +36,23 @@ export interface Hello {
     ok: number;
 }
 
-export interface RunCommandOptions {
-    serverStatus?: number;
+export interface ServerStatusOptions {
     tcmalloc?: number;
 }
 
-export interface RunCommandOutputs {
-    ok?: number;
+export interface ServerStatusOutputs {
+    ok: number;
+    storageEngine: {
+        name: string;
+    };
+    connections: {
+        current: number;
+        available: number;
+    };
     tcmalloc?: {
-        usingPerCPUCaches?: boolean;
-        tcmalloc?: {
-            cpu_free?: number;
+        usingPerCPUCaches: boolean;
+        tcmalloc: {
+            cpu_free: number;
         };
     };
 }
