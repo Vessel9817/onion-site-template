@@ -15,10 +15,10 @@ FROM ${MONGO_VERSION} AS run
 # on DB initialization only (first run), before the replica set is initialized
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link --exclude=*.sh --exclude=debug.js [ "./", "./" ]
+COPY --link --exclude=*.sh --exclude=diagnose.js [ "./", "./" ]
 
 WORKDIR /project/
-COPY --link [ "debug.sh", "debug.js", "./" ]
+COPY --link [ "diagnose.sh", "diagnose.js", "./" ]
 
 # Corresponds to user mongodb
 USER 999:999
@@ -36,7 +36,7 @@ HEALTHCHECK \
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./index.sh", "debug.sh", "debug.js", "./" ]
+COPY --link [ "./index.sh", "diagnose.sh", "diagnose.js", "./" ]
 
 # Corresponds to user mongodb
 USER 999:999

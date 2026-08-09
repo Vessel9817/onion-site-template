@@ -3,4 +3,4 @@
 mongosh \
     --host "${HOST}" \
     --port "${PORT}" \
-    -f '/project/debug.js'
+    -f '/project/diagnose.js'
