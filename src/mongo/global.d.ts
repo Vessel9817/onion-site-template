@@ -28,7 +28,7 @@ export interface Db {
     getUsers: () => { ok: number; users: User[] };
     hello: () => Hello;
     // Simplified rundown of a highly extensible method
-    serverStatus: (options: ServerStatusOptions) => ServerStatusOutputs;
+    serverStatus: (options?: ServerStatusOptions) => ServerStatusOutputs;
 }
 
 export interface Hello {
@@ -41,11 +41,11 @@ export interface ServerStatusOptions {
 }
 
 export interface ServerStatusOutputs {
-    ok: number;
-    storageEngine: {
+    ok?: number;
+    storageEngine?: {
         name: string;
     };
-    connections: {
+    connections?: {
         current: number;
         available: number;
     };

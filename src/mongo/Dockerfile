@@ -6,7 +6,7 @@ FROM ${NODE_VERSION} AS build
 
 WORKDIR /docker-entrypoint-initdb.d/
 COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
-RUN npm ci --no-fund --omit=dev
+RUN npm ci --no-fund --omit=dev --include=optional
 
 # Starts replica node
 FROM ${MONGO_VERSION} AS run
@@ -15,7 +15,10 @@ FROM ${MONGO_VERSION} AS run
 # on DB initialization only (first run), before the replica set is initialized
 WORKDIR /docker-entrypoint-initdb.d/
 COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
-COPY --link --exclude=debug.js [ "./", "./" ]
+COPY --link --exclude=*.sh --exclude=debug.js [ "./", "./" ]
+
+WORKDIR /project/
+COPY --link [ "debug.sh", "debug.js", "./" ]
 
 # Corresponds to user mongodb
 USER 999:999
@@ -33,7 +36,7 @@ HEALTHCHECK \
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./index.sh", "./debug.js", "./" ]
+COPY --link [ "./index.sh", "debug.sh", "debug.js", "./" ]
 
 # Corresponds to user mongodb
 USER 999:999
