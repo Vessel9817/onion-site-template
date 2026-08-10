@@ -1,6 +1,6 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import * as tsParser from '@typescript-eslint/parser';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import { type Config, defineConfig } from 'eslint/config';
