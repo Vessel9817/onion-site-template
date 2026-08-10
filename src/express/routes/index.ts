@@ -1,7 +1,7 @@
-import APP_ROUTER from './app';
-import NOT_FOUND_ROUTER from './notFound';
+import appRouter from './app';
+import notFoundRouter from './notFound';
 
 export {
-    APP_ROUTER,
-    NOT_FOUND_ROUTER
+    appRouter,
+    notFoundRouter
 };

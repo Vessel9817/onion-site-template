@@ -1,32 +1,32 @@
 import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
-import { DOMAIN, MONGODB_URI } from './env';
-import { APP_ROUTER, NOT_FOUND_ROUTER } from './routes';
+import { domain, msgBoard } from './env';
+import { appRouter, notFoundRouter } from './routes';
 
-const APP = express();
-const PORT = 3000;
+const app = express();
+const port = 3000;
 
-APP.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 
 // Removing fingerprintable headers
-APP.disable('x-powered-by');
+app.disable('x-powered-by');
 
 // Setting global app middleware
-APP.use(cors({ origin: DOMAIN })); // Sets CORS policy
-APP.use(express.json()); // Parse Content-Type: json
-APP.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
-APP.use('/', APP_ROUTER); // Serves app
-APP.use('/', NOT_FOUND_ROUTER); // Catches errors
+app.use(cors({ origin: domain })); // Sets CORS policy
+app.use(express.json()); // Parse Content-Type: json
+app.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
+app.use('/', appRouter); // Serves app
+app.use('/', notFoundRouter); // Catches errors
 
 // Starting server
 try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(msgBoard.uri);
 }
 catch (err) {
     console.error('Failed to connect to database:', err);
 }
 
-APP.listen(PORT, () => {
+app.listen(port, () => {
     console.log('Server is running!');
 });
