@@ -65,11 +65,17 @@ const config: webpack.Configuration = {
         rules: [
             // TS (must come before JS)
             {
-                test: /\.(mts|ts)$/,
+                test: /\.(m?ts)$/,
                 exclude: /node_modules/,
                 use: [
                     {
-                        loader: require.resolve('ts-loader')
+                        loader: 'ts-loader',
+                        options: {
+                            compilerOptions: {
+                                emitDeclarationOnly: false,
+                                noEmit: false
+                            }
+                        }
                     }
                 ]
             }
