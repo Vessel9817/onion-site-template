@@ -6,8 +6,8 @@
             "ESNext",
 
             // Web interfaces
-            "dom",
-            "dom.iterable",
+            "DOM",
+            "DOM.iterable",
 
             // Asynchronicity and promises
             "ES2020.Promise",
@@ -15,9 +15,10 @@
         ],
         "allowJs": true,
         "checkJs": true,
+        "composite": true,
+        "declaration": true,
         "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
+        "emitDeclarationOnly": true, // Speeds up project-wide type-checking
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
@@ -28,7 +29,8 @@
         "importHelpers": true,
         "newLine": "lf",
         "stripInternal": true,
-        "outDir": "dist"
+        "rootDir": ".",
+        "outDir": "../../dist/src/express" // See also: https://stackoverflow.com/a/48798945
     },
     "include": ["**/*"],
     "exclude": [

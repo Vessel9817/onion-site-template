@@ -104,9 +104,7 @@ jobs:
       - name: Install node modules
         run: npm ci --no-fund
       - name: Run tsc
-        run: |
-          chmod +x '.github/workflows/tsc.sh'
-          '.github/workflows/tsc.sh'
+        run: npm run tsc
   # Checks that npm workspaces are synchronized with the top-level lockfile
   workspaces:
     permissions:

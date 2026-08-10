@@ -6,8 +6,8 @@
             "ESNext",
 
             // Web interfaces
-            "dom",
-            "dom.iterable",
+            "DOM",
+            "DOM.iterable",
 
             // Asynchronicity and promises
             "ES2020.Promise",
@@ -16,21 +16,19 @@
         "allowJs": true,
         "checkJs": true,
         "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "module": "ES2022",
         "resolveJsonModule": true,
-        "noEmit": false,
+        "noEmit": true,
         "typeRoots": ["./node_modules/@types"],
         "types": ["node"],
         "importHelpers": true,
         "newLine": "lf",
         "stripInternal": true,
         "rootDir": "./src",
-        "outDir": "./dist" // Unused: https://stackoverflow.com/a/48798945
+        "outDir": "./dist" // See also: https://stackoverflow.com/a/48798945
     },
     "include": ["./src/eslint/**/*"],
     "exclude": [
@@ -42,5 +40,9 @@
         "**/temp/",
         "**/tmp/",
         "**/dist/"
+    ],
+    "references": [
+        { "path": "./src/express" },
+        { "path": "./src/mongo" },
     ]
 }
