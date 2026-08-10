@@ -1,19 +1,15 @@
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack from 'webpack';
 import { NODE_ENV } from './env';
 
-const __filename = fileURLToPath(import.meta.url);
-const require = createRequire(__filename);
 const PROJECT_ROOT = process.cwd();
 const OUTPUT_DIR = 'dist';
 
 const config: webpack.Configuration = {
     mode: NODE_ENV,
-    devtool: 'nosources-cheap-module-source-map',
+    devtool: NODE_ENV === 'development' && 'cheap-module-source-map',
     target: 'node',
     entry: {
         index: {
