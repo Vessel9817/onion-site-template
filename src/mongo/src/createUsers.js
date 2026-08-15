@@ -1,6 +1,6 @@
 const assert = require('node:assert');
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const env = /** @type {import('./env')} */ (require(`${__dirname}/env`));
+const env = /** @type {typeof import('./env')} */ (require(`${__dirname}/env`));
 
 /**
  * Creates an administrator and a user, if they don't already exist.
