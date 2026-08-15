@@ -16,13 +16,9 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "./index.sh",
-        "tsc": "tsc --noEmit"
+        "start": "./index.sh"
     },
     "dependencies": {
         "license-report": "^6.8.5"
-    },
-    "devDependencies": {
-        "typescript": "^6.0.3"
     }
 }

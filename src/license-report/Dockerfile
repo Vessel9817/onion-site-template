@@ -2,14 +2,13 @@ ARG NODE_VERSION=node:lts-alpine
 
 FROM ${NODE_VERSION}
 
-WORKDIR /project/
-
 # Installing license-report dependencies
+WORKDIR /project/
 COPY [ "./package.json", "./package-lock.json*", "./npm-shrinkwrap.json*", "./" ]
 
 ARG LICENSE_REPORT_APP_PATH="./src/license-report"
 COPY --link [ "${LICENSE_REPORT_APP_PATH}/package.json", "./src/license-report/" ]
-RUN npm ci --no-fund -w "${LICENSE_REPORT_APP_PATH}"
+RUN npm ci --no-fund -w "${LICENSE_REPORT_APP_PATH}" --omit=dev
 
 ARG EXPRESS_APP_PATH="./src/express"
 COPY --link [ "${EXPRESS_APP_PATH}/package.json", "./packages/express.json" ]
