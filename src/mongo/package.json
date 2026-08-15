@@ -23,7 +23,7 @@
     },
     "devDependencies": {
         "@types/node": "^26.2.0",
-        "mongodb": "^7.5.0",
-        "typescript": "^6.0.3"
+        "@typescript/native": "npm:typescript@^7.0.2",
+        "mongodb": "^7.5.0"
     }
 }
