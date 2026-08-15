@@ -164,7 +164,7 @@ To update the website, run the following command in the project directory:
 
 ```shell
 # Pull base images and build compose project
-npm run build -- --pull
+npm run build:pull
 ```
 
 Then, stop and start the website.
