@@ -13,8 +13,8 @@
                         <input type="text" name="name" placeholder="Display name" value="<%= msg.name %>" />
                         <input type="text" name="content" placeholder="Say something..." value="<%= msg.content %>" />
                         <br />
-                        <input type="submit" formaction="/chat/edit" value="Edit" title="Edit" class="btn" />
-                        <input type="submit" formaction="/chat/delete" value="Delete" title="Delete" class="btn" />
+                        <input type="submit" formaction="/chat/edit" value="Edit" title="Edit" />
+                        <input type="submit" formaction="/chat/delete" value="Delete" title="Delete" />
                     </form>
                 </li>
             <% } %>
@@ -26,8 +26,7 @@
         <form action="/chat/send" method="post">
             <input type="text" name="name" placeholder="Display name" />
             <textarea id="content" name="content" placeholder="Say something..."></textarea>
-            <input type="submit" value="Send" title="Send" class="btn btn-primary" />
+            <input type="submit" value="Send" title="Send" class="primary" />
         </form>
     </body>
-    <%- include('../../common/scripts') %>
 </html>
