@@ -13,7 +13,7 @@ const config: webpack.Configuration = {
     target: 'node',
     entry: {
         index: {
-            import: path.join(PROJECT_ROOT, 'app.ts')
+            import: path.join(PROJECT_ROOT, 'server.ts')
         }
     },
     output: {

@@ -1,11 +1,9 @@
 import cors from 'cors';
 import express from 'express';
-import mongoose from 'mongoose';
-import { domain, msgBoard } from './env';
+import { domain } from './env';
 import { appRouter, notFoundRouter } from './routes';
 
 const app = express();
-const port = 3000;
 
 app.set('view engine', 'ejs');
 
@@ -19,14 +17,4 @@ app.use(express.urlencoded({ extended: false })); // Encodes special characters 
 app.use('/', appRouter); // Serves app
 app.use('/', notFoundRouter); // Catches errors
 
-// Starting server
-try {
-    await mongoose.connect(msgBoard.uri);
-}
-catch (err) {
-    console.error('Failed to connect to database:', err);
-}
-
-app.listen(port, () => {
-    console.log('Server is running!');
-});
+export default app;
