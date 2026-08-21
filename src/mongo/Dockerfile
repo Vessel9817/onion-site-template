@@ -18,9 +18,11 @@ COPY --link --from=build [ "/docker-entrypoint-initdb.d/", "./" ]
 COPY --link --exclude=*.sh --exclude=diagnose.js [ "./", "./" ]
 
 WORKDIR /project/
-COPY --link [ "diagnose.sh", "diagnose.js", "./" ]
-
+COPY --link [ "./diagnose.js", "./" ]
 # Corresponds to user mongodb
+USER 999:999
+COPY --link --chmod=+x --chown=999:999 [ "./diagnose.sh", "./" ]
+
 USER 999:999
 CMD [ "mongod", "--replSet", "dataset" ]
 # mongo recommends a minimum connection interval of 1s to avoid performance degradation
@@ -36,9 +38,10 @@ HEALTHCHECK \
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
-COPY --link [ "./index.sh", "diagnose.sh", "diagnose.js", "./" ]
+COPY --link [ "./diagnose.js", "./" ]
+# 999:999 corresponds to user mongodb
+COPY --link --chown=999:999 --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
 
-# Corresponds to user mongodb
 USER 999:999
 ENTRYPOINT [ "/project/index.sh" ]
 ENV HOST=mongo

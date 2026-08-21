@@ -8,7 +8,7 @@ RUN \
     && apk add --no-cache socat
 
 ARG USER=1000:1000
-COPY --link --chown="${USER}" [ "./entrypoint.sh", "./" ]
+COPY --link --chown="${USER}" --chmod=+x [ "./entrypoint.sh", "./" ]
 
 USER "${USER}"
 ENV EXPOSE_PORT=80

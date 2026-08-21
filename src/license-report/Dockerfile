@@ -17,6 +17,7 @@ COPY --link [ "${MONGO_APP_PATH}/package.json", "./packages/mongo.json" ]
 COPY --link [ "./package.json", "./packages/website.json" ]
 # 1000:1000 corresponds to user "node"
 COPY --link --chown=1000:1000 [ "${LICENSE_REPORT_APP_PATH}", "./packages/" ]
+COPY --link --chown=1000:1000 --chmod=+x [ "${LICENSE_REPORT_APP_PATH}/index.sh", "./packages/" ]
 
 # Running app
 USER node
