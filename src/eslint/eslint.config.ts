@@ -24,6 +24,11 @@ const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.cts',
 ];
 
+const TEST_FILE_GLOBS = [
+    '**/test/**/*.js',
+    '**/test/**/*.ts',
+];
+
 const IGNORE_FILE_CONFIG: Config = {
     ignores: [
         // Development
@@ -202,11 +207,40 @@ const MONGO_JS_CONFIG: Config = {
     },
 };
 
+// Test runner callbacks return promises that the runner itself awaits
+const TEST_CONFIG: Config = {
+    files: TEST_FILE_GLOBS,
+    rules: {
+        // https://typescript-eslint.io/rules/no-floating-promises
+        '@typescript-eslint/no-floating-promises': [
+            'error',
+            {
+                allowForKnownSafeCalls: [
+                    {
+                        from: 'package',
+                        package: 'node:test',
+                        name: [
+                            'after',
+                            'afterEach',
+                            'before',
+                            'beforeEach',
+                            'describe',
+                            'it',
+                            'test',
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+};
+
 const CONFIG: Config[] = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
     JS_CONFIG,
     MONGO_JS_CONFIG,
+    TEST_CONFIG,
 ];
 
 export default CONFIG;

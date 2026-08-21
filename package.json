@@ -14,7 +14,7 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "npm test --workspaces --if-present",
         "start": "node --run=start:prod",
         "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
         "build:pull": "node --run=build -- --pull",
@@ -26,7 +26,9 @@
         "markdownlint": "markdownlint-cli2",
         "eslint": "eslint . -c ./src/eslint/eslint.config.ts",
         "eslint:fix": "node --run=eslint -- --fix",
-        "license-report": "docker compose run --rm license-report"
+        "license-report": "docker compose run --rm license-report",
+        "test:coverage": "npm run test:coverage --workspaces --if-present",
+        "smoke": "sh ./.github/workflows/smoke.sh"
     },
     "workspaces": {
         "packages": [

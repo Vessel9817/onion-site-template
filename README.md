@@ -175,6 +175,38 @@ For instance, `express` currently requires a restart if `mongo` restarts.
 
 ## Maintenance
 
+### Tests
+
+Unit and integration tests run directly in Node. They need no containers,
+network access or database:
+
+```shell
+# Test every workspace
+npm test
+
+# Same, with a coverage report and minimum thresholds
+npm run test:coverage
+```
+
+A single workspace can be tested on its own:
+
+```shell
+npm test --workspace=./src/express
+```
+
+Separately, a smoke test builds the compose project, generates a throwaway
+onion address and waits for tor to confirm the site answers over it.
+It requires Docker and takes several minutes:
+
+```shell
+npm run smoke
+docker compose --profile production down --volumes
+```
+
+This replaces every file under the `secrets` directories with the example
+credentials, so it refuses to run once `src/tor/secrets/hostname` exists.
+Run it on a throwaway checkout, never on a configured deployment.
+
 ### OnionScan
 
 Performs a comprehensive scan of the website, identifying fingerprints
