@@ -4,30 +4,39 @@
     <body>
         <h1>Chat</h1>
         <%- include('../../common/nav') %>
-        <ul>
-            <% for ( let msg of msgs ) { %>
-                <li>
-                    <form method="post">
-                        <input type="hidden" name="id" value="<%= msg.id %>" />
-                        <p>Last modified: <%= msg.lastModified %></p>
-                        <input type="text" name="name" placeholder="Display name" value="<%= msg.name %>" />
-                        <input type="text" name="content" placeholder="Say something..." value="<%= msg.content %>" />
-                        <br />
-                        <input type="submit" formaction="/chat/edit" value="Edit" title="Edit" class="btn" />
-                        <input type="submit" formaction="/chat/delete" value="Delete" title="Delete" class="btn" />
-                    </form>
-                </li>
-            <% } %>
-        </ul>
-        <a href="?page=<%= page + 1 %>">Previous</a>
-        <% if (page > 1) { %>
-            <a href="?page=<%= page - 1 %>">Next</a>
-        <% } %>
-        <form action="/chat/send" method="post">
-            <input type="text" name="name" placeholder="Display name" />
-            <textarea id="content" name="content" placeholder="Say something..."></textarea>
-            <input type="submit" value="Send" title="Send" class="btn btn-primary" />
-        </form>
+        <main>
+            <ul class="messages">
+                <% for ( let msg of msgs ) { %>
+                    <li>
+                        <form method="post">
+                            <input type="hidden" name="id" value="<%= msg.id %>" />
+                            <p class="meta">Last modified: <%= msg.lastModified %></p>
+                            <label class="visually-hidden" for="name-<%= msg.id %>">Display name</label>
+                            <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= msg.name %>" />
+                            <label class="visually-hidden" for="content-<%= msg.id %>">Message</label>
+                            <input id="content-<%= msg.id %>" type="text" name="content" autocomplete="off" placeholder="Say something..." value="<%= msg.content %>" />
+                            <div class="actions">
+                                <input type="submit" formaction="/chat/edit" value="Edit" />
+                                <input type="submit" formaction="/chat/delete" value="Delete" />
+                            </div>
+                        </form>
+                    </li>
+                <% } %>
+            </ul>
+            <nav class="pagination" aria-label="Message pages">
+                <a href="?page=<%= page + 1 %>">Older messages</a>
+                <% if (page > 1) { %>
+                    <a href="?page=<%= page - 1 %>">Newer messages</a>
+                <% } %>
+            </nav>
+            <form class="compose" action="/chat/send" method="post">
+                <h2>New message</h2>
+                <label for="send-name">Display name</label>
+                <input id="send-name" type="text" name="name" autocomplete="off" placeholder="Display name" />
+                <label for="send-content">Message</label>
+                <textarea id="send-content" name="content" rows="4" autocomplete="off" placeholder="Say something..."></textarea>
+                <input type="submit" value="Send" class="primary" />
+            </form>
+        </main>
     </body>
-    <%- include('../../common/scripts') %>
 </html>
