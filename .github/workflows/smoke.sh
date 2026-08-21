@@ -53,6 +53,6 @@ done
 
 docker compose -f "${TOR_COMPOSE}" down
 
-sed -i "s/${ONION}/${onion}/" src/express/secrets/.env src/onionprobe/config.yml
+sed -i "s/${ONION}/${onion}/" src/onionprobe/config.yml
 
 docker compose --profile production up --wait --wait-timeout 900 tor
