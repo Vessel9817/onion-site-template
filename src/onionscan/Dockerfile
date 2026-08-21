@@ -3,7 +3,7 @@ ARG NODE_VERSION=node:lts-alpine
 
 FROM ${GO_VERSION} AS onionscan
 
-RUN go install github.com/harr1424/onionscan@latest
+RUN go install github.com/harr1424/onionscan@cc1488c7746822a9ddc9518dcf6bd853758c3de3
 
 WORKDIR /project/
 
