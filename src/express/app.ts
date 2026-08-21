@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import { connect, reconnectOnDisconnect } from './db/connection';
 import { msgBoard } from './env';
 import { csp } from './middleware';
 import { appRouter, notFoundRouter } from './routes';
@@ -20,12 +20,8 @@ app.use('/', appRouter); // Serves app
 app.use('/', notFoundRouter); // Catches errors
 
 // Starting server
-try {
-    await mongoose.connect(msgBoard.uri);
-}
-catch (err) {
-    console.error('Failed to connect to database:', err);
-}
+reconnectOnDisconnect(msgBoard.uri);
+void connect(msgBoard.uri);
 
 app.listen(port, () => {
     console.log('Server is running!');
