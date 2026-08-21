@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: github/codeql-action/init@v4
+      - uses: github/codeql-action/init@main
         with:
           languages: ${{ matrix.languages }}
           build-mode: none
