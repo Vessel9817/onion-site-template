@@ -13,7 +13,7 @@ RUN apt-get update -qq \
 # Installing Vanguards with Python 3.12+ support
 # https://github.com/mikeperry-tor/vanguards/pull/105
 WORKDIR /project/
-ADD [ "https://github.com/waveform80/vanguards.git#python312", "./vanguards/" ]
+ADD [ "https://github.com/mikeperry-tor/vanguards.git#183d24775521feb3ed61b681088347279c3fc84c", "./vanguards/" ]
 WORKDIR /project/vanguards/
 RUN pip install -r "./requirements.txt"
 
