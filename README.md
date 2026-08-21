@@ -120,7 +120,7 @@ abiding by the following regex: (Onion v3 address)
 `[a-z0-9]{56}\.onion`
 
 This domain should also be specified in
-`src/onionscan/.env`, `src/express/.env` and `src/onionprobe/config.yml`
+`src/onionscan/.env` and `src/onionprobe/config.yml`
 where the placeholder onion address is present.
 
 ## Running

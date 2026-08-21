@@ -5,7 +5,6 @@ import { MsgModel } from '../db/msgBoard';
 import { stubAggregate } from './support';
 
 process.env.MONGODB_URI ??= 'mongodb://127.0.0.1:27017/test';
-process.env.ONION_HOSTNAME ??= `${'a'.repeat(56)}.onion`;
 
 const { default: app } = await import('../app');
 
