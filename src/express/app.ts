@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { msgBoard } from './env';
+import { csp } from './middleware';
 import { appRouter, notFoundRouter } from './routes';
 
 const app = express();
@@ -14,6 +15,7 @@ app.disable('x-powered-by');
 // Setting global app middleware
 app.use(express.json()); // Parse Content-Type: json
 app.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
+app.use(csp); // Restrictions application permissions
 app.use('/', appRouter); // Serves app
 app.use('/', notFoundRouter); // Catches errors
 
