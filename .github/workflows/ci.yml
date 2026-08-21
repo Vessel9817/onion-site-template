@@ -8,6 +8,35 @@ env:
   DOCKER_COMPOSE_VERSION: v5.4.0
 
 jobs:
+  # Scans code using CodeQL
+  analyze:
+    permissions:
+      contents: read
+      security-events: write
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04]
+        node-version: [24.x]
+        languages: [actions, javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: github/codeql-action/init@main
+        with:
+          languages: ${{ matrix.languages }}
+          build-mode: none
+      - name: Install node modules
+        run: npm ci --no-fund
+      - name: Build Express app
+        run: npm -w ./src/express run build
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@main
   # Builds Docker compose services
   build:
     permissions:
