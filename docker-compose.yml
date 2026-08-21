@@ -50,7 +50,7 @@ services:
         target: /usr/local/openresty/nginx/html/
         read_only: true
     environment:
-      - PROXY_ADDRESS=http://10.5.2.2:3000
+      - PROXY_ADDRESS=https://10.5.2.2:3000
     secrets:
       - source: tor-hostname
         target: /run/secrets/hostname
