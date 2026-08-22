@@ -7,41 +7,43 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const PREFIX = 'node_modules/';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
+const PREFIX = 'node_modules/'; // Not ideal in the general case, but OK for npm
 
 /**
- * @param {unknown} value The value to narrow
- * @param {string} description What the value holds, for the error message
- * @returns {Record<string, unknown>} The value, as an object
+ * @param value The value to narrow
+ * @param description What the value holds, for the error message
+ * @returns The value, as an object
  */
-function asObject(value, description) {
+function asObject(
+    value: unknown,
+    description: string
+): Record<string, unknown> {
     assert.ok(typeof value === 'object', `${description} should be an object`);
     assert.ok(value !== null, `${description} is null`);
     assert.ok(!Array.isArray(value), `${description} should not be an array`);
 
-    return /** @type {Record<string, unknown>} */ (value);
+    return value as Record<string, unknown>;
 }
 
 /**
- * @param {string} file The path, relative to the project root
- * @returns {Record<string, unknown>} The parsed file
+ * @param file The path, relative to the project root
+ * @returns The parsed file
  */
-function read(file) {
-    /** @type {unknown} */
-    const parsed = JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8'));
+function read(file: string): Record<string, unknown> {
+    const parsed: unknown = JSON.parse(fs.readFileSync(path.join(PROJECT_ROOT, file), 'utf8'));
 
     return asObject(parsed, file);
 }
 
 /**
- * @param {string} file The lockfile path, relative to the project root
- * @returns {Map<string, Set<string>>} Every version each package resolves to
+ * @param file The lockfile path, relative to the project root
+ * @returns Every version each package resolves to
  */
-function versionsOf(file) {
+function versionsOf(file: string): Map<string, Set<string>> {
     const packages = asObject(read(file).packages, `${file} packages`);
-    /** @type {Map<string, Set<string>>} */
-    const versions = new Map();
+    const versions = new Map<string, Set<string>>();
 
     for (const [slot, value] of Object.entries(packages)) {
         const at = slot.lastIndexOf(PREFIX);
@@ -72,19 +74,18 @@ function versionsOf(file) {
 }
 
 /**
- * @returns {string[]} Each workspace directory, relative to the project root
+ * @returns Each workspace directory, relative to the project root
  */
-function workspaceDirs() {
+function workspaceDirs(): string[] {
     const { workspaces } = read('package.json');
-    // npm accepts either a list of paths or an object holding one
+    // pacakge.json accepts either a list of paths or an object holding one
     const listed = Array.isArray(workspaces)
         ? workspaces
         : asObject(workspaces, 'package.json workspaces').packages;
 
     assert.ok(Array.isArray(listed), 'package.json workspaces should be a list of paths');
 
-    /** @type {string[]} */
-    const dirs = [];
+    const dirs: string[] = [];
 
     for (const dir of listed) {
         assert.ok(typeof dir === 'string', 'package.json workspace should be a path');
@@ -96,20 +97,20 @@ function workspaceDirs() {
 }
 
 /**
- * @returns {boolean} Whether every workspace lockfile agrees with the root
+ * @returns Whether every workspace lockfile agrees with the root
  */
-function check() {
+function check(): boolean {
     const root = versionsOf('package-lock.json');
     let synced = true;
 
     for (const workspace of workspaceDirs()) {
         const lockfile = path.join(workspace, 'package-lock.json');
 
-        if (!fs.existsSync(path.join(ROOT, workspace))) {
+        if (!fs.existsSync(path.join(PROJECT_ROOT, workspace))) {
             console.warn(`${workspace}: no such workspace`);
             continue;
         }
-        if (!fs.existsSync(path.join(ROOT, lockfile))) {
+        if (!fs.existsSync(path.join(PROJECT_ROOT, lockfile))) {
             continue;
         }
 

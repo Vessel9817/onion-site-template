@@ -123,4 +123,4 @@ jobs:
       - name: Install node modules
         run: npm ci --no-fund
       - name: Check workspace lockfile synchronization
-        run: node ./.github/workflows/workspaces.js
+        run: npm run check-workspaces

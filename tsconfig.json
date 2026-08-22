@@ -29,7 +29,7 @@
         "stripInternal": true,
         "outDir": "./dist" // See also: https://stackoverflow.com/a/48798945
     },
-    "include": ["./src/eslint/**/*", "./.github/workflows/**/*"],
+    "include": ["./src/eslint/**/*", "./src/workspaces/**/*"],
     "exclude": [
         "**/coverage/",
         "**/licenses/",
