@@ -184,7 +184,7 @@ network access or database:
 # Test every workspace
 npm test
 
-# Same, with a coverage report and minimum thresholds
+# Same, with a coverage report
 npm run test:coverage
 ```
 
