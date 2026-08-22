@@ -1,11 +1,8 @@
 import express from 'express';
-import { connect, reconnectOnDisconnect } from './db/connection';
-import { msgBoard } from './env';
 import { csp } from './middleware';
 import { appRouter, notFoundRouter } from './routes';
 
 const app = express();
-const port = 3000;
 
 app.set('view engine', 'ejs');
 
@@ -19,10 +16,4 @@ app.use(csp); // Restricts application permissions
 app.use('/', appRouter); // Serves app
 app.use('/', notFoundRouter); // Catches errors
 
-// Starting server
-reconnectOnDisconnect(msgBoard.uri);
-void connect(msgBoard.uri);
-
-app.listen(port, () => {
-    console.log('Server is running!');
-});
+export default app;

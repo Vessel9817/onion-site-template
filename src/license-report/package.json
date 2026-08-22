@@ -15,7 +15,6 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "start": "./index.sh"
     },
     "dependencies": {
