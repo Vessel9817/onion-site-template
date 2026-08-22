@@ -201,6 +201,3 @@ jobs:
       - name: Collect logs
         if: failure()
         run: docker compose --profile production logs
-      - name: Tear down
-        if: always()
-        run: docker compose --profile production down --volumes --remove-orphans

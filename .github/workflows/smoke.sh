@@ -42,7 +42,7 @@ while :; do
 
     waited=$((waited + 1))
 
-    if [ "${waited}" -ge 180 ]; then
+    if [ "${waited}" -ge 10 ]; then
         echo 'tor produced no hostname' >&2
         docker compose -f "${TOR_COMPOSE}" logs tor >&2
         exit 1

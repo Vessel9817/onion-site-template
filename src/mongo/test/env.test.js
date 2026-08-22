@@ -55,8 +55,8 @@ afterEach(() => {
     }
 });
 
-describe('mongo env', () => {
-    it('reads both credential pairs and defaults the database name', () => {
+void describe('mongo env', () => {
+    void it('reads both credential pairs and defaults the database name', () => {
         const env = load();
 
         assert.deepEqual(env.admin, { username: 'root', password: 'rootpw' });
@@ -64,19 +64,19 @@ describe('mongo env', () => {
         assert.equal(env.dbName, 'test');
     });
 
-    it('uses the configured database name', () => {
+    void it('uses the configured database name', () => {
         process.env.MONGO_INITDB_DATABASE = 'msg_board';
 
         assert.equal(load().dbName, 'msg_board');
     });
 
-    it('rejects a credential file that is missing', () => {
+    void it('rejects a credential file that is missing', () => {
         process.env.PASSWORD_FILE = path.join(dir, 'absent');
 
         assert.throws(load, { message: /doesn't exist/ });
     });
 
-    it('rejects a credential file that is empty', () => {
+    void it('rejects a credential file that is empty', () => {
         process.env.PASSWORD_FILE = secret('empty', '');
 
         assert.throws(load, { message: /password is missing/ });

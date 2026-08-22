@@ -1,12 +1,9 @@
 import assert from 'node:assert/strict';
 import { type Server } from 'node:http';
 import { after, before, describe, it, type TestContext } from 'node:test';
+import app from '../app';
 import { MsgModel } from '../db/msgBoard';
 import { stubAggregate } from './support';
-
-process.env.MONGODB_URI ??= 'mongodb://127.0.0.1:27017/test';
-
-const { default: app } = await import('../app');
 
 let server: Server;
 let base: string;
@@ -49,22 +46,22 @@ after(async () => {
     });
 });
 
-describe('routes', () => {
-    it('serves the home page', async () => {
+void describe('routes', () => {
+    void it('serves the home page', async () => {
         const res = await fetch(base + '/');
 
         assert.equal(res.status, 200);
         assert.match(await res.text(), /Home/);
     });
 
-    it('renders an error page for an unknown path', async () => {
+    void it('renders an error page for an unknown path', async () => {
         const res = await fetch(base + '/nonexistent');
 
         assert.equal(res.status, 404);
         assert.match(await res.text(), /Not Found/);
     });
 
-    it('renders stored messages', async (t: TestContext) => {
+    void it('renders stored messages', async (t: TestContext) => {
         stubAggregate(t, [{ _id: 'id', name: 'ann', content: 'hello', lastModified: 0 }]);
 
         const res = await fetch(base + '/chat');
@@ -73,7 +70,7 @@ describe('routes', () => {
         assert.match(await res.text(), /hello/);
     });
 
-    it('passes the requested page through to the query', async (t: TestContext) => {
+    void it('passes the requested page through to the query', async (t: TestContext) => {
         const aggregate = stubAggregate(t, []);
 
         await fetch(base + '/chat?page=5');
@@ -83,7 +80,7 @@ describe('routes', () => {
         assert.deepEqual(stages.at(1), { $skip: 40 });
     });
 
-    it('rejects a message with no content', async (t: TestContext) => {
+    void it('rejects a message with no content', async (t: TestContext) => {
         const insertOne = t.mock.method(MsgModel, 'insertOne',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.insertOne>);
 
@@ -93,7 +90,7 @@ describe('routes', () => {
         assert.equal(insertOne.mock.callCount(), 0);
     });
 
-    it('redirects to the board after accepting a message', async (t: TestContext) => {
+    void it('redirects to the board after accepting a message', async (t: TestContext) => {
         const insertOne = t.mock.method(MsgModel, 'insertOne',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.insertOne>);
 
@@ -104,13 +101,13 @@ describe('routes', () => {
         assert.equal(insertOne.mock.callCount(), 1);
     });
 
-    it('rejects a delete with a malformed id', async () => {
+    void it('rejects a delete with a malformed id', async () => {
         const res = await post('/chat/delete', { id: 'not-a-valid-object-id' });
 
         assert.equal(res.status, 400);
     });
 
-    it('reports a failed query without leaking the cause', async (t: TestContext) => {
+    void it('reports a failed query without leaking the cause', async (t: TestContext) => {
         t.mock.method(MsgModel, 'aggregate', () => ({
             exec: () => Promise.reject(new Error('connection refused'))
         }) as unknown as ReturnType<typeof MsgModel.aggregate>);

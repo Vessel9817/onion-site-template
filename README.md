@@ -196,7 +196,8 @@ npm test --workspace=./src/express
 
 Separately, a smoke test builds the compose project, generates a throwaway
 onion address and waits for tor to confirm the site answers over it.
-It requires Docker and takes several minutes:
+It requires Docker and takes several minutes. Being a shell script, it runs
+on Linux, or under WSL on Windows:
 
 ```shell
 npm run smoke

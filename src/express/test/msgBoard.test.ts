@@ -15,8 +15,8 @@ function pipelineOf(call: { arguments: unknown[] }): PipelineStage[] {
     return call.arguments[0] as PipelineStage[];
 }
 
-describe('msgBoard', () => {
-    it('timestamps new messages to a 100ms boundary', async (t: TestContext) => {
+void describe('msgBoard', () => {
+    void it('timestamps new messages to a 100ms boundary', async (t: TestContext) => {
         const insertOne = t.mock.method(MsgModel, 'insertOne',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.insertOne>);
         const earliest = Math.floor(Date.now() / 100) * 100;
@@ -31,20 +31,23 @@ describe('msgBoard', () => {
         assert.ok(doc.lastModified >= earliest);
     });
 
-    it('excludes the id from the stored document when editing', async (t: TestContext) => {
+    void it('stores a rehydrated document without the id when editing', async (t: TestContext) => {
         const update = t.mock.method(MsgModel, 'findByIdAndUpdate',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.findByIdAndUpdate>);
         const id = new ObjectId();
+        const earliest = Math.floor(Date.now() / 100) * 100;
 
         await editMsg({ _id: id, name: 'ann', content: 'edited' });
 
-        const [target, doc] = update.mock.calls[0].arguments;
+        const [target, doc] = update.mock.calls[0].arguments as [ObjectId, HydratedMsg];
 
         assert.equal(target, id);
-        assert.ok(!('_id' in (doc as object)));
+        assert.ok(!('_id' in doc));
+        assert.equal(doc.content, 'edited');
+        assert.ok(doc.lastModified >= earliest);
     });
 
-    it('omits the skip stage on the first page', async (t: TestContext) => {
+    void it('omits the skip stage on the first page', async (t: TestContext) => {
         const aggregate = stubAggregate(t, []);
 
         await getMsgs(1);
@@ -54,7 +57,7 @@ describe('msgBoard', () => {
         assert.ok(!stages.some((stage) => '$skip' in stage));
     });
 
-    it('skips whole pages and returns oldest first', async (t: TestContext) => {
+    void it('skips whole pages and returns oldest first', async (t: TestContext) => {
         const newest = { lastModified: 2 };
         const oldest = { lastModified: 1 };
         const aggregate = stubAggregate(t, [newest, oldest]);
