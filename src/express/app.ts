@@ -1,7 +1,7 @@
 import express from 'express';
 import { connect, reconnectOnDisconnect } from './db/connection';
 import { msgBoard } from './env';
-import { csp } from './middleware';
+import { csp, errorHandler } from './middleware';
 import { appRouter, notFoundRouter } from './routes';
 
 const app = express();
@@ -18,7 +18,8 @@ app.use(express.json()); // Parse Content-Type: json
 app.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
 app.use(csp); // Restricts application permissions
 app.use('/', appRouter); // Serves app
-app.use('/', notFoundRouter); // Catches errors
+app.use('/', notFoundRouter); // Catches 404 errors
+app.use('/', errorHandler); // Catches errors, preventing stack trace leaks
 
 // Starting server
 reconnectOnDisconnect(msgBoard.uri);
