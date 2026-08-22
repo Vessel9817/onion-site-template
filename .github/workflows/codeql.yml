@@ -1,0 +1,31 @@
+name: CodeQL
+
+# A fork's push runs in the fork, so its results are reported there rather
+# than on the pull request. Analysing the merge commit reports them here.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Scans code using CodeQL
+  analyze:
+    permissions:
+      contents: read
+      security-events: write
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04]
+        languages: [actions, javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - uses: github/codeql-action/init@main
+        with:
+          languages: ${{ matrix.languages }}
+          build-mode: none
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@main
