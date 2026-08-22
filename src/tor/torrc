@@ -24,3 +24,7 @@ AvoidDiskWrites 1
 # Reducing fingerprintability at the cost of bandwidth
 ConnectionPadding 1
 ReducedConnectionPadding 0
+
+# Introducing proof-of-work defenses
+# https://github.com/Vessel9817/onion-site-template/issues/113#issuecomment-5379475420
+HiddenServicePoWDefensesEnabled 1
