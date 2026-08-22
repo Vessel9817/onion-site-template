@@ -33,8 +33,12 @@ the licensing of this repository's various modules and their dependencies.
 
 ### Installing Dependencies
 
-- Clone this repository
 - Install Docker Desktop
+- Clone this repository:
+
+    ```shell
+    git clone --recurse-submodules https://github.com/Vessel9817/onion-site-template.git
+    ```
 
 ### Configuring Secrets
 
@@ -119,8 +123,7 @@ abiding by the following regex: (Onion v3 address)
 
 `[a-z0-9]{56}\.onion`
 
-This domain should also be specified in
-`src/onionscan/.env` and `src/onionprobe/config.yml`
+This domain should also be specified in `src/onionprobe/config.yml`
 where the placeholder onion address is present.
 
 ## Running
@@ -171,7 +174,6 @@ Then, stop and start the website.
 
 In general, you should be able to omit the shutdown procedure,
 but some services may not function correctly.
-For instance, `express` currently requires a restart if `mongo` restarts.
 
 ## Maintenance
 
