@@ -118,7 +118,8 @@ describe('routes', () => {
         const res = await fetch(base + '/chat');
         const body = await res.text();
 
-        assert.equal(res.status, 500);
+        // No connection behind the failure, so 503 rather than 500
+        assert.equal(res.status, 503);
         assert.doesNotMatch(body, /connection refused/);
     });
 });
