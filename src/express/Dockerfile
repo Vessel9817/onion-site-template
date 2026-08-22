@@ -21,8 +21,7 @@ RUN \
 
 # Copying built app
 WORKDIR /project/
-# 1000:1000 corresponds to user "node"
-COPY --from=build --chown=1000:1000 [ "/project/dist/", "./" ]
+COPY --from=build [ "/project/dist/", "./" ]
 COPY --link [ "./views/", "./views/" ]
 
 # Running app

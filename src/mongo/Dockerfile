@@ -21,7 +21,7 @@ WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
 # Corresponds to user mongodb
 USER 999:999
-COPY --link --chmod=+x --chown=999:999 [ "./diagnose.sh", "./" ]
+COPY --link --chmod=+x [ "./diagnose.sh", "./" ]
 
 USER 999:999
 CMD [ "mongod", "--replSet", "dataset" ]
@@ -40,7 +40,7 @@ FROM ${MONGO_VERSION} AS init
 WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
 # 999:999 corresponds to user mongodb
-COPY --link --chown=999:999 --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
+COPY --link --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
 
 USER 999:999
 ENTRYPOINT [ "/project/index.sh" ]
