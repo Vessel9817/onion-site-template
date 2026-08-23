@@ -3,6 +3,7 @@ import { type Server } from 'node:http';
 import { after, before, describe, it, type TestContext } from 'node:test';
 import app from '../app';
 import { MsgModel } from '../db/msgBoard';
+import { http } from '../utils';
 import { stubAggregate } from './support';
 
 let server: Server;
@@ -96,7 +97,7 @@ void describe('routes', () => {
 
         const res = await post('/chat/send', { name: 'ann', content: 'hello' });
 
-        assert.equal(res.status, 302);
+        assert.equal(res.status, http.codes.SEE_OTHER);
         assert.equal(res.headers.get('location'), '/chat');
         assert.equal(insertOne.mock.callCount(), 1);
     });
