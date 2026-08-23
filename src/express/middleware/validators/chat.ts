@@ -1,8 +1,8 @@
-import { check } from 'express-validator';
+import { body } from 'express-validator';
 import { ObjectId } from 'mongodb';
 import { MsgBoard } from '../../db';
 
-const idValidator = check('id')
+const idValidator = body('id')
     .trim()
     // Is stringified ObjectId (24 hexadecimal characters)
     .isString()
@@ -20,7 +20,7 @@ const idValidator = check('id')
     .withMessage('Invalid id')
     .bail();
 
-const nameValidator = check('name')
+const nameValidator = body('name')
     // Is string
     .isString()
     .withMessage('Invalid display name')
@@ -36,7 +36,7 @@ const nameValidator = check('name')
     )
     .bail();
 
-const contentValidator = check('content')
+const contentValidator = body('content')
     .isString()
     .notEmpty()
     .withMessage('Please enter a message')
