@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { ObjectId, type WithId } from 'mongodb';
 import { MsgBoard } from '../db';
 import { http } from '../utils';
+import { redirect } from '../utils/shims';
 
 /**
  * Displays the chat home page
@@ -57,7 +58,7 @@ export const sendMsg: RequestHandler = async (req, res, next) => {
 
     await MsgBoard.createMsg(msg);
 
-    res.redirect('/chat');
+    redirect(res, '/chat');
 };
 
 /**
@@ -87,7 +88,7 @@ export const editMsg: RequestHandler = async (req, res, next) => {
 
     await MsgBoard.editMsg(newMsg);
 
-    res.redirect('/chat');
+    redirect(res, '/chat');
 };
 
 /**
@@ -109,5 +110,5 @@ export const deleteMsg: RequestHandler = async (req, res, next) => {
 
     await MsgBoard.deleteMsg(id);
 
-    res.redirect('/chat');
+    redirect(res, '/chat');
 };
