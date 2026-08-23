@@ -96,10 +96,11 @@ try {
             console.error(`Unable to parse kernel version: ${kernelVerStr}`);
         }
         else {
-            const kernelMajorVer = Number.parseInt(kernelVer[0]);
-            const kernelMinorVer = Number.parseInt(kernelVer[1]);
+            const kernelMajorVer = Number.parseInt(kernelVer[1]);
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const kernelMinorVer = Number.parseInt(kernelVer[2] ?? 0);
 
-            if (kernelMajorVer < MIN_KERNEL_MAJOR_VER || (kernelMajorVer >= MIN_KERNEL_MAJOR_VER && kernelMinorVer < MIN_KERNEL_MINOR_VER)) {
+            if (kernelMajorVer < MIN_KERNEL_MAJOR_VER || (kernelMajorVer === MIN_KERNEL_MAJOR_VER && kernelMinorVer < MIN_KERNEL_MINOR_VER)) {
                 console.warn(`Linux kernel: expected version ${MIN_KERNEL_MAJOR_VER.toString()}.${MIN_KERNEL_MINOR_VER.toString()} or later, got: ${kernelVerStr}`);
             }
         }

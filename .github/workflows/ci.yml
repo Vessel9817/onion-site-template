@@ -123,10 +123,7 @@ jobs:
       - name: Install node modules
         run: npm ci --no-fund
       - name: Check workspace lockfile synchronization
-        run: |
-          chmod +x ./.github/workflows/workspaces.sh
-          chmod a-w ./package-lock.json
-          ./.github/workflows/workspaces.sh
+        run: npm run check-workspaces
   # Runs unit and integration tests with coverage
   test:
     permissions:

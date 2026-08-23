@@ -27,10 +27,9 @@
         "importHelpers": true,
         "newLine": "lf",
         "stripInternal": true,
-        "rootDir": "./src",
         "outDir": "./dist" // See also: https://stackoverflow.com/a/48798945
     },
-    "include": ["./src/eslint/**/*"],
+    "include": ["./src/eslint/**/*", "./src/workspaces/**/*"],
     "exclude": [
         "**/coverage/",
         "**/licenses/",

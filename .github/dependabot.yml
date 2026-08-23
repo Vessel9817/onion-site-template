@@ -10,7 +10,8 @@ updates:
     schedule:
       interval: "daily" # weekdays
   - package-ecosystem: "docker"
-    directory: "/"
+    directories:
+      - "*"
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"
