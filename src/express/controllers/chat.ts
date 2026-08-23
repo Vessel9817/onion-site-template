@@ -13,7 +13,7 @@ import { redirect } from '../utils/shims';
 export const getChat: RequestHandler = async (req, res) => {
     const params = req.query as { page?: string };
     const rawPage = Number(params.page);
-    const page = Number.isFinite(rawPage) ? Math.min(1, rawPage) : 1;
+    const page = Number.isFinite(rawPage) ? Math.max(1, Math.trunc(rawPage)) : 1;
     const msgs = await MsgBoard.getMsgs(page);
     const formattedMsgs = msgs.map((e) => ({
         id: e._id,

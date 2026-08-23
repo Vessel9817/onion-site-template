@@ -124,3 +124,48 @@ jobs:
         run: npm ci --no-fund
       - name: Check workspace lockfile synchronization
         run: npm run check-workspaces
+  # Runs unit and integration tests with coverage
+  test:
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        node-version: [24.x]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install node modules
+        run: npm ci --no-fund
+      - name: Run tests
+        run: npm run test:coverage
+  # Verifies the compose stack serves its onion address
+  smoke:
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v5
+        with:
+          version: ${{ env.DOCKER_VERSION }}
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v2
+        with:
+          version: ${{ env.DOCKER_COMPOSE_VERSION }}
+      - name: Serve the onion
+        run: npm run smoke
+      - name: Collect logs
+        if: failure()
+        run: docker compose --profile production logs
