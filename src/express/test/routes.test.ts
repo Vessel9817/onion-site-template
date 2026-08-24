@@ -123,28 +123,28 @@ void describe('routes', () => {
         assert.doesNotMatch(body, /trace/);
     });
 
-    void it("doesn't send a Server header", async () => {
+    void it('omits the Server header', async () => {
         const res = await fetch(base);
         const header = res.headers.keys().find((name) => name.toLowerCase() === 'server');
 
         assert.equal(header, undefined);
     });
 
-    void it("doesn't send an X-Powered-By header", async () => {
+    void it('omits the X-Powered-By header', async () => {
         const res = await fetch(base);
         const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-powered-by');
 
         assert.equal(header, undefined);
     });
 
-    void it("doesn't send an X-Served-By header", async () => {
+    void it('omits the X-Served-By header', async () => {
         const res = await fetch(base);
         const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-served-by');
 
         assert.equal(header, undefined);
     });
 
-    void it("doesn't send an X-Jsd-* header", async () => {
+    void it('omits the X-Jsd-* header', async () => {
         const regex = /^x-jsd-/i;
         const res = await fetch(base);
         const header = res.headers.keys().find((name) => regex.test(name));
@@ -152,7 +152,7 @@ void describe('routes', () => {
         assert.equal(header, undefined);
     });
 
-    void it("doesn't send an ETag header", async () => {
+    void it('omits the ETag header', async () => {
         const res = await fetch(base);
         const header = res.headers.keys().find((name) => name.toLowerCase() === 'etag');
 
