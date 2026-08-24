@@ -51,14 +51,14 @@ void describe('routes', () => {
     void it('serves the home page', async () => {
         const res = await fetch(base + '/');
 
-        assert.equal(res.status, 200);
+        assert.equal(res.status, http.codes.OK);
         assert.match(await res.text(), /Home/);
     });
 
     void it('renders an error page for an unknown path', async () => {
         const res = await fetch(base + '/nonexistent');
 
-        assert.equal(res.status, 404);
+        assert.equal(res.status, http.codes.NOT_FOUND);
         assert.match(await res.text(), /Not Found/);
     });
 
@@ -67,7 +67,7 @@ void describe('routes', () => {
 
         const res = await fetch(base + '/chat');
 
-        assert.equal(res.status, 200);
+        assert.equal(res.status, http.codes.OK);
         assert.match(await res.text(), /hello/);
     });
 
@@ -87,7 +87,7 @@ void describe('routes', () => {
 
         const res = await post('/chat/send', { name: 'ann', content: '' });
 
-        assert.equal(res.status, 400);
+        assert.equal(res.status, http.codes.BAD_REQUEST);
         assert.equal(insertOne.mock.callCount(), 0);
     });
 
@@ -105,7 +105,7 @@ void describe('routes', () => {
     void it('rejects a delete with a malformed id', async () => {
         const res = await post('/chat/delete', { id: 'not-a-valid-object-id' });
 
-        assert.equal(res.status, 400);
+        assert.equal(res.status, http.codes.BAD_REQUEST);
     });
 
     void it('reports a failed query without leaking the cause', async (t: TestContext) => {
@@ -116,8 +116,46 @@ void describe('routes', () => {
         const res = await fetch(base + '/chat');
         const body = await res.text();
 
-        // No connection behind the failure, so 503 rather than 500
-        assert.equal(res.status, 503);
+        // No connection behind the failure
+        assert.equal(res.status, http.codes.SERVICE_UNAVAILABLE);
         assert.doesNotMatch(body, /connection refused/);
+        assert.doesNotMatch(body, /stack/);
+        assert.doesNotMatch(body, /trace/);
+    });
+
+    void it('omits the Server header', async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'server');
+
+        assert.equal(header, undefined);
+    });
+
+    void it('omits the X-Powered-By header', async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-powered-by');
+
+        assert.equal(header, undefined);
+    });
+
+    void it('omits the X-Served-By header', async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-served-by');
+
+        assert.equal(header, undefined);
+    });
+
+    void it('omits the X-Jsd-* header', async () => {
+        const regex = /^x-jsd-/i;
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => regex.test(name));
+
+        assert.equal(header, undefined);
+    });
+
+    void it('omits the ETag header', async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'etag');
+
+        assert.equal(header, undefined);
     });
 });
