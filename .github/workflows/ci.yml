@@ -1,7 +1,12 @@
 name: CI
 
+# A fork's push runs in the fork, so its results are reported there rather
+# than on the pull request. Running on the merge commit reports them here.
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 env:
   DOCKER_VERSION: v29.7.2
