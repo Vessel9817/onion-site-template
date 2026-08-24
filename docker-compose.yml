@@ -51,6 +51,7 @@ services:
         read_only: true
     environment:
       - PROXY_ADDRESS=http://10.5.2.2:3000
+      - USE_ONION_LOCATION=0
     secrets:
       - source: tor-hostname
         target: /run/secrets/hostname
