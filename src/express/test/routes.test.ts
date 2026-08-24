@@ -119,5 +119,43 @@ void describe('routes', () => {
         // No connection behind the failure
         assert.equal(res.status, http.codes.SERVICE_UNAVAILABLE);
         assert.doesNotMatch(body, /connection refused/);
+        assert.doesNotMatch(body, /stack/);
+        assert.doesNotMatch(body, /trace/);
+    });
+
+    void it("doesn't send a Server header", async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'server');
+
+        assert.equal(header, undefined);
+    });
+
+    void it("doesn't send an X-Powered-By header", async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-powered-by');
+
+        assert.equal(header, undefined);
+    });
+
+    void it("doesn't send an X-Served-By header", async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'x-served-by');
+
+        assert.equal(header, undefined);
+    });
+
+    void it("doesn't send an X-Jsd-* header", async () => {
+        const regex = /^x-jsd-/i;
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => regex.test(name));
+
+        assert.equal(header, undefined);
+    });
+
+    void it("doesn't send an ETag header", async () => {
+        const res = await fetch(base);
+        const header = res.headers.keys().find((name) => name.toLowerCase() === 'etag');
+
+        assert.equal(header, undefined);
     });
 });
