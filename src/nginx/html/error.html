@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Error</title>
         <meta name="color-scheme" content="light dark" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f6f8" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1115" />
         <link rel="icon" href="data:," />
         <meta name="referrer" content="no-referrer" />
         <style>
@@ -22,26 +22,26 @@
                 }
             }
             html {
-                --bg: var(--light-mode, white) var(--dark-mode, black);
-                --fg: var(--light-mode, black) var(--dark-mode, white);
+                --bg: var(--light-mode, #f5f6f8) var(--dark-mode, #0f1115);
+                --fg: var(--light-mode, #171a1f) var(--dark-mode, #e8eaf0);
             }
             @supports (color: light-dark(black, white)) {
                 html {
-                    --bg: light-dark(white, black);
-                    --fg: light-dark(black, white);
+                    --bg: light-dark(#f5f6f8, #0f1115);
+                    --fg: light-dark(#171a1f, #e8eaf0);
                 }
             }
             body {
                 background-color: var(--bg);
                 color: var(--fg);
                 font-family: system-ui, sans-serif;
-                line-height: 1.5;
+                line-height: 1.6;
                 margin: 0 auto;
                 max-width: 45rem;
                 padding: 1rem;
             }
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.9rem;
                 line-height: 1.2;
                 margin: 0 0 1rem;
             }

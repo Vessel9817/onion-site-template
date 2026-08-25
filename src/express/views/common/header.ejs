@@ -5,8 +5,8 @@
     <title><%= title %></title>
     <%# Paints the right background before the stylesheet is parsed %>
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f6f8" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1115" />
     <%# No favicon request, no referrer on outbound links %>
     <link rel="icon" href="data:," />
     <meta name="referrer" content="no-referrer" />
@@ -27,26 +27,28 @@
             }
         }
         html {
-            --bg: var(--light-mode, white) var(--dark-mode, black);
-            --fg: var(--light-mode, black) var(--dark-mode, white);
-            --surface: var(--light-mode, #ededed) var(--dark-mode, #1c1c1c);
-            --surface-hover: var(--light-mode, #dcdcdc) var(--dark-mode, #2b2b2b);
-            --border: var(--light-mode, #767676) var(--dark-mode, #6e6e6e);
-            --muted: var(--light-mode, #595959) var(--dark-mode, #a8a8a8);
-            --accent: var(--light-mode, #14477f) var(--dark-mode, #9dc1f5);
-            --accent-hover: var(--light-mode, #0f3560) var(--dark-mode, #b8d4f8);
+            --bg: var(--light-mode, #f5f6f8) var(--dark-mode, #0f1115);
+            --fg: var(--light-mode, #171a1f) var(--dark-mode, #e8eaf0);
+            --surface: var(--light-mode, #ffffff) var(--dark-mode, #181b22);
+            --surface-hover: var(--light-mode, #eceef2) var(--dark-mode, #232733);
+            --border: var(--light-mode, #7f8898) var(--dark-mode, #6b7382);
+            --muted: var(--light-mode, #59616e) var(--dark-mode, #9aa3b2);
+            --accent: var(--light-mode, #2a4fb8) var(--dark-mode, #8fb5ff);
+            --accent-hover: var(--light-mode, #1f3d94) var(--dark-mode, #acc7ff);
+            --on-accent: var(--light-mode, #ffffff) var(--dark-mode, #0f1115);
             --error: var(--light-mode, #a3261d) var(--dark-mode, #ffb4ab);
         }
         @supports (color: light-dark(black, white)) {
             html {
-                --bg: light-dark(white, black);
-                --fg: light-dark(black, white);
-                --surface: light-dark(#ededed, #1c1c1c);
-                --surface-hover: light-dark(#dcdcdc, #2b2b2b);
-                --border: light-dark(#767676, #6e6e6e);
-                --muted: light-dark(#595959, #a8a8a8);
-                --accent: light-dark(#14477f, #9dc1f5);
-                --accent-hover: light-dark(#0f3560, #b8d4f8);
+                --bg: light-dark(#f5f6f8, #0f1115);
+                --fg: light-dark(#171a1f, #e8eaf0);
+                --surface: light-dark(#ffffff, #181b22);
+                --surface-hover: light-dark(#eceef2, #232733);
+                --border: light-dark(#7f8898, #6b7382);
+                --muted: light-dark(#59616e, #9aa3b2);
+                --accent: light-dark(#2a4fb8, #8fb5ff);
+                --accent-hover: light-dark(#1f3d94, #acc7ff);
+                --on-accent: light-dark(#ffffff, #0f1115);
                 --error: light-dark(#a3261d, #ffb4ab);
             }
         }
@@ -60,7 +62,7 @@
             background-color: var(--bg);
             color: var(--fg);
             font-family: system-ui, sans-serif;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0 auto;
             max-width: 45rem;
             padding: 1rem;
@@ -92,7 +94,7 @@
             text-wrap: pretty;
         }
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.9rem;
             line-height: 1.2;
             margin: 0 0 1rem;
         }
@@ -121,8 +123,9 @@
             overflow-wrap: anywhere;
         }
         .message {
+            background-color: var(--surface);
             border-color: var(--border);
-            border-radius: 0.25rem;
+            border-radius: 0.75rem;
             border-style: solid;
             border-width: 1px;
             padding: 0.75rem;
@@ -178,6 +181,9 @@
         [aria-invalid="true"] {
             border-color: var(--error);
         }
+        [aria-invalid="true"]:focus-visible {
+            outline-color: var(--error);
+        }
         .actions {
             display: flex;
             gap: 0.5rem;
@@ -203,27 +209,30 @@
             padding: 0;
         }
         nav a {
+            border-radius: 0.5rem;
             display: inline-block;
-            padding: 0.5rem;
+            padding: 0.5rem 0.75rem;
         }
         nav a[aria-current="page"] {
+            background-color: var(--surface);
             font-weight: 700;
-            text-decoration-thickness: 2px;
+            text-decoration-line: none;
         }
         input,
         textarea {
-            background-color: var(--bg);
+            background-color: var(--surface);
             border-color: var(--border);
-            border-radius: 0.25rem;
+            border-radius: 0.5rem;
             border-style: solid;
             border-width: 1px;
             color: inherit;
             font: inherit;
-            padding: 0.35rem 0.5rem;
+            padding: 0.5rem 0.7rem;
         }
         input[type="submit"] {
             background-color: var(--surface);
             cursor: pointer;
+            font-weight: 600;
             min-height: 2.25rem;
             padding-inline: 0.9rem;
         }
@@ -233,7 +242,7 @@
         input[type="submit"].primary {
             background-color: var(--accent);
             border-color: var(--accent);
-            color: var(--bg);
+            color: var(--on-accent);
         }
         input[type="submit"].primary:hover {
             background-color: var(--accent-hover);
@@ -245,14 +254,14 @@
                 --border: var(--fg);
                 --muted: var(--fg);
             }
-            .messages li,
+            .message,
             input,
             textarea {
                 border-width: 2px;
             }
         }
         @media (forced-colors: active) {
-            .messages li,
+            .message,
             input,
             textarea {
                 border-width: 2px;
