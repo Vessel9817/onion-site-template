@@ -12,34 +12,40 @@
             <% } %>
             <ul class="messages">
                 <% for (const msg of msgs) { %>
-                    <%# A rejected edit is shown in the row it came from, with what was submitted %>
+                    <%# A rejected edit reopens the editor in the row it came from, with what was submitted %>
                     <% const own = rejected.id === msg.id && !rejected.errors.id; %>
                     <% const errors = own ? rejected.errors : {}; %>
                     <% const name = own && rejected.name != null ? rejected.name : msg.name; %>
                     <% const content = own && rejected.content != null ? rejected.content : msg.content; %>
                     <li>
-                        <form method="post">
-                            <input type="hidden" name="id" value="<%= msg.id %>" />
-                            <p class="meta">Last modified: <time datetime="<%= msg.dateTime %>"><%= msg.lastModified %></time></p>
-                            <label class="visually-hidden" for="name-<%= msg.id %>">Display name</label>
-                            <% if (errors.name) { %>
-                                <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" aria-invalid="true" aria-describedby="name-<%= msg.id %>-error" autofocus />
-                                <p class="error" id="name-<%= msg.id %>-error"><%= errors.name %></p>
-                            <% } else { %>
-                                <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" />
-                            <% } %>
-                            <label class="visually-hidden" for="content-<%= msg.id %>">Message</label>
-                            <% if (errors.content) { %>
-                                <textarea id="content-<%= msg.id %>" name="content" rows="2" autocomplete="off" placeholder="Say something..." required maxlength="2048" aria-invalid="true" aria-describedby="content-<%= msg.id %>-error"<%= errors.name ? '' : ' autofocus' %>><%= content %></textarea>
-                                <p class="error" id="content-<%= msg.id %>-error"><%= errors.content %></p>
-                            <% } else { %>
-                                <textarea id="content-<%= msg.id %>" name="content" rows="2" autocomplete="off" placeholder="Say something..." required maxlength="2048"><%= content %></textarea>
-                            <% } %>
-                            <div class="actions">
-                                <input type="submit" formaction="/chat/edit?page=<%= page %>" value="Edit" />
-                                <input type="submit" formaction="/chat/delete?page=<%= page %>" value="Delete" formnovalidate />
-                            </div>
-                        </form>
+                        <article class="message" aria-labelledby="author-<%= msg.id %>">
+                            <p class="meta"><b id="author-<%= msg.id %>"><%= msg.name %></b> <time datetime="<%= msg.dateTime %>"><%= msg.lastModified %></time></p>
+                            <p class="content"><%= msg.content %></p>
+                            <details<%= own ? ' open' : '' %>>
+                                <summary>Edit</summary>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<%= msg.id %>" />
+                                    <label for="name-<%= msg.id %>">Display name</label>
+                                    <% if (errors.name) { %>
+                                        <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" aria-invalid="true" aria-describedby="name-<%= msg.id %>-error" autofocus />
+                                        <p class="error" id="name-<%= msg.id %>-error"><%= errors.name %></p>
+                                    <% } else { %>
+                                        <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" />
+                                    <% } %>
+                                    <label for="content-<%= msg.id %>">Message</label>
+                                    <% if (errors.content) { %>
+                                        <textarea id="content-<%= msg.id %>" name="content" rows="3" autocomplete="off" placeholder="Say something..." required maxlength="2048" aria-invalid="true" aria-describedby="content-<%= msg.id %>-error"<%= errors.name ? '' : ' autofocus' %>><%= content %></textarea>
+                                        <p class="error" id="content-<%= msg.id %>-error"><%= errors.content %></p>
+                                    <% } else { %>
+                                        <textarea id="content-<%= msg.id %>" name="content" rows="3" autocomplete="off" placeholder="Say something..." required maxlength="2048"><%= content %></textarea>
+                                    <% } %>
+                                    <div class="actions">
+                                        <input type="submit" formaction="/chat/edit?page=<%= page %>" value="Save" class="primary" />
+                                        <input type="submit" formaction="/chat/delete?page=<%= page %>" value="Delete" formnovalidate />
+                                    </div>
+                                </form>
+                            </details>
+                        </article>
                     </li>
                 <% } %>
             </ul>
