@@ -6,7 +6,7 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const root = /** @type {import('./root')} */ (require(`${__dirname}/root`));
+const root = /** @type {typeof import('./root')} */ (require(`${__dirname}/root`));
 
 // DB name
 // https://hub.docker.com/_/mongo#initializing-a-fresh-instance
