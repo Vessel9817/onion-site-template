@@ -2,9 +2,8 @@
 <html lang="en">
     <%- include('../../common/header', { title: 'Server Status' }) %>
     <body>
-        <h1>Server Status</h1>
-        <%- include('../../common/nav') %>
-        <main>
+        <%- include('../../common/top', { heading: 'Server Status', current: '' }) %>
+        <main id="main">
             <p><%= msg %></p>
         </main>
     </body>

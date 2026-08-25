@@ -1,10 +1,10 @@
-<nav>
+<nav aria-label="Site">
     <ul>
         <li>
-            <a href="/">Home</a>
+            <a href="/"<%- current === '/' ? ' aria-current="page"' : '' %>>Home</a>
         </li>
         <li>
-            <a href="/chat">Chat</a>
+            <a href="/chat"<%- current === '/chat' ? ' aria-current="page"' : '' %>>Chat</a>
         </li>
     </ul>
 </nav>

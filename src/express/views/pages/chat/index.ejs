@@ -2,39 +2,79 @@
 <html lang="en">
     <%- include('../../common/header', { title: "Chat" }) %>
     <body>
-        <h1>Chat</h1>
-        <%- include('../../common/nav') %>
-        <main>
+        <%- include('../../common/top', { heading: 'Chat', current: '/chat' }) %>
+        <main id="main">
+            <% if (rejected.errors.id) { %>
+                <p class="error" role="alert"><%= rejected.errors.id %></p>
+            <% } %>
+            <% if (msgs.length === 0) { %>
+                <p class="empty">No messages yet.</p>
+            <% } %>
             <ul class="messages">
-                <% for ( let msg of msgs ) { %>
+                <% for (const msg of msgs) { %>
+                    <%# A rejected edit reopens the editor in the row it came from, with what was submitted %>
+                    <% const own = rejected.id === msg.id && !rejected.errors.id; %>
+                    <% const errors = own ? rejected.errors : {}; %>
+                    <% const name = own && rejected.name != null ? rejected.name : msg.name; %>
+                    <% const content = own && rejected.content != null ? rejected.content : msg.content; %>
                     <li>
-                        <form method="post">
-                            <input type="hidden" name="id" value="<%= msg.id %>" />
-                            <p class="meta">Last modified: <%= msg.lastModified %></p>
-                            <label class="visually-hidden" for="name-<%= msg.id %>">Display name</label>
-                            <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= msg.name %>" />
-                            <label class="visually-hidden" for="content-<%= msg.id %>">Message</label>
-                            <input id="content-<%= msg.id %>" type="text" name="content" autocomplete="off" placeholder="Say something..." value="<%= msg.content %>" />
-                            <div class="actions">
-                                <input type="submit" formaction="/chat/edit" value="Edit" />
-                                <input type="submit" formaction="/chat/delete" value="Delete" />
-                            </div>
-                        </form>
+                        <article class="message" aria-labelledby="author-<%= msg.id %>">
+                            <p class="meta"><b id="author-<%= msg.id %>"><%= msg.name %></b> <time datetime="<%= msg.dateTime %>"><%= msg.lastModified %></time></p>
+                            <p class="content"><%= msg.content %></p>
+                            <details<%= own ? ' open' : '' %>>
+                                <summary>Edit</summary>
+                                <form method="post">
+                                    <input type="hidden" name="id" value="<%= msg.id %>" />
+                                    <label for="name-<%= msg.id %>">Display name</label>
+                                    <% if (errors.name) { %>
+                                        <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" aria-invalid="true" aria-describedby="name-<%= msg.id %>-error" autofocus />
+                                        <p class="error" id="name-<%= msg.id %>-error"><%= errors.name %></p>
+                                    <% } else { %>
+                                        <input id="name-<%= msg.id %>" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= name %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" />
+                                    <% } %>
+                                    <label for="content-<%= msg.id %>">Message</label>
+                                    <% if (errors.content) { %>
+                                        <textarea id="content-<%= msg.id %>" name="content" rows="3" autocomplete="off" placeholder="Say something..." required maxlength="2048" aria-invalid="true" aria-describedby="content-<%= msg.id %>-error"<%= errors.name ? '' : ' autofocus' %>><%= content %></textarea>
+                                        <p class="error" id="content-<%= msg.id %>-error"><%= errors.content %></p>
+                                    <% } else { %>
+                                        <textarea id="content-<%= msg.id %>" name="content" rows="3" autocomplete="off" placeholder="Say something..." required maxlength="2048"><%= content %></textarea>
+                                    <% } %>
+                                    <div class="actions">
+                                        <input type="submit" formaction="/chat/edit?page=<%= page %>" value="Save" class="primary" />
+                                        <input type="submit" formaction="/chat/delete?page=<%= page %>" value="Delete" formnovalidate />
+                                    </div>
+                                </form>
+                            </details>
+                        </article>
                     </li>
                 <% } %>
             </ul>
             <nav class="pagination" aria-label="Message pages">
-                <a href="?page=<%= page + 1 %>">Older messages</a>
+                <% if (hasOlder) { %>
+                    <a href="?page=<%= page + 1 %>">Older messages</a>
+                <% } %>
                 <% if (page > 1) { %>
                     <a href="?page=<%= page - 1 %>">Newer messages</a>
                 <% } %>
             </nav>
+            <%# A rejected send is shown in the compose form, with what was submitted %>
+            <% const compose = rejected.id == null ? rejected : { errors: {} }; %>
             <form class="compose" action="/chat/send" method="post">
                 <h2>New message</h2>
                 <label for="send-name">Display name</label>
-                <input id="send-name" type="text" name="name" autocomplete="off" placeholder="Display name" />
+                <% if (compose.errors.name) { %>
+                    <input id="send-name" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= compose.name ?? '' %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" aria-invalid="true" aria-describedby="send-name-error" autofocus />
+                    <p class="error" id="send-name-error"><%= compose.errors.name %></p>
+                <% } else { %>
+                    <input id="send-name" type="text" name="name" autocomplete="off" placeholder="Display name" value="<%= compose.name ?? '' %>" required maxlength="32" pattern=".*\S.*" title="Display name cannot be blank" />
+                <% } %>
                 <label for="send-content">Message</label>
-                <textarea id="send-content" name="content" rows="4" autocomplete="off" placeholder="Say something..."></textarea>
+                <% if (compose.errors.content) { %>
+                    <textarea id="send-content" name="content" rows="4" autocomplete="off" placeholder="Say something..." required maxlength="2048" aria-invalid="true" aria-describedby="send-content-error"<%= compose.errors.name ? '' : ' autofocus' %>><%= compose.content ?? '' %></textarea>
+                    <p class="error" id="send-content-error"><%= compose.errors.content %></p>
+                <% } else { %>
+                    <textarea id="send-content" name="content" rows="4" autocomplete="off" placeholder="Say something..." required maxlength="2048"><%= compose.content ?? '' %></textarea>
+                <% } %>
                 <input type="submit" value="Send" class="primary" />
             </form>
         </main>

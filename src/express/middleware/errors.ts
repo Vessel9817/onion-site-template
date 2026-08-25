@@ -35,6 +35,14 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
     console.error('Handled uncaught error:', newErr);
 
+    // A body parser error carries its own status, such as 413 for an oversized body
+    const status: unknown = (err as { status?: unknown } | null)?.status;
+
+    if (typeof status === 'number' && status >= 400 && status < 600) {
+        res.statusCode = status;
+        res.statusMessage = http.names[status];
+    }
+
     // Giving limited error information to the client
     // res.statusMessage can be undefined
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
