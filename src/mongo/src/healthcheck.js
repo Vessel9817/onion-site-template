@@ -67,8 +67,10 @@ try {
     if (!authenticate(adminDb, root)) {
         // No user exists yet, so the localhost exception is open
         if (!initiated()) {
-            assert.ok(replicas.isInitiator(config, os.hostname()),
-                `Waiting for ${replicas.initiator(config)} to initiate the replica set (this is ${os.hostname()})`);
+            assert.ok(
+                replicas.isInitiator(config, os.hostname()),
+                `Waiting for ${replicas.initiator(config)} to initiate the replica set (this is ${os.hostname()})`
+            );
 
             rs.initiate(config);
             console.log('Initiated replica set!');

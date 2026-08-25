@@ -17,7 +17,7 @@ try {
         'Administrator cannot authenticate');
     assert.strictEqual(rs.status().ok, 1, 'Replica set is not initiated');
 
-    console.log('Replica set is up');
+    console.log('Replica set is up!');
 }
 catch (err) {
     console.error('Failed to confirm the replica set:', err);

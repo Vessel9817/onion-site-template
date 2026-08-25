@@ -19,11 +19,10 @@ COPY --link --exclude=*.sh --exclude=diagnose.js [ "./", "./" ]
 
 WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
-COPY --link [ "./src/root.js", "./src/" ]
-# Corresponds to user mongodb
-USER 999:999
+COPY --link [ "./src/", "./src/" ]
 COPY --link --chmod=+x [ "./diagnose.sh", "./" ]
 
+# Corresponds to user mongodb
 USER 999:999
 # The keyfile authenticates members to each other and turns authorization on
 CMD [ "mongod", "--replSet", "dataset", "--keyFile", "/run/secrets/keyFile.pem" ]
@@ -43,9 +42,9 @@ FROM ${MONGO_VERSION} AS init
 WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
 COPY --link [ "./src/init.js", "./src/root.js", "./src/" ]
-# 999:999 corresponds to user mongodb
 COPY --link --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
 
+# 999:999 corresponds to user mongodb
 USER 999:999
 ENTRYPOINT [ "/project/index.sh" ]
 ENV HOST=mongo

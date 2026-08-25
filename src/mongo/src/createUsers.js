@@ -4,10 +4,7 @@ const env = /** @type {typeof import('./env')} */ (require(`${__dirname}/env`));
 
 /**
  * Creates the database user, if it doesn't already exist.
- *
- * Expects the connection to be authenticated as the administrator, who is
- * created by the healthcheck under the localhost exception.
- *
+ * Expects the connection to be authenticated as the administrator.
  * Throws an error if the user doesn't exist and the connected node
  * isn't a writable primary.
  * @param {import('../global').Db} adminDb

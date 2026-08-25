@@ -33,7 +33,7 @@ function load() {
 
 void describe('root', () => {
     beforeEach(() => {
-        dir = fs.mkdtempSync(path.join(os.tmpdir(), 'root-'));
+        dir = fs.mkdtempSync(path.join(os.tmpdir(), 'root'));
     });
 
     afterEach(() => {
@@ -60,7 +60,7 @@ void describe('root', () => {
     });
 
     void it('refuses a missing file', () => {
-        process.env.ROOT_USERNAME_FILE = path.join(dir, 'nope');
+        process.env.ROOT_USERNAME_FILE = path.join(dir, '-nope');
         process.env.ROOT_PASSWORD_FILE = secret('p', 'hunter2');
 
         assert.throws(load, /doesn't exist/);
