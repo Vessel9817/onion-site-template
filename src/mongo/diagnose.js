@@ -167,6 +167,12 @@ try {
      * Runs diagnostics. Logs any issues. Resolution may not always be possible.
      */
     function diagnose() {
+        // serverStatus needs a login now that the keyfile turns authorization on
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const root = /** @type {typeof import('./src/root')} */ (require(`${__dirname}/src/root`));
+
+        db.getSiblingDB('admin').auth(root.username, root.password);
+
         diagnoseTcmalloc();
         diagnoseEngine();
     }

@@ -116,10 +116,14 @@ services:
       service: mongo-init
     container_name: mongo-init
     depends_on:
-      # Replicas will die until this service initializes the replica set
-      - mongo-1
-      - mongo-2
-      - mongo-3
+      # A node's healthcheck initiates the replica set and creates the
+      # administrator, whose credentials this service needs to confirm it
+      mongo-1:
+        condition: service_healthy
+      mongo-2:
+        condition: service_healthy
+      mongo-3:
+        condition: service_healthy
     volumes:
       - type: volume
         source: mongo-db-init
@@ -137,6 +141,8 @@ services:
       file: ./src/docker-compose.yml
       service: mongo
     container_name: mongo-1
+    # Matches its entry in replicas.json
+    hostname: mongo-1
     volumes:
       - type: volume
         source: mongo-db-1
@@ -153,6 +159,8 @@ services:
       file: ./src/docker-compose.yml
       service: mongo
     container_name: mongo-2
+    # Matches its entry in replicas.json
+    hostname: mongo-2
     volumes:
       - type: volume
         source: mongo-db-2
@@ -169,6 +177,8 @@ services:
       file: ./src/docker-compose.yml
       service: mongo
     container_name: mongo-3
+    # Matches its entry in replicas.json
+    hostname: mongo-3
     volumes:
       - type: volume
         source: mongo-db-3
@@ -194,8 +204,14 @@ services:
     environment:
       # Standard configuration details
       - ME_CONFIG_BASICAUTH_ENABLED=true
-      - ME_CONFIG_MONGODB_AUTHDB=admin
-      - ME_CONFIG_MONGODB_URL=mongodb://mongo-1:27017,mongo-2:27017,mongo-3:27017?replicaSet=dataset
+      # mongo-express uses a URL as given, without the credentials below, so
+      # the members are listed and it builds the URL itself. The image's
+      # entrypoint still reads the URL to decide what to wait for, and skips
+      # the wait when the URL lists more than one member
+      - ME_CONFIG_MONGODB_SERVER=mongo-1,mongo-2,mongo-3
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_URL=mongodb://mongo-1:27017,mongo-2:27017,mongo-3:27017
       # Administrator credentials
       - ME_CONFIG_MONGODB_ADMINUSERNAME_FILE=/run/secrets/root/username.txt
       - ME_CONFIG_MONGODB_ADMINPASSWORD_FILE=/run/secrets/root/password.txt

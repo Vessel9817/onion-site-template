@@ -14,7 +14,7 @@ declare global {
 
 export interface Db {
     adminCommand: (command: 'ping') => { ok: number };
-    auth: (username: string, password: string) => void;
+    auth: (username: string, password: string) => { ok: number };
     createCollection: (name: string) => void;
     createUser: (options: {
         user: string;
@@ -59,6 +59,7 @@ export interface ServerStatusOutputs {
 
 export interface Rs {
     initiate: (config?: RsInitiateConfig) => void;
+    status: () => { ok: number };
 }
 
 export interface RsInitiateConfig {
