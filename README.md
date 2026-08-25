@@ -66,8 +66,10 @@ The same goes with these files, except that these values should be memorable:
 Although this project will work with the example credentials
 in each of these files, **for your own security, please change them.**
 
-Next, create a key file for MongoDB replicas by running
-the following command in the project root:
+Next, create a key file for MongoDB replicas. The replica set members use
+it to authenticate each other, and it turns authorization on, so every
+client needs the credentials above. Run the following command in the
+project root:
 
 ```shell
 openssl rand -base64 756 > ./src/mongo/secrets/keyFile.pem

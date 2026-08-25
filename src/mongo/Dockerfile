@@ -19,29 +19,32 @@ COPY --link --exclude=*.sh --exclude=diagnose.js [ "./", "./" ]
 
 WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
-# Corresponds to user mongodb
-USER 999:999
+COPY --link [ "./src/", "./src/" ]
 COPY --link --chmod=+x [ "./diagnose.sh", "./" ]
 
+# Corresponds to user mongodb
 USER 999:999
-CMD [ "mongod", "--replSet", "dataset" ]
+# The keyfile authenticates members to each other and turns authorization on
+CMD [ "mongod", "--replSet", "dataset", "--keyFile", "/run/secrets/keyFile.pem" ]
 # mongo recommends a minimum connection interval of 1s to avoid performance degradation
 HEALTHCHECK \
     --interval=2s \
     --timeout=5s \
-    --start-period=1s \
+    # Covers initiation, election and the first user
+    --start-period=30s \
     # Waits for election to complete
     --retries=10 \
     CMD [ "mongosh", "-f", "/docker-entrypoint-initdb.d/src/healthcheck.js" ]
 
-# Initializes replica set
+# Confirms the replica set is up. Initiating it needs localhost, so a node's healthcheck does that
 FROM ${MONGO_VERSION} AS init
 
 WORKDIR /project/
 COPY --link [ "./diagnose.js", "./" ]
-# 999:999 corresponds to user mongodb
+COPY --link [ "./src/init.js", "./src/root.js", "./src/" ]
 COPY --link --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
 
+# 999:999 corresponds to user mongodb
 USER 999:999
 ENTRYPOINT [ "/project/index.sh" ]
 ENV HOST=mongo

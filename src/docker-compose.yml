@@ -29,19 +29,6 @@ services:
     mem_swappiness: 1
     # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
     stop_signal: SIGTERM
-    configs:
-      - source: mongo-replicas
-        target: /project/replicas.json
-    secrets:
-      - source: mongo-keyfile
-        target: /run/secrets/keyFile.pem
-        mode: 0400
-        uid: '999'
-        gid: '999'
-      - source: mongo-root-username
-        target: /run/secrets/username.txt
-      - source: mongo-root-password
-        target: /run/secrets/password.txt
   mongo:
     restart: unless-stopped
     build:
@@ -52,6 +39,9 @@ services:
     mem_swappiness: 1
     # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
     stop_signal: SIGTERM
+    configs:
+      - source: mongo-replicas
+        target: /docker-entrypoint-initdb.d/replicas.json
     secrets:
       - source: mongo-keyfile
         target: /run/secrets/keyFile.pem
