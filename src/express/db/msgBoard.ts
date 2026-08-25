@@ -2,7 +2,7 @@ import { ObjectId, type WithId } from 'mongodb';
 import mongoose, { type PipelineStage, Schema } from 'mongoose';
 import { dateNow } from '../utils/shims';
 
-const MSG_PAGE_SIZE = 10;
+export const MSG_PAGE_SIZE = 10;
 
 export interface Msg {
     name: string;

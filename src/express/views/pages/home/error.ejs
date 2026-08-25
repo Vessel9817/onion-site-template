@@ -2,9 +2,8 @@
 <html lang="en">
     <%- include('../../common/header', { title: 'Error' }) %>
     <body>
-        <h1><%= code %> <%= name %></h1>
-        <%- include('../../common/nav') %>
-        <main>
+        <%- include('../../common/top', { heading: `${code} ${name}`, current: '' }) %>
+        <main id="main">
             <p>If you think this is an error, please contact this site's maintainers.</p>
         </main>
     </body>

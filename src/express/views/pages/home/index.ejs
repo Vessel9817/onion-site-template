@@ -2,9 +2,8 @@
 <html lang="en">
     <%- include('../../common/header', { title: 'Home' }) %>
     <body>
-        <h1>Home</h1>
-        <%- include('../../common/nav') %>
-        <main>
+        <%- include('../../common/top', { heading: 'Home', current: '/' }) %>
+        <main id="main">
             <p>Welcome. Check out some of our pages.</p>
         </main>
     </body>

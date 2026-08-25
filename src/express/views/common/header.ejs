@@ -3,8 +3,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
+    <%# Paints the right background before the stylesheet is parsed %>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+    <%# No favicon request, no referrer on outbound links %>
+    <link rel="icon" href="data:," />
+    <meta name="referrer" content="no-referrer" />
 
-    <%# light-dark polyfill %>
+    <%# Each color is resolved once, so rules below read a single token. %>
+    <%# light-dark() is the standard; the polyfill beneath it covers older browsers. %>
     <%# https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark %>
     <style>
         :root {
@@ -19,22 +27,28 @@
             }
         }
         html {
-            --bg_light: white;
-            --bg_dark: black;
-            --font_light: black;
-            --font_dark: white;
-            --surface_light: #ededed;
-            --surface_dark: #1c1c1c;
-            --border_light: #767676;
-            --border_dark: #6e6e6e;
-            --muted_light: #595959;
-            --muted_dark: #a8a8a8;
-            --accent_light: #14477f;
-            --accent_dark: #9dc1f5;
-            --surface_hover_light: #dcdcdc;
-            --surface_hover_dark: #2b2b2b;
-            --accent_hover_light: #0f3560;
-            --accent_hover_dark: #b8d4f8;
+            --bg: var(--light-mode, white) var(--dark-mode, black);
+            --fg: var(--light-mode, black) var(--dark-mode, white);
+            --surface: var(--light-mode, #ededed) var(--dark-mode, #1c1c1c);
+            --surface-hover: var(--light-mode, #dcdcdc) var(--dark-mode, #2b2b2b);
+            --border: var(--light-mode, #767676) var(--dark-mode, #6e6e6e);
+            --muted: var(--light-mode, #595959) var(--dark-mode, #a8a8a8);
+            --accent: var(--light-mode, #14477f) var(--dark-mode, #9dc1f5);
+            --accent-hover: var(--light-mode, #0f3560) var(--dark-mode, #b8d4f8);
+            --error: var(--light-mode, #a3261d) var(--dark-mode, #ffb4ab);
+        }
+        @supports (color: light-dark(black, white)) {
+            html {
+                --bg: light-dark(white, black);
+                --fg: light-dark(black, white);
+                --surface: light-dark(#ededed, #1c1c1c);
+                --surface-hover: light-dark(#dcdcdc, #2b2b2b);
+                --border: light-dark(#767676, #6e6e6e);
+                --muted: light-dark(#595959, #a8a8a8);
+                --accent: light-dark(#14477f, #9dc1f5);
+                --accent-hover: light-dark(#0f3560, #b8d4f8);
+                --error: light-dark(#a3261d, #ffb4ab);
+            }
         }
         *,
         *::before,
@@ -42,8 +56,9 @@
             box-sizing: border-box;
         }
         body {
-            background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
-            color: var(--light-mode, var(--font_light)) var(--dark-mode, var(--font_dark));
+            accent-color: var(--accent);
+            background-color: var(--bg);
+            color: var(--fg);
             font-family: system-ui, sans-serif;
             line-height: 1.5;
             margin: 0 auto;
@@ -51,13 +66,24 @@
             padding: 1rem;
         }
         a {
-            color: var(--light-mode, var(--accent_light)) var(--dark-mode, var(--accent_dark));
+            color: var(--accent);
         }
         :focus-visible {
-            outline-color: var(--light-mode, var(--accent_light)) var(--dark-mode, var(--accent_dark));
+            outline-color: var(--accent);
             outline-offset: 2px;
             outline-style: solid;
             outline-width: 2px;
+        }
+        .skip {
+            background-color: var(--bg);
+            left: 1rem;
+            padding: 0.5rem;
+            position: absolute;
+            top: 1rem;
+            transform: translateY(-200%);
+        }
+        .skip:focus {
+            transform: none;
         }
         h1 {
             font-size: 1.6rem;
@@ -84,8 +110,12 @@
             margin: 0 0 1.5rem;
             padding: 0;
         }
+        .messages li,
+        .error {
+            overflow-wrap: anywhere;
+        }
         .messages li {
-            border-color: var(--light-mode, var(--border_light)) var(--dark-mode, var(--border_dark));
+            border-color: var(--border);
             border-radius: 0.25rem;
             border-style: solid;
             border-width: 1px;
@@ -97,10 +127,24 @@
             flex-direction: column;
             gap: 0.5rem;
         }
-        .meta {
-            color: var(--light-mode, var(--muted_light)) var(--dark-mode, var(--muted_dark));
-            font-size: 0.85rem;
+        .meta,
+        .empty {
+            color: var(--muted);
             margin: 0;
+        }
+        .meta {
+            font-size: 0.85rem;
+        }
+        .empty {
+            margin-bottom: 1.5rem;
+        }
+        .error {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        [aria-invalid="true"] {
+            border-color: var(--error);
         }
         .actions {
             display: flex;
@@ -128,10 +172,14 @@
             display: inline-block;
             padding: 0.5rem;
         }
+        nav a[aria-current="page"] {
+            font-weight: 700;
+            text-decoration-thickness: 2px;
+        }
         input,
         textarea {
-            background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
-            border-color: var(--light-mode, var(--border_light)) var(--dark-mode, var(--border_dark));
+            background-color: var(--bg);
+            border-color: var(--border);
             border-radius: 0.25rem;
             border-style: solid;
             border-width: 1px;
@@ -140,21 +188,44 @@
             padding: 0.35rem 0.5rem;
         }
         input[type="submit"] {
-            background-color: var(--light-mode, var(--surface_light)) var(--dark-mode, var(--surface_dark));
+            background-color: var(--surface);
             cursor: pointer;
+            min-height: 2.25rem;
             padding-inline: 0.9rem;
         }
         input[type="submit"]:hover {
-            background-color: var(--light-mode, var(--surface_hover_light)) var(--dark-mode, var(--surface_hover_dark));
+            background-color: var(--surface-hover);
         }
         input[type="submit"].primary {
-            background-color: var(--light-mode, var(--accent_light)) var(--dark-mode, var(--accent_dark));
-            border-color: var(--light-mode, var(--accent_light)) var(--dark-mode, var(--accent_dark));
-            color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg);
         }
         input[type="submit"].primary:hover {
-            background-color: var(--light-mode, var(--accent_hover_light)) var(--dark-mode, var(--accent_hover_dark));
-            border-color: var(--light-mode, var(--accent_hover_light)) var(--dark-mode, var(--accent_hover_dark));
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        <%# Stronger edges when the reader asks for them; system colors take over entirely in forced-colors mode %>
+        @media (prefers-contrast: more) {
+            html {
+                --border: var(--fg);
+                --muted: var(--fg);
+            }
+            .messages li,
+            input,
+            textarea {
+                border-width: 2px;
+            }
+        }
+        @media (forced-colors: active) {
+            .messages li,
+            input,
+            textarea {
+                border-width: 2px;
+            }
+            nav a[aria-current="page"] {
+                text-decoration-line: underline;
+            }
         }
     </style>
 </head>

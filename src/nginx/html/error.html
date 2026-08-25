@@ -3,6 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Error</title>
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="white" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+        <link rel="icon" href="data:," />
+        <meta name="referrer" content="no-referrer" />
         <style>
             :root {
                 color-scheme: light dark;
@@ -16,21 +22,35 @@
                 }
             }
             html {
-                --bg_light: white;
-                --bg_dark: black;
-                --font_light: black;
-                --font_dark: white;
+                --bg: var(--light-mode, white) var(--dark-mode, black);
+                --fg: var(--light-mode, black) var(--dark-mode, white);
+            }
+            @supports (color: light-dark(black, white)) {
+                html {
+                    --bg: light-dark(white, black);
+                    --fg: light-dark(black, white);
+                }
             }
             body {
-                background-color: var(--light-mode, var(--bg_light)) var(--dark-mode, var(--bg_dark));
-                color: var(--light-mode, var(--font_light)) var(--dark-mode, var(--font_dark));
+                background-color: var(--bg);
+                color: var(--fg);
+                font-family: system-ui, sans-serif;
+                line-height: 1.5;
+                margin: 0 auto;
+                max-width: 45rem;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+                line-height: 1.2;
+                margin: 0 0 1rem;
             }
         </style>
-        <title>Error</title>
     </head>
     <body>
-        <h1>Error <!--@ERROR_CODE--></h1>
-        <h2><!--@ERROR_MESSAGE--></h2>
-        <p>If you believe this to be an error, contact the website maintainers.</p>
+        <main>
+            <h1><!--@ERROR_CODE--> <!--@ERROR_MESSAGE--></h1>
+            <p>If you think this is an error, please contact this site's maintainers.</p>
+        </main>
     </body>
 </html>
