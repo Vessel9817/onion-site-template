@@ -1,13 +1,12 @@
+import { Types, type PipelineStage } from 'mongoose';
 import assert from 'node:assert/strict';
 import { describe, it, type TestContext } from 'node:test';
-import { ObjectId } from 'mongodb';
-import { type PipelineStage } from 'mongoose';
 import {
     createMsg,
     editMsg,
     getMsgs,
-    type HydratedMsg,
-    MsgModel
+    MsgModel,
+    type HydratedMsg
 } from '../db/msgBoard';
 import { stubAggregate } from './support';
 
@@ -34,12 +33,12 @@ void describe('msgBoard', () => {
     void it('stores a rehydrated document without the id when editing', async (t: TestContext) => {
         const update = t.mock.method(MsgModel, 'findByIdAndUpdate',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.findByIdAndUpdate>);
-        const id = new ObjectId();
+        const id = new Types.ObjectId();
         const earliest = Math.floor(Date.now() / 100) * 100;
 
         await editMsg({ _id: id, name: 'ann', content: 'edited' });
 
-        const [target, doc] = update.mock.calls[0].arguments as [ObjectId, HydratedMsg];
+        const [target, doc] = update.mock.calls[0].arguments as [Types.ObjectId, HydratedMsg];
 
         assert.equal(target, id);
         assert.ok(!('_id' in doc));

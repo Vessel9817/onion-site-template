@@ -1,5 +1,5 @@
-import { ObjectId, type WithId } from 'mongodb';
-import mongoose, { type PipelineStage, Schema } from 'mongoose';
+import type { WithId } from 'mongodb';
+import mongoose, { Schema, type PipelineStage, type Types } from 'mongoose';
 import { dateNow } from '../utils/shims';
 
 export const MSG_PAGE_SIZE = 10;
@@ -42,7 +42,7 @@ function hydrateMsg(partialMsg: Msg): HydratedMsg {
  * @param id The record's `ObjectId`
  * @returns `true` if the record exists, `false` otherwise
  */
-export async function idExists(id: ObjectId): Promise<boolean> {
+export async function idExists(id: Types.ObjectId): Promise<boolean> {
     return (await MsgModel.findById(id)) != null;
 }
 
@@ -95,6 +95,6 @@ export async function editMsg(newMsg: WithId<Msg>): Promise<void> {
  * Deletes a record based on the given ObjectId
  * @param id The ObjectId of the record to delete
  */
-export async function deleteMsg(id: ObjectId): Promise<void> {
+export async function deleteMsg(id: Types.ObjectId): Promise<void> {
     await MsgModel.findByIdAndDelete(id).exec();
 }

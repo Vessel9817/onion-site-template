@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { ObjectId } from 'mongodb';
+import { Types } from 'mongoose';
 import { MsgBoard } from '../../db';
 
 /** Bidirectional overrides can make a name render as different text than it is */
@@ -32,12 +32,12 @@ const idValidator = body('id')
     .isHexadecimal()
     .withMessage('Invalid id')
     .bail()
-    .custom((rawId: string) => ObjectId.isValid(rawId))
+    .custom((rawId: string) => Types.ObjectId.isValid(rawId))
     .withMessage('Invalid id')
     .bail()
     // Id exists in database. A resolved promise always passes, so the check has to throw
     .custom(async (rawId: string) => {
-        const id = new ObjectId(rawId);
+        const id = new Types.ObjectId(rawId);
 
         if (!await MsgBoard.idExists(id)) {
             throw new Error('That message no longer exists');

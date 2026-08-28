@@ -1,6 +1,7 @@
 import { type Request, type RequestHandler, type Response } from 'express';
 import { validationResult } from 'express-validator';
-import { ObjectId, type WithId } from 'mongodb';
+import type { WithId } from 'mongodb';
+import { Types } from 'mongoose';
 import { MsgBoard } from '../db';
 import { MSG_PAGE_SIZE } from '../db/msgBoard';
 import { http } from '../utils';
@@ -149,7 +150,7 @@ export const editMsg: RequestHandler = async (req, res) => {
     }
 
     const newMsg: WithId<MsgBoard.Msg> = {
-        _id: new ObjectId(params.id),
+        _id: new Types.ObjectId(params.id),
         name: params.name,
         content: params.content
     };
@@ -176,7 +177,7 @@ export const deleteMsg: RequestHandler = async (req, res) => {
         return;
     }
 
-    const id = new ObjectId(params.id);
+    const id = new Types.ObjectId(params.id);
 
     await MsgBoard.deleteMsg(id);
 
