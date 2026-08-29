@@ -50,6 +50,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
         node-version: [24.x]
+        workspaces: ['.', './src/express', './src/license-report', './src/mongo']
     steps:
       - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
