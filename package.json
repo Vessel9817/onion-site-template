@@ -21,7 +21,7 @@
         "start:prod": "docker compose --profile production up -d grafana",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans",
-        "onionscan": "docker compose up -d onionscan-ui",
+        "onionscan": "docker compose up -d onionscan",
         "check-workspaces": "tsx ./src/workspaces",
         "tsc": "tsc -b",
         "markdownlint": "markdownlint-cli2",
