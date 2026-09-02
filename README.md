@@ -1,6 +1,7 @@
 # Onion Site Template
 
 [![CI][ci-badge]][ci-workflow]
+[![CodeQL][codeql-badge]][codeql-workflow]
 
 ## Compatibility
 
@@ -268,6 +269,8 @@ npm run eslint:fix
 
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
+[codeql-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml
+[codeql-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml/badge.svg
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
 [wtfjs]: https://github.com/denysdovhan/wtfjs
 [onionprobe]: https://gitlab.torproject.org/tpo/onion-services/onionprobe
