@@ -16,7 +16,7 @@
     "scripts": {
         "test": "npm test --workspaces --if-present",
         "start": "node --run=start:prod",
-        "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
+        "build": "docker compose --profile production --profile development --profile monitor --profile license-report --profile onionscan build",
         "build:pull": "node --run=build -- --pull",
         "start:prod": "docker compose --profile production up -d grafana",
         "start:dev": "docker compose --profile development up -d",
