@@ -197,7 +197,7 @@ jobs:
         with:
           version: ${{ env.DOCKER_COMPOSE_VERSION }}
       - name: Serve the onion
-        run: npm run smoke
+        run: npm run test:smoke
       - name: Collect logs
         if: failure()
         run: docker compose --profile production logs

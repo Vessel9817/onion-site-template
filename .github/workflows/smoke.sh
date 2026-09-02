@@ -4,7 +4,7 @@
 # through its own SOCKS port, so a healthy stack is the assertion.
 set -eu
 
-cd "$(dirname "$0")/../.."
+# Should be called from the project root
 
 TOR_COMPOSE='src/tor/docker-compose.yml'
 ONION='[a-z0-9]\{56\}\.onion'

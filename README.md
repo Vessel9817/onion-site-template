@@ -200,18 +200,17 @@ npm test --workspace=./src/express
 
 Separately, a smoke test builds the compose project, generates a throwaway
 onion address and waits for tor to confirm the site answers over it.
-It requires Docker and takes several minutes. Being a shell script, it runs
-on Linux, or under WSL on Windows:
+It may take several minutes.
+
+> [!WARNING]
+> Never run a smoke test on a configured deployment, always on a throwaway
+> checkout. This overwrites any secret with example credentials, so it refuses
+> to run once a configured `.env` file exists.
 
 ```shell
-npm run smoke
+npm run test:smoke
 docker compose --profile production down --volumes
 ```
-
-This replaces every file under the `secrets` directories with the example
-credentials, so it refuses to run once `src/express/secrets/.env` or
-`src/mongo/secrets/.env` exists.
-Run it on a throwaway checkout, never on a configured deployment.
 
 ### OnionScan
 
