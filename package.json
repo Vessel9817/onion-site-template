@@ -34,7 +34,8 @@
         "packages": [
             "./src/express",
             "./src/license-report",
-            "./src/mongo"
+            "./src/mongo",
+            "./src/workspaces"
         ]
     },
     "devDependencies": {
