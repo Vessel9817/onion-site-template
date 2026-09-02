@@ -146,11 +146,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: './package-lock.json'
+          cache-dependency-path: './src/workspaces/package-lock.json'
       - name: Install node modules
-        run: npm ci --no-fund
+        run: npm ci -w ./src/workspaces --no-fund
       - name: Check workspace lockfile synchronization
-        run: npm run check-workspaces
+        run: npm -w ./src/workspaces start
   # Runs unit and integration tests with coverage
   test:
     permissions:

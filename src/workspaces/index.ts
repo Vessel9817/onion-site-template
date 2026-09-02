@@ -77,7 +77,7 @@ function versionsOf(file: string): Map<string, Set<string>> {
  */
 function workspaceDirs(): string[] {
     const { workspaces } = read('package.json');
-    // pacakge.json accepts either a list of paths or an object holding one
+    // package.json accepts either a list of paths or an object holding one
     const listed = Array.isArray(workspaces)
         ? workspaces
         : asObject(workspaces, 'package.json workspaces').packages;
