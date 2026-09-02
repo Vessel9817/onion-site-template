@@ -230,6 +230,7 @@ services:
       service: onionprobe
     profiles:
       - production
+      - monitor
     environment:
       - ONIONPROBE_CONFIG=/project/config.yml
     volumes:
@@ -251,6 +252,7 @@ services:
       service: prometheus
     profiles:
       - production
+      - monitor
     depends_on:
       onionprobe:
         condition: service_started
@@ -279,6 +281,7 @@ services:
       service: grafana
     profiles:
       - production
+      - monitor
     depends_on:
       prometheus:
         condition: service_started

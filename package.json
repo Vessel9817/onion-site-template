@@ -16,26 +16,26 @@
     "scripts": {
         "test": "npm test --workspaces --if-present",
         "start": "node --run=start:prod",
-        "build": "docker compose --profile production --profile development --profile license-report --profile onionscan build",
+        "build": "docker compose --profile production --profile development --profile monitor --profile license-report --profile onionscan build",
         "build:pull": "node --run=build -- --pull",
         "start:prod": "docker compose --profile production up -d grafana",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans",
-        "onionscan": "docker compose up -d onionscan-ui",
-        "check-workspaces": "tsx ./src/workspaces",
+        "onionscan": "docker compose up -d onionscan",
         "tsc": "tsc -b",
         "markdownlint": "markdownlint-cli2",
         "eslint": "eslint . -c ./src/eslint/eslint.config.ts",
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report",
         "test:coverage": "npm run test:coverage --workspaces --if-present",
-        "smoke": "sh ./.github/workflows/smoke.sh"
+        "test:smoke": "sh ./.github/workflows/smoke.sh"
     },
     "workspaces": {
         "packages": [
             "./src/express",
             "./src/license-report",
-            "./src/mongo"
+            "./src/mongo",
+            "./src/workspaces"
         ]
     },
     "devDependencies": {

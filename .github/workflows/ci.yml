@@ -1,7 +1,7 @@
 name: CI
 
 # A fork's push runs in the fork, so its results are reported there rather
-# than on the pull request. Running on the merge commit reports them here.
+# than on the pull request. Running on a merge commit reports them here.
 on:
   push:
     branches: [main]
@@ -26,6 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          persist-credentials: false
           submodules: true
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
@@ -39,6 +40,8 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './src/**/package-lock.json'
       - name: Build Compose stack
         run: npm run build
   # Checks for dependency conflicts that `npm ci` would miss
@@ -53,12 +56,16 @@ jobs:
         workspace: ['.', './src/express', './src/license-report', './src/mongo']
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
       - name: Check dependency tree
-        run: cd ${{ matrix.workspace }} && npm i --package-lock-only --dry-run
+        run: cd '${{ matrix.workspace }}' && npm i --package-lock-only --dry-run
   # Runs a markdown linting check
   markdownlint:
     permissions:
@@ -70,6 +77,8 @@ jobs:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           config: .markdownlint-cli2.jsonc
@@ -84,10 +93,14 @@ jobs:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './package-lock.json'
       - name: Install node modules
         run: npm ci --no-fund
       - name: Run eslint
@@ -103,10 +116,14 @@ jobs:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './package-lock.json'
       - name: Install node modules
         run: npm ci --no-fund
       - name: Run tsc
@@ -122,14 +139,18 @@ jobs:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './src/workspaces/package-lock.json'
       - name: Install node modules
-        run: npm ci --no-fund
+        run: npm ci -w ./src/workspaces --no-fund
       - name: Check workspace lockfile synchronization
-        run: npm run check-workspaces
+        run: npm -w ./src/workspaces start
   # Runs unit and integration tests with coverage
   test:
     permissions:
@@ -141,10 +162,14 @@ jobs:
         node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './package-lock.json'
       - name: Install node modules
         run: npm ci --no-fund
       - name: Run tests
@@ -161,6 +186,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          persist-credentials: false
           submodules: true
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
@@ -171,7 +197,7 @@ jobs:
         with:
           version: ${{ env.DOCKER_COMPOSE_VERSION }}
       - name: Serve the onion
-        run: npm run smoke
+        run: npm run test:smoke
       - name: Collect logs
         if: failure()
         run: docker compose --profile production logs

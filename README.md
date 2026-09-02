@@ -1,6 +1,7 @@
 # Onion Site Template
 
 [![CI][ci-badge]][ci-workflow]
+[![CodeQL][codeql-badge]][codeql-workflow]
 
 ## Compatibility
 
@@ -200,18 +201,17 @@ npm test --workspace=./src/express
 
 Separately, a smoke test builds the compose project, generates a throwaway
 onion address and waits for tor to confirm the site answers over it.
-It requires Docker and takes several minutes. Being a shell script, it runs
-on Linux, or under WSL on Windows:
+It may take several minutes.
+
+> [!WARNING]
+> Never run a smoke test on a configured deployment, always on a throwaway
+> checkout. This overwrites any secret with example credentials, so it refuses
+> to run once a configured `.env` file exists.
 
 ```shell
-npm run smoke
+npm run test:smoke
 docker compose --profile production down --volumes
 ```
-
-This replaces every file under the `secrets` directories with the example
-credentials, so it refuses to run once `src/express/secrets/.env` or
-`src/mongo/secrets/.env` exists.
-Run it on a throwaway checkout, never on a configured deployment.
 
 ### OnionScan
 
@@ -269,6 +269,8 @@ npm run eslint:fix
 
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
+[codeql-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml
+[codeql-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml/badge.svg
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
 [wtfjs]: https://github.com/denysdovhan/wtfjs
 [onionprobe]: https://gitlab.torproject.org/tpo/onion-services/onionprobe

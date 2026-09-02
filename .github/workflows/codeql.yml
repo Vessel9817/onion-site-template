@@ -1,7 +1,7 @@
 name: CodeQL
 
 # A fork's push runs in the fork, so its results are reported there rather
-# than on the pull request. Analysing the merge commit reports them here.
+# than on the pull request. Running on a merge commit reports them here.
 on:
   push:
     branches: [main]
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: github/codeql-action/init@main
         with:
           languages: ${{ matrix.languages }}
