@@ -268,7 +268,7 @@ npm run eslint:fix
     we want to know.) It would be greatly appreciated if a minimal
     [CI workflow](./.github/workflows) were included for verification.
 
-[license-badge]: https://raw.githubusercontent.com/Vessel9817/onion-site-template/refs/heads/main/license.svg
+[license-badge]: https://raw.githubusercontent.com/Vessel9817/onion-site-template/refs/heads/main/badge.svg
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
 [ci-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml/badge.svg
 [codeql-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml
