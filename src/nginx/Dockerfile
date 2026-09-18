@@ -17,4 +17,4 @@ COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
 # Depends on PROXY_ADDRESS env var
 ENTRYPOINT [ "/project/entrypoint.sh" ]
-CMD [ "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]
+CMD [ "--deep", "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]
