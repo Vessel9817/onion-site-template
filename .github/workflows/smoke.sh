@@ -7,7 +7,6 @@ set -eu
 # Should be called from the project root
 
 TOR_COMPOSE='src/tor/docker-compose.yml'
-ONION='[a-z0-9]\{56\}\.onion'
 
 # Materialising the examples would destroy a configured deployment.
 for configured in src/express/secrets/.env src/mongo/secrets/.env; do
@@ -56,7 +55,4 @@ while :; do
 done
 
 docker compose -f "${TOR_COMPOSE}" down
-
-sed -i "s/${ONION}/${onion}/" src/onionprobe/config.yml
-
 docker compose --profile production up --wait --wait-timeout 900 tor
