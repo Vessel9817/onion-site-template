@@ -35,7 +35,6 @@ services:
     healthcheck:
       test: ['CMD', 'wget', '-q', '--spider', 'http://localhost']
       timeout: 5s
-    platform: linux/amd64
     volumes:
       # Overwriting default config without affecting other default files
       - type: bind
