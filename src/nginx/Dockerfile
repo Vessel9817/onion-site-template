@@ -5,7 +5,7 @@ FROM ${OPENRESTY_VERSION} AS openresty-gixy
 WORKDIR /project/
 
 # Installing Gixy
-COPY [ "./download-gixy.sh", "./" ]
+COPY --chmod="+x" [ "./download-gixy.sh", "./" ]
 
 ARG TARGETPLATFORM
 ARG TARGETOS
