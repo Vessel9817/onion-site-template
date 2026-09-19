@@ -88,7 +88,7 @@ services:
         condition: service_healthy
     secrets:
       - source: express
-        target: /project/secrets/
+        target: /project/secrets/.env
     networks:
       express:
         ipv4_address: 10.5.2.2
@@ -368,7 +368,7 @@ secrets:
   tor-hostname:
     file: ./src/tor/secrets/hostname
   express:
-    file: ./src/express/secrets/
+    file: ./src/express/secrets/.env
   mongo-config:
     file: ./src/mongo/secrets/.env
   mongo-keyfile:

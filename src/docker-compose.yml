@@ -30,7 +30,7 @@ services:
     # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
     stop_signal: SIGTERM
   mongo:
-    restart: unless-stopped
+    restart: always
     build:
       context: ./mongo
       dockerfile: ./Dockerfile
@@ -79,11 +79,11 @@ services:
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v3-distroless
-    restart: unless-stopped
+    restart: always
   grafana:
     container_name: grafana
     image: grafana/grafana-oss:13.0.1-security-01
-    restart: unless-stopped
+    restart: always
     environment:
       GF_ANALYTICS_REPORTING_ENABLED: false # No anonymous usage statistics
   onionscan:
@@ -125,8 +125,6 @@ configs:
 secrets:
   tor-hostname:
     file: ./tor/secrets/hostname
-  express:
-    file: ./express/secrets/
   mongo-config:
     file: ./mongo/secrets/.env
   mongo-keyfile:

@@ -179,6 +179,12 @@ Then, stop and start the website.
 In general, you should be able to omit the shutdown procedure,
 but some services may not function correctly.
 
+## Kubernetes
+
+Not officially supported. For translating Docker Compose configurations
+to Kubernetes, see the [Kompose docs][kompose]. Note that Docker Desktop
+comes with the required Kubernetes utilities.
+
 ## Maintenance
 
 ### Tests
@@ -274,6 +280,7 @@ npm run eslint:fix
 [codeql-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml
 [codeql-badge]: https://github.com/Vessel9817/onion-site-template/actions/workflows/codeql.yml/badge.svg
 [onionmine]: https://onionservices.torproject.org/apps/base/onionmine/
+[kompose]: https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/
 [wtfjs]: https://github.com/denysdovhan/wtfjs
 [onionprobe]: https://gitlab.torproject.org/tpo/onion-services/onionprobe
 [onionscan]: https://github.com/harr1424/onionscan
