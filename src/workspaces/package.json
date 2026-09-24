@@ -19,6 +19,6 @@
         "start": "tsx index.ts"
     },
     "devDependencies": {
-        "tsx": "^4.23.13"
+        "tsx": "^4.23.15"
     }
 }
