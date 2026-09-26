@@ -1,7 +1,5 @@
 import { type Request, type RequestHandler, type Response } from 'express';
 import { validationResult } from 'express-validator';
-import type { WithId } from 'mongodb';
-import { Types } from 'mongoose';
 import { MsgBoard } from '../db';
 import { MSG_PAGE_SIZE } from '../db/msgBoard';
 import { http } from '../utils';
@@ -49,7 +47,7 @@ async function renderBoard(req: Request, res: Response, rejected?: Rejected): Pr
     const page = getPage(req);
     const msgs = await MsgBoard.getMsgs(page);
     const formattedMsgs = msgs.map((e) => ({
-        id: e._id.toString(),
+        id: e.index,
         name: e.name,
         content: e.content,
         lastModified: new Date(e.lastModified).toLocaleString('en-US', {
@@ -149,13 +147,11 @@ export const editMsg: RequestHandler = async (req, res) => {
         return;
     }
 
-    const newMsg: WithId<MsgBoard.Msg> = {
-        _id: new Types.ObjectId(params.id),
+    await MsgBoard.editMsg({
+        index: params.id,
         name: params.name,
         content: params.content
-    };
-
-    await MsgBoard.editMsg(newMsg);
+    });
 
     redirect(res, '/chat');
 };
@@ -177,9 +173,7 @@ export const deleteMsg: RequestHandler = async (req, res) => {
         return;
     }
 
-    const id = new Types.ObjectId(params.id);
-
-    await MsgBoard.deleteMsg(id);
+    await MsgBoard.deleteMsg(params.id);
 
     redirect(res, '/chat');
 };

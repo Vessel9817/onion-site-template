@@ -4,7 +4,7 @@ import { after, before, describe, it, type TestContext } from 'node:test';
 import app from '../app';
 import { MsgModel } from '../db/msgBoard';
 import { http } from '../utils';
-import { stubAggregate } from './support';
+import { MSG_INDEX, stubAggregate } from './support';
 
 let server: Server;
 let base: string;
@@ -62,13 +62,22 @@ void describe('routes', () => {
         assert.match(await res.text(), /Not Found/);
     });
 
-    void it('renders stored messages', async (t: TestContext) => {
-        stubAggregate(t, [{ _id: 'id', name: 'ann', content: 'hello', lastModified: 0 }]);
+    void it('renders stored messages under their index, never the ObjectId', async (t: TestContext) => {
+        stubAggregate(t, [{
+            _id: '0123456789abcdef01234567',
+            index: MSG_INDEX,
+            name: 'ann',
+            content: 'hello',
+            lastModified: 0
+        }]);
 
         const res = await fetch(base + '/chat');
+        const body = await res.text();
 
         assert.equal(res.status, http.codes.OK);
-        assert.match(await res.text(), /hello/);
+        assert.match(body, /hello/);
+        assert.ok(body.includes(`name="id" value="${MSG_INDEX}"`));
+        assert.doesNotMatch(body, /0123456789abcdef01234567/);
     });
 
     void it('passes the requested page through to the query', async (t: TestContext) => {
@@ -103,12 +112,28 @@ void describe('routes', () => {
         assert.equal(insertOne.mock.callCount(), 1);
     });
 
-    void it('rejects a delete with a malformed id', async (t: TestContext) => {
+    void it('rejects a delete whose id is 32 characters but not hexadecimal', async (t: TestContext) => {
         stubAggregate(t, []);
+        const exists = t.mock.method(MsgModel, 'exists',
+            () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.exists>);
 
-        const res = await post('/chat/delete', { id: 'not-a-valid-object-id' });
+        const res = await post('/chat/delete', { id: 'g'.repeat(32) });
 
         assert.equal(res.status, http.codes.BAD_REQUEST);
+        assert.match(await res.text(), /Invalid id/);
+        assert.equal(exists.mock.callCount(), 0);
+    });
+
+    void it('rejects the 24 character id format the ObjectId had', async (t: TestContext) => {
+        stubAggregate(t, []);
+        const exists = t.mock.method(MsgModel, 'exists',
+            () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.exists>);
+
+        const res = await post('/chat/delete', { id: '0123456789abcdef01234567' });
+
+        assert.equal(res.status, http.codes.BAD_REQUEST);
+        assert.match(await res.text(), /Invalid id/);
+        assert.equal(exists.mock.callCount(), 0);
     });
 
     void it('shows a rejected message on the board with its input kept', async (t: TestContext) => {
@@ -126,14 +151,45 @@ void describe('routes', () => {
 
     void it('shows a rejected delete on the board', async (t: TestContext) => {
         stubAggregate(t, []);
-        t.mock.method(MsgModel, 'findById',
-            () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.findById>);
+        t.mock.method(MsgModel, 'exists',
+            () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.exists>);
 
-        const res = await post('/chat/delete', { id: '0123456789abcdef01234567' });
+        const res = await post('/chat/delete', { id: MSG_INDEX });
         const body = await res.text();
 
         assert.equal(res.status, http.codes.BAD_REQUEST);
         assert.match(body, /<p class="error" role="alert">That message no longer exists<\/p>/);
+    });
+
+    void it('deletes a message by the index the form carried', async (t: TestContext) => {
+        const exists = t.mock.method(MsgModel, 'exists',
+            () => Promise.resolve({ _id: 'x' }) as unknown as ReturnType<typeof MsgModel.exists>);
+        const deleteOne = t.mock.method(MsgModel, 'deleteOne', () => ({
+            exec: () => Promise.resolve({ acknowledged: true, deletedCount: 1 })
+        }) as unknown as ReturnType<typeof MsgModel.deleteOne>);
+
+        const res = await post('/chat/delete', { id: MSG_INDEX });
+
+        assert.equal(res.status, http.codes.SEE_OTHER);
+        assert.equal(res.headers.get('location'), '/chat');
+        assert.deepEqual(exists.mock.calls[0].arguments[0], { index: { $eq: MSG_INDEX } });
+        assert.deepEqual(deleteOne.mock.calls[0].arguments[0], { index: { $eq: MSG_INDEX } });
+    });
+
+    void it('edits a message by the index the form carried', async (t: TestContext) => {
+        t.mock.method(MsgModel, 'exists',
+            () => Promise.resolve({ _id: 'x' }) as unknown as ReturnType<typeof MsgModel.exists>);
+        const update = t.mock.method(MsgModel, 'findOneAndUpdate',
+            () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.findOneAndUpdate>);
+
+        const res = await post('/chat/edit', { id: MSG_INDEX, name: 'ann', content: 'edited' });
+
+        assert.equal(res.status, http.codes.SEE_OTHER);
+        assert.equal(res.headers.get('location'), '/chat');
+        const [filter, doc] = update.mock.calls[0].arguments as [unknown, { content: string }];
+        assert.deepEqual(filter, { index: { $eq: MSG_INDEX } });
+        assert.ok(!('index' in doc));
+        assert.equal(doc.content, 'edited');
     });
 
     void it('rejects a name or message that is only whitespace', async (t: TestContext) => {
@@ -219,7 +275,8 @@ void describe('routes', () => {
         const stages = aggregate.mock.calls[0]?.arguments[0] as { $skip?: number }[];
         const skip = stages.find((stage) => stage.$skip != null)?.$skip;
         assert.ok(skip != null && skip <= 2 ** 31 - 1);
-        assert.equal((aggregate.mock.calls[1]?.arguments[0] as unknown[]).length, 2);
+        const firstPage = aggregate.mock.calls[1]?.arguments[0] as { $skip?: number }[];
+        assert.ok(!firstPage.some((stage) => stage.$skip != null));
     });
 
     void it('constrains the compose form without scripts', async (t: TestContext) => {
