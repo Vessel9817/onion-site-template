@@ -23,8 +23,9 @@ openssl rand -base64 756 > src/mongo/secrets/keyFile.pem
 chmod 0400 src/mongo/secrets/keyFile.pem
 # mongod reads the keyfile as its own user, so the file takes that owner,
 # as the README asks. A container does the chown so no sudo is needed.
-docker run --rm -v "${PWD}/src/mongo/secrets/keyFile.pem:/keyFile.pem" \
-    mongo:8 chown 999:999 /keyFile.pem
+docker run --rm --user 0 --entrypoint chown \
+    -v "${PWD}/src/mongo/secrets/keyFile.pem:/keyFile.pem" \
+    mongodb/mongodb-community-server:8.3-ubi9-slim 999:999 /keyFile.pem
 
 # The root compose file mounts the hostname as a secret, so tor has to
 # generate one first. Tor chowns its bind-mounted directory to a uid this
