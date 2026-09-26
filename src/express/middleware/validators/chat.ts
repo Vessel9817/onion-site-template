@@ -1,5 +1,4 @@
 import { body } from 'express-validator';
-import { Types } from 'mongoose';
 import { MsgBoard } from '../../db';
 
 /** Bidirectional overrides can make a name render as different text than it is */
@@ -21,24 +20,19 @@ function normalizeNewlines(value: unknown): unknown {
 }
 
 const idValidator = body('id')
-    // Is stringified ObjectId (24 hexadecimal characters)
+    // Is a message's public index (32 hexadecimal characters)
     .isString()
     .withMessage('Invalid id')
     .bail()
     .trim()
-    .isLength({ min: 24, max: 24 })
+    .isLength({ min: 32, max: 32 })
     .withMessage('Invalid id')
     .bail()
     .isHexadecimal()
     .withMessage('Invalid id')
     .bail()
-    .custom((rawId: string) => Types.ObjectId.isValid(rawId))
-    .withMessage('Invalid id')
-    .bail()
     // Id exists in database. A resolved promise always passes, so the check has to throw
-    .custom(async (rawId: string) => {
-        const id = new Types.ObjectId(rawId);
-
+    .custom(async (id: string) => {
         if (!await MsgBoard.idExists(id)) {
             throw new Error('That message no longer exists');
         }
