@@ -20,7 +20,7 @@ function normalizeNewlines(value: unknown): unknown {
 }
 
 const idValidator = body('id')
-    // Is a message's public index (32 hexadecimal characters)
+    // Is a message's public index (32 lowercase hexadecimal characters)
     .isString()
     .withMessage('Invalid id')
     .bail()
@@ -28,7 +28,10 @@ const idValidator = body('id')
     .isLength({ min: 32, max: 32 })
     .withMessage('Invalid id')
     .bail()
-    .isHexadecimal()
+    .isLowercase()
+    .withMessage('Invalid id')
+    .bail()
+    .isBase64()
     .withMessage('Invalid id')
     .bail()
     // Id exists in database. A resolved promise always passes, so the check has to throw

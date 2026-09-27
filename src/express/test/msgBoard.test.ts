@@ -32,7 +32,7 @@ void describe('msgBoard', () => {
         assert.ok(doc.lastModified >= earliest);
     });
 
-    void it('gives each new message its own 32 character hex index', async (t: TestContext) => {
+    void it('gives each new message its own 32 character lowercase hex index', async (t: TestContext) => {
         const insertOne = t.mock.method(MsgModel, 'insertOne',
             () => Promise.resolve() as unknown as ReturnType<typeof MsgModel.insertOne>);
 

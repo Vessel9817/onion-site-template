@@ -112,7 +112,7 @@ void describe('routes', () => {
         assert.equal(insertOne.mock.callCount(), 1);
     });
 
-    void it('rejects a delete whose id is 32 characters but not hexadecimal', async (t: TestContext) => {
+    void it('rejects a delete whose id is not hexadecimal', async (t: TestContext) => {
         stubAggregate(t, []);
         const exists = t.mock.method(MsgModel, 'exists',
             () => Promise.resolve(null) as unknown as ReturnType<typeof MsgModel.exists>);
