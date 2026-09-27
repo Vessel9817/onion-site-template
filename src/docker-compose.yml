@@ -27,8 +27,6 @@ services:
       target: init
     # Doesn't affect /proc/sys/vm/swappiness
     mem_swappiness: 1
-    # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
-    stop_signal: SIGTERM
   mongo:
     restart: always
     build:
@@ -37,8 +35,6 @@ services:
       target: run
     # Doesn't affect /proc/sys/vm/swappiness
     mem_swappiness: 1
-    # https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
-    stop_signal: SIGTERM
     # mongod takes 15 s to shut down after SIGTERM
     stop_grace_period: 30s
     configs:

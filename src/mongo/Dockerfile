@@ -44,6 +44,8 @@ COPY --link [ "./diagnose.js", "./" ]
 COPY --link [ "./src/init.js", "./src/root.js", "./src/" ]
 COPY --link --chmod=+x [ "./index.sh", "./diagnose.sh", "./" ]
 
+# https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#stop-mongod-processes
+STOPSIGNAL SIGTERM
 # 999:999 corresponds to user mongodb
 USER 999:999
 ENTRYPOINT [ "/project/index.sh" ]
