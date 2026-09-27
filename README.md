@@ -208,16 +208,21 @@ npm test --workspace=./src/express
 
 Separately, a smoke test builds the compose project, generates a throwaway
 onion address and waits for tor to confirm the site answers over it.
-It may take several minutes.
+Tor joins only a private Tor network that the test starts in a container,
+so the address is never published. It may take several minutes.
 
 > [!WARNING]
 > Never run a smoke test on a configured deployment, always on a throwaway
 > checkout. This overwrites any secret with example credentials, so it refuses
-> to run once a configured `.env` file exists.
+> to run once a configured `.env` file exists, or while any container or
+> network of the `website` compose project exists. The second command below
+> removes the containers, networks and volumes a smoke test leaves behind,
+> and would delete a deployment's volumes just the same.
 
 ```shell
 npm run test:smoke
-docker compose --profile production down --volumes
+docker compose --profile production -f docker-compose.yml \
+    -f .github/smoke/testnet.yml down --volumes
 ```
 
 ### OnionScan

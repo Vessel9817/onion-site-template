@@ -200,4 +200,6 @@ jobs:
         run: npm run test:smoke
       - name: Collect logs
         if: failure()
-        run: docker compose --profile production logs
+        run: >-
+          docker compose --profile production -f docker-compose.yml
+          -f .github/smoke/testnet.yml logs
