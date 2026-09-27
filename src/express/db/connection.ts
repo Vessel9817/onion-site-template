@@ -34,11 +34,3 @@ export async function connect(
         setTimeout(() => void connect(uri, retryMs), retryMs);
     }
 }
-
-/**
- * Reconnects whenever the database drops the connection
- * @param uri The connection string
- */
-export function reconnectOnDisconnect(uri: string): void {
-    mongoose.connection.on('disconnected', () => void connect(uri));
-}
