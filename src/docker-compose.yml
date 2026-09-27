@@ -83,7 +83,11 @@ services:
     image: grafana/grafana-oss:13.0.1-security-01
     restart: always
     environment:
-      GF_ANALYTICS_REPORTING_ENABLED: false # No anonymous usage statistics
+      # No anonymous usage statistics
+      GF_ANALYTICS_REPORTING_ENABLED: false
+      # Mitigate network discovery
+      GF_AUTH_ANONYMOUS_HIDE_VERSION: true
+      GF_METRICS_ENABLED: false
   onionscan:
     container_name: onionscan
     restart: on-failure
