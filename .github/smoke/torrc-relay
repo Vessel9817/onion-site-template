@@ -1,0 +1,16 @@
+# Configuring every node of the smoke test's private Tor network
+
+# Allowing private addresses and trusting only the authorities testnet.sh lists
+TestingTorNetwork 1
+%include /smoke/tn/dirauth
+
+# Publishing at once, with no reachability test and no DNS lookup for IPv6
+AssumeReachable 1
+AddressDisableIPv6 1
+
+# Relaying only: no traffic exits the network and no node opens a SOCKS port
+ExitRelay 0
+SocksPort 0
+
+# Using one worker thread; one per CPU let a node's diff cache pass 500 MB
+NumCPUs 1
