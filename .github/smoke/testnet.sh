@@ -39,7 +39,7 @@ fingerprint() {
         awk -v nick="$1" '$1 == nick { $1 = ""; gsub(/ /, ""); print }'
 }
 
-for n in 1 2 3 4; do
+for n in $(seq 1 4); do
     mkdir -p "${tn}/a${n}/keys"
     chmod 700 "${tn}/a${n}"
     # Certifying the address and DirPort the authority serves on
@@ -57,7 +57,7 @@ done
 {
     date +%s
 
-    for n in 1 2 3 4 5 6 7 8; do
+    for n in $(seq 1 8); do
         mkdir -p "${tn}/r${n}"
         chmod 700 "${tn}/r${n}"
         echo "node_id=\$$(fingerprint "r${n}") bw=4096"
@@ -67,14 +67,14 @@ done
 # Prefixing each node's lines with its nickname; $! is sed, which ends with tor
 pids=''
 
-for n in 1 2 3 4; do
+for n in $(seq 1 4); do
     tor -f "${conf}/torrc-authority" DataDirectory "${tn}/a${n}" \
         Nickname "a${n}" Address "${addr}" ORPort "${addr}:500${n}" \
         DirPort "${addr}:700${n}" 2>&1 | sed -u "s/^/a${n} /" &
     pids="${pids} $!"
 done
 
-for n in 1 2 3 4 5 6 7 8; do
+for n in $(seq 1 8); do
     tor -f "${conf}/torrc-relay" DataDirectory "${tn}/r${n}" \
         Nickname "r${n}" Address "${addr}" ORPort "${addr}:510${n}" 2>&1 |
         sed -u "s/^/r${n} /" &
@@ -105,4 +105,5 @@ cp "${tn}/dirauth" "${shared}/torrc-defaults.tmp"
 mv "${shared}/torrc-defaults.tmp" "${shared}/torrc-defaults"
 echo 'testnet: the consensus lists 8 relays vanguards can use'
 
+# Keep network container running
 wait
