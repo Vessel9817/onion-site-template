@@ -14,6 +14,3 @@ SocksPort 0
 
 # Using one worker thread; one per CPU let a node's diff cache pass 500 MB
 NumCPUs 1
-
-# Reducing privileges
-User debian-tor
