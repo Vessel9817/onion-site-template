@@ -20,3 +20,6 @@ AuthDirVoteStableGuaranteeMinUptime 0
 
 # Reading bandwidths from testnet.sh's file, so every relay is Fast at once
 V3BandwidthsFile /smoke/tn/bandwidth
+
+# Reducing privileges
+User debian-tor
