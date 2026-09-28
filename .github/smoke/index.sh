@@ -10,7 +10,6 @@ set -eu
 TOR_NETWORK='website_tor'
 NGINX_NETWORK='website_nginx'
 TOR_COMPOSE='src/tor/docker-compose.yml'
-HOSTNAME_COMPOSE='.github/smoke/hostname.yml'
 TESTNET_COMPOSE='.github/smoke/testnet.yml'
 
 # Materialising the examples would destroy a configured deployment.
@@ -62,13 +61,13 @@ internal() {
 # The root compose file mounts the hostname as a secret, so tor has to
 # generate one first. Tor chowns its bind-mounted directory to a uid this
 # shell does not have, so the hostname is read from inside the container.
-docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" up -d
+docker compose -f "${TOR_COMPOSE}" up -d
 internal "${TOR_NETWORK}"
 
 waited=0
 
 while :; do
-    if onion=$(docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" \
+    if onion=$(docker compose -f "${TOR_COMPOSE}" \
         exec -T tor cat /var/lib/tor/website/hostname 2>/dev/null); then
         onion=$(printf '%s' "${onion}" | tr -d '[:space:]')
 
@@ -81,14 +80,14 @@ while :; do
 
     if [ "${waited}" -ge 10 ]; then
         echo 'tor produced no hostname' >&2
-        docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" logs tor >&2
+        docker compose -f "${TOR_COMPOSE}" logs tor >&2
         exit 1
     fi
 
     sleep 1
 done
 
-docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" down
+docker compose -f "${TOR_COMPOSE}" down
 
 # Starting the private Tor network after the down above, while images build
 docker compose -f docker-compose.yml -f "${TESTNET_COMPOSE}" up -d testnet

@@ -1,9 +1,0 @@
-# Overriding src/tor/docker-compose.yml in the smoke test: no relative paths
-services:
-  tor:
-    # Writing the onion keys and hostname without opening a connection
-    command: ['DisableNetwork', '1']
-networks:
-  tor:
-    # Giving the network no route off the host while tor makes its keys
-    internal: true
