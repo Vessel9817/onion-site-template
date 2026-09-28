@@ -40,10 +40,6 @@ services:
       'TestingTorNetwork', '1'
     ]
     volumes:
-      - type: bind
-        source: ./src/tor/torrc
-        target: /etc/tor/torrc
-        read_only: true
       - type: volume
         source: testnet
         target: /smoke/shared/

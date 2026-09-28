@@ -114,7 +114,7 @@ If you don't have an onion domain, run the following in the project directory
 to generate one:
 
 ```shell
-docker compose -f ./src/tor/docker-compose.yml run --rm tor
+docker compose -f ./src/tor/docker-compose.yml run --rm tor DisableNetwork 1
 ```
 
 Then, wait a couple seconds for `src/tor/secrets` to be populated. In more
@@ -125,11 +125,11 @@ formal terms, terminate the process once you see the following output:
 ```
 
 At this point, the credentials have been generated, so it's safe to shutdown.
-The container is attempting to connect to the tor network, but it will never
-succeed, as it doesn't have internet access:
+`DisableNetwork` keeps tor from connecting to the tor network, and the
+container has no internet access either:
 
 ```log
-Tor daemon connection failed: [Errno 111] Connection refused. Trying again...
+[notice] Delaying directory fetches: DisableNetwork is set.
 ```
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],

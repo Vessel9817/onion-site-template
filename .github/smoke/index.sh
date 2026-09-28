@@ -61,14 +61,15 @@ internal() {
 # The root compose file mounts the hostname as a secret, so tor has to
 # generate one first. Tor chowns its bind-mounted directory to a uid this
 # shell does not have, so the hostname is read from inside the container.
-docker compose -f "${TOR_COMPOSE}" up -d
+# DisableNetwork writes the keys without tor opening a connection.
+keygen=$(docker compose -f "${TOR_COMPOSE}" run -d tor DisableNetwork 1)
 internal "${TOR_NETWORK}"
 
 waited=0
 
 while :; do
-    if onion=$(docker compose -f "${TOR_COMPOSE}" \
-        exec -T tor cat /var/lib/tor/website/hostname 2>/dev/null); then
+    if onion=$(docker exec "${keygen}" \
+        cat /var/lib/tor/website/hostname 2>/dev/null); then
         onion=$(printf '%s' "${onion}" | tr -d '[:space:]')
 
         if [ -n "${onion}" ]; then
@@ -80,13 +81,14 @@ while :; do
 
     if [ "${waited}" -ge 10 ]; then
         echo 'tor produced no hostname' >&2
-        docker compose -f "${TOR_COMPOSE}" logs tor >&2
+        docker logs "${keygen}" >&2
         exit 1
     fi
 
     sleep 1
 done
 
+docker rm -f "${keygen}" > /dev/null
 docker compose -f "${TOR_COMPOSE}" down
 
 # Starting the private Tor network after the down above, while images build
