@@ -4,15 +4,10 @@ services:
     extends:
       file: ../docker-compose.yml
       service: tor
-    command: [
-      '--ignore-missing-torrc',
-      '--defaults-torrc', '/nonexistent/torrc-defaults',
-      'HiddenServiceDir', '/var/lib/tor/website/',
-      'HiddenServicePort', '80 10.5.0.2:80', # Dummy info
-      'DataDirectory', '/var/lib/tor/data/',
-      'DisableNetwork', '1'
-    ]
     volumes:
+      - type: bind
+        source: ./torrc
+        target: /etc/tor/torrc
       # Path defined by torrc
       - type: bind
         source: ./secrets/
@@ -22,7 +17,6 @@ services:
         ipv4_address: 10.5.3.2
 networks:
   tor:
-    internal: true
     ipam:
       config:
         - subnet: 10.5.3.0/24

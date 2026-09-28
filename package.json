@@ -28,8 +28,7 @@
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report",
         "test:coverage": "npm run test:coverage --workspaces --if-present",
-        "test:smoke:start": "sh ./.github/smoke/index.sh",
-        "test:smoke:stop": "docker compose --profile production -f docker-compose.yml -f .github/smoke/testnet.yml down --volumes"
+        "test:smoke": "sh ./.github/workflows/smoke.sh"
     },
     "workspaces": {
         "packages": [
