@@ -126,11 +126,7 @@ formal terms, terminate the process once you see the following output:
 
 At this point, the credentials have been generated, so it's safe to shutdown.
 `DisableNetwork` keeps tor from connecting to the tor network, and the
-container has no internet access either:
-
-```log
-[notice] Delaying directory fetches: DisableNetwork is set.
-```
+container has no internet access regardless.
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in
