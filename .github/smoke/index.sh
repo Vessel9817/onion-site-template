@@ -62,7 +62,12 @@ internal() {
 # generate one first. Tor chowns its bind-mounted directory to a uid this
 # shell does not have, so the hostname is read from inside the container.
 # DisableNetwork writes the keys without tor opening a connection.
-keygen=$(docker compose -f "${TOR_COMPOSE}" run -d tor DisableNetwork 1)
+# The container is named, since run prints any image build to stdout too.
+keygen='tor-keygen'
+# Removing it however the script ends; the stop script can't see it
+trap 'docker rm -f "${keygen}" > /dev/null 2>&1' EXIT
+docker compose -f "${TOR_COMPOSE}" run -d --name "${keygen}" \
+    tor DisableNetwork 1 >&2
 internal "${TOR_NETWORK}"
 
 waited=0
