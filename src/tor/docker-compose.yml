@@ -17,6 +17,7 @@ services:
         ipv4_address: 10.5.3.2
 networks:
   tor:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.3.0/24
