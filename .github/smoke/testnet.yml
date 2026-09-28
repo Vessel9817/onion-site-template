@@ -1,6 +1,7 @@
 # Overriding docker-compose.yml in the smoke test: paths start at the repo root
 services:
   testnet:
+    container_name: local_tor_network
     # Reusing the image the tor service builds, never pulling one
     image: website-tor
     pull_policy: never
@@ -17,6 +18,10 @@ services:
       # Staying healthy through 5 minutes of failed checks from a busy authority
       retries: 30
     volumes:
+      - type: bind
+        source: ./torrc
+        target: /etc/tor/torrc
+        read_only: true
       - type: bind
         source: ./.github/smoke/
         target: /smoke/conf/
