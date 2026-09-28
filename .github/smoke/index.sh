@@ -7,6 +7,8 @@ set -eu
 
 # Should be called from the project root
 
+TOR_NETWORK='website_tor'
+NGINX_NETWORK='website_nginx'
 TOR_COMPOSE='src/tor/docker-compose.yml'
 HOSTNAME_COMPOSE='.github/smoke/hostname.yml'
 TESTNET_COMPOSE='.github/smoke/testnet.yml'
@@ -61,7 +63,7 @@ internal() {
 # generate one first. Tor chowns its bind-mounted directory to a uid this
 # shell does not have, so the hostname is read from inside the container.
 docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" up -d
-internal website_tor
+internal "${TOR_NETWORK}"
 
 waited=0
 
@@ -90,10 +92,10 @@ docker compose -f "${TOR_COMPOSE}" -f "${HOSTNAME_COMPOSE}" down
 
 # Starting the private Tor network after the down above, while images build
 docker compose -f docker-compose.yml -f "${TESTNET_COMPOSE}" up -d testnet
-internal website_tor
+internal "${TOR_NETWORK}"
 docker compose --profile production -f docker-compose.yml \
     -f "${TESTNET_COMPOSE}" up --wait --wait-timeout 900 tor
-internal website_nginx
+internal "${NGINX_NETWORK}"
 
 # Waiting for vanguards' state file, which it writes once it has picked layers
 deadline=$(($(date +%s) + 60))
