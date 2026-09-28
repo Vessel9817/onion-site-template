@@ -114,15 +114,30 @@ If you don't have an onion domain, run the following in the project directory
 to generate one:
 
 ```shell
-docker compose -f ./src/tor/docker-compose.yml up -d
-docker compose -f ./src/tor/docker-compose.yml down
+docker compose -f ./src/tor/docker-compose.yml run --rm tor
+```
+
+Then, wait a couple seconds for `src/tor/secrets` to be populated. In more
+formal terms, terminate the process once you see the following output:
+
+```log
+[notice] Bootstrapped 0% (starting): Starting
+```
+
+At this point, the credentials have been generated, so it's safe to shutdown.
+The container is attempting to connect to the tor network, but it will never
+succeed, as it doesn't have internet access:
+
+```log
+Tor daemon connection failed: [Errno 111] Connection refused. Trying again...
 ```
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in
-[`src/tor/secrets/`](./src/tor/secrets).
-If you don't, one will automatically be generated for you in the aforementioned
-directory. Your website domain will be found in `src/tor/secrets/hostname`,
+[`src/tor/secrets/`](./src/tor/secrets). If you don't, one will automatically
+be generated for you in the aforementioned directory.
+
+Your website domain will be found in `src/tor/secrets/hostname`,
 abiding by the following regex: (Onion v3 address)
 
 `[a-z0-9]{56}\.onion`
