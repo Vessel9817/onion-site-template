@@ -41,7 +41,7 @@ services:
     ]
     volumes:
       - type: bind
-        source: ./torrc
+        source: ./src/tor/torrc
         target: /etc/tor/torrc
         read_only: true
       - type: volume
