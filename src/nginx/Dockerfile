@@ -1,5 +1,6 @@
 ARG OPENRESTY_VERSION=openresty/openresty:noble
 
+# Ran as root to read secrets on startup
 FROM ${OPENRESTY_VERSION} AS openresty-gixy
 
 WORKDIR /project/
