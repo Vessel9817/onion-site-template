@@ -197,7 +197,7 @@ jobs:
         with:
           version: ${{ env.DOCKER_COMPOSE_VERSION }}
       - name: Serve the onion
-        run: npm run test:smoke
+        run: npm run test:smoke:start
       - name: Collect logs
         if: failure()
         run: >-

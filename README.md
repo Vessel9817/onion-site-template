@@ -220,9 +220,11 @@ so the address is never published. It may take several minutes.
 > and would delete a deployment's volumes just the same.
 
 ```shell
-npm run test:smoke
-docker compose --profile production -f docker-compose.yml \
-    -f .github/smoke/testnet.yml down --volumes
+npm run test:smoke:start
+
+# If successful, do some stuff on the test network
+
+npm run test:smoke:stop
 ```
 
 ### OnionScan
