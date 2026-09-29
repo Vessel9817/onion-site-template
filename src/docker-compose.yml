@@ -88,6 +88,10 @@ services:
       # Mitigate network discovery
       GF_AUTH_ANONYMOUS_HIDE_VERSION: true
       GF_METRICS_ENABLED: false
+      # Disable pings to grafana.com
+      GF_ANALYTICS_CHECK_FOR_UPDATES: false
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: false
+      GF_PLUGINS_PREINSTALL_DISABLED: true
   onionscan:
     container_name: onionscan
     restart: on-failure
