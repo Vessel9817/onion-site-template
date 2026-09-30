@@ -3,12 +3,14 @@
 services:
   tor:
     container_name: tor
+    restart: always
     build:
       context: ./tor
       dockerfile: ./Dockerfile
       target: run
   nginx:
     container_name: nginx
+    restart: always
     build:
       context: ./nginx
       dockerfile: ./Dockerfile
