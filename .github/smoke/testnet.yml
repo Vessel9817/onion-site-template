@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-go/master/schema/compose-spec.json
+
+# Overriding docker-compose.yml in the smoke test: paths start at the repo root
+services:
+  testnet:
+    container_name: local_tor_network
+    # Reusing the image the tor service builds, never pulling one
+    image: website-tor
+    pull_policy: never
+    # Stopping the tor processes at once on down
+    init: true
+    entrypoint: ['/bin/sh', '/smoke/conf/testnet.sh']
+    healthcheck:
+      # Passing once the DirAuthority lines are out and 8 relays are usable
+      test: ['CMD', 'sh', '/smoke/conf/testnet.sh', 'check']
+      interval: 10s
+      timeout: 10s
+      start_period: 300s
+      start_interval: 2s
+      # Staying healthy through 5 minutes of failed checks from a busy authority
+      retries: 30
+    volumes:
+      - type: bind
+        source: ./.github/smoke/
+        target: /smoke/conf/
+        read_only: true
+      - type: volume
+        source: testnet
+        target: /smoke/shared/
+    environment:
+      - TESTNET_ADDRESS=10.5.3.200
+    networks:
+      tor:
+        ipv4_address: 10.5.3.200
+  tor:
+    depends_on:
+      testnet:
+        condition: service_healthy
+    # Failing closed on a missing file, as TestingTorNetwork needs DirAuthority
+    command: [
+      '--defaults-torrc', '/smoke/shared/torrc-defaults',
+      'TestingTorNetwork', '1'
+    ]
+    volumes:
+      - type: volume
+        source: testnet
+        target: /smoke/shared/
+        read_only: true
+# Giving both networks tor joins no route off the host
+networks:
+  tor:
+    internal: true
+  nginx:
+    internal: true
+volumes:
+  testnet:

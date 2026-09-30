@@ -1,4 +1,5 @@
 {
+    "$schema": "https://www.schemastore.org/package.json",
     "name": "website_",
     "version": "0.0.0",
     "private": true,
@@ -16,6 +17,7 @@
     "scripts": {
         "test": "npm test --workspaces --if-present",
         "start": "node --run=start:prod",
+        "generate-onion": "docker compose -f ./src/tor/docker-compose.yml run -e DISABLE_VANGUARDS=1 --rm tor DisableNetwork 1",
         "build": "docker compose --profile production --profile development --profile monitor --profile license-report --profile onionscan build",
         "build:pull": "node --run=build -- --pull",
         "start:prod": "docker compose --profile production up -d grafana",
@@ -28,7 +30,8 @@
         "eslint:fix": "node --run=eslint -- --fix",
         "license-report": "docker compose run --rm license-report",
         "test:coverage": "npm run test:coverage --workspaces --if-present",
-        "test:smoke": "sh ./.github/workflows/smoke.sh"
+        "test:smoke:start": "sh ./.github/smoke/index.sh",
+        "test:smoke:stop": "docker compose --profile production -f docker-compose.yml -f .github/smoke/testnet.yml down --volumes"
     },
     "workspaces": {
         "packages": [
@@ -42,7 +45,7 @@
         "@eslint/js": "^10.0.1",
         "@eslint/json": "^2.1.0",
         "@stylistic/eslint-plugin": "^5.10.0",
-        "@types/node": "^26.6.2",
+        "@types/node": "^26.6.3",
         "@typescript/native": "npm:typescript@^7.0.2",
         "eslint": "^10.11.0",
         "eslint-import-resolver-typescript": "^4.4.5",
