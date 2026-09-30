@@ -1,4 +1,5 @@
 {
+    "$schema": "https://www.schemastore.org/license-report-config.json",
     "package": "./package.json",
     "fields": [
         "name",

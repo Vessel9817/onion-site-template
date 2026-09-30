@@ -31,6 +31,7 @@ export async function connect(
         const name = err instanceof Error ? err.name : 'unknown error';
 
         console.error(`Database connection failed (${name}), retrying`);
+        // The driver has already closed the failed client's connections
         setTimeout(() => void connect(uri, retryMs), retryMs);
     }
 }
