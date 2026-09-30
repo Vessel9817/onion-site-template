@@ -31,7 +31,8 @@ export async function connect(
         const name = err instanceof Error ? err.name : 'unknown error';
 
         console.error(`Database connection failed (${name}), retrying`);
-        // The driver has already closed the failed client's connections
+        // Mongoose can fail after the driver connected, as on a '.' in the database name
+        await mongoose.connection.close().catch(() => undefined);
         setTimeout(() => void connect(uri, retryMs), retryMs);
     }
 }

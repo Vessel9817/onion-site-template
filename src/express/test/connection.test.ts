@@ -16,4 +16,17 @@ void describe('connection', () => {
         assert.equal(dial.mock.callCount(), 1);
         assert.equal(dial.mock.calls[0].arguments[0], URI);
     });
+
+    void it('closes the connection after a failed attempt, then retries', async (t: TestContext) => {
+        t.mock.timers.enable({ apis: ['setTimeout'] });
+        t.mock.method(console, 'error', () => undefined);
+        t.mock.method(mongoose, 'connect', () => Promise.reject(new Error('refused')));
+        const close = t.mock.method(mongoose.connection, 'close', () => Promise.resolve(mongoose.connection));
+        const retry = t.mock.method(globalThis, 'setTimeout');
+
+        await connect(URI, 1000);
+
+        assert.equal(close.mock.callCount(), 1);
+        assert.equal(retry.mock.callCount(), 1);
+    });
 });
