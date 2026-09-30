@@ -58,19 +58,6 @@ services:
         target: /run/secrets/express/username.txt
       - source: mongo-password
         target: /run/secrets/express/password.txt
-  mongo-debug:
-    container_name: mongo-debug
-    restart: on-failure
-    image: mongo-express@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64
-    secrets:
-      - source: mongo-root-username
-        target: /run/secrets/root/username.txt
-      - source: mongo-root-password
-        target: /run/secrets/root/password.txt
-      - source: mongo-dev-username
-        target: /run/secrets/dev/username.txt
-      - source: mongo-dev-password
-        target: /run/secrets/dev/password.txt
   onionprobe:
     container_name: onionprobe
     build:
@@ -145,7 +132,3 @@ secrets:
     file: ./mongo/secrets/express/username.txt
   mongo-password:
     file: ./mongo/secrets/express/password.txt
-  mongo-dev-username:
-    file: ./mongo/secrets/dev/username.txt
-  mongo-dev-password:
-    file: ./mongo/secrets/dev/password.txt
