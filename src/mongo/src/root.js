@@ -23,8 +23,9 @@ const passwordFile = process.env.ROOT_PASSWORD_FILE ?? '/run/secrets/root/passwo
 assert.ok(fs.existsSync(usernameFile), `Admin username file doesn't exist: ${usernameFile}`);
 assert.ok(fs.existsSync(passwordFile), `Admin password file doesn't exist: ${passwordFile}`);
 
-const username = fs.readFileSync(usernameFile).toString();
-const password = fs.readFileSync(passwordFile).toString();
+// Editors end a file with a newline, which would become part of the credential
+const username = fs.readFileSync(usernameFile).toString().trim();
+const password = fs.readFileSync(passwordFile).toString().trim();
 
 assert.ok(username, 'Admin username is missing');
 assert.ok(password, 'Admin password is missing');
