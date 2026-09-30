@@ -16,6 +16,7 @@
     "scripts": {
         "test": "npm test --workspaces --if-present",
         "start": "node --run=start:prod",
+        "generate-onion": "docker compose -f ./src/tor/docker-compose.yml run -e DISABLE_VANGUARDS=1 --rm tor DisableNetwork 1",
         "build": "docker compose --profile production --profile development --profile monitor --profile license-report --profile onionscan build",
         "build:pull": "node --run=build -- --pull",
         "start:prod": "docker compose --profile production up -d grafana",

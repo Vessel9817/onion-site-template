@@ -114,7 +114,7 @@ stat -c %u:%g ./src/mongo/secrets/keyFile.pem # Should print 999:999
 project root to generate one:
 
 ```shell
-docker compose -f ./src/tor/docker-compose.yml run -e DISABLE_VANGUARDS=1 --rm tor DisableNetwork 1
+npm run generate-onion
 ```
 
 Then, [`src/tor/secrets/`](./src/tor/secrets) should be populated almost
