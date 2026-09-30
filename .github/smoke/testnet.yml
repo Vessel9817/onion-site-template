@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-go/master/schema/compose-spec.json
+
 # Overriding docker-compose.yml in the smoke test: paths start at the repo root
 services:
   testnet:
