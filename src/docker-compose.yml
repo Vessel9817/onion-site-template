@@ -15,7 +15,7 @@ services:
       target: openresty-gixy
   express:
     container_name: express
-    restart: on-failure
+    restart: always
     # Longer than the 8 s express gives itself to stop
     stop_grace_period: 10s
     build:
