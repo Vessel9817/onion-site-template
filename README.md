@@ -110,34 +110,30 @@ stat -c %u:%g ./src/mongo/secrets/keyFile.pem # Should print 999:999
 
 #### tor
 
-If you don't have an onion domain, run the following in the project directory
-to generate one:
+**If you don't have an onion domain**, run the following command in the
+project root to generate one:
 
 ```shell
 docker compose -f ./src/tor/docker-compose.yml run --rm tor DisableNetwork 1
 ```
 
-Then, wait a couple seconds for `src/tor/secrets` to be populated. In more
-formal terms, terminate the process once you see the following output:
+Then, wait a couple seconds for [`src/tor/secrets/`](./src/tor/secrets) to be
+populated. In more formal terms, terminate the process once you see the
+following output:
 
 ```log
 [notice] Bootstrapped 0% (starting): Starting
 ```
 
-At this point, the credentials have been generated, so it's safe to shutdown.
-`DisableNetwork` keeps tor from connecting to the tor network, and the
-container has no internet access regardless.
+From here, the container will attempt to publish your website to the tor
+network. It will fail indefinitely. At this point, the credentials have been
+generated, so it's safe to shut it down.
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in
-[`src/tor/secrets/`](./src/tor/secrets). If you don't, one will automatically
-be generated for you in the aforementioned directory.
+[`src/tor/secrets/`](./src/tor/secrets) instead.
 
-Your website domain will be found in `src/tor/secrets/hostname`,
-abiding by the following regex: (Onion v3 address)
-
-`[a-z0-9]{56}\.onion`
-
+Your website domain will be found in `src/tor/secrets/hostname`.
 This domain should also be specified in `src/onionprobe/config.yml`
 where the placeholder onion address is present.
 
@@ -146,7 +142,7 @@ where the placeholder onion address is present.
 ### Production
 
 For production mode, run **one** of the following equivalent commands
-in the project directory:
+in the project root:
 
 ```shell
 npm start
@@ -157,7 +153,7 @@ npm run start:prod
 ### Development
 
 To attach all debugging containers intended for development-only use,
-run the following command in the project directory:
+run the following command in the project root:
 
 ```shell
 npm run start:dev
@@ -169,7 +165,7 @@ as they collectively depend on all production containers unrelated to tor.
 ### Shutdown
 
 To stop the website, run **one** of the following equivalent commands
-in the project directory:
+in the project root:
 
 ```shell
 npm stop
@@ -178,7 +174,7 @@ npm run stop
 
 ### Updating
 
-To update the website, run the following command in the project directory:
+To update the website, run the following command in the project root:
 
 ```shell
 # Pull base images and build compose project
