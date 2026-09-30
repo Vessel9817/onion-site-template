@@ -66,8 +66,8 @@ internal() {
 keygen='tor-keygen'
 # Removing it however the script ends; the stop script can't see it
 trap 'docker rm -f "${keygen}" > /dev/null 2>&1' EXIT
-docker compose -f "${TOR_COMPOSE}" run -d --name "${keygen}" \
-    tor DisableNetwork 1 >&2
+docker compose -f "${TOR_COMPOSE}" run -e DISABLE_VANGUARDS=1 -d \
+    --name "${keygen}" tor DisableNetwork 1 >&2
 internal "${TOR_NETWORK}"
 
 waited=0

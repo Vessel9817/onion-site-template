@@ -114,11 +114,11 @@ stat -c %u:%g ./src/mongo/secrets/keyFile.pem # Should print 999:999
 project root to generate one:
 
 ```shell
-docker compose -f ./src/tor/docker-compose.yml run --rm tor DisableNetwork 1
+docker compose -f ./src/tor/docker-compose.yml run -e DISABLE_VANGUARDS=1 --rm tor DisableNetwork 1
 ```
 
-Then, wait a couple seconds for [`src/tor/secrets/`](./src/tor/secrets) to be
-populated. In more formal terms, terminate the process once you see the
+Then, [`src/tor/secrets/`](./src/tor/secrets) should be populated almost
+instantly. In more formal terms, terminate the process once you see the
 following output:
 
 ```log
