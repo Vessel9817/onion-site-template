@@ -20,11 +20,13 @@ export async function connect(
     retryMs: number = RETRY_INTERVAL_MS
 ): Promise<void> {
     if (mongoose.connection.readyState !== mongoose.ConnectionStates.disconnected) {
+        reconnectOnDisconnect(uri);
         return;
     }
 
     try {
         await mongoose.connect(uri);
+        reconnectOnDisconnect(uri);
     }
     catch (err) {
         // Not the message, which can carry the connection string
@@ -40,5 +42,5 @@ export async function connect(
  * @param uri The connection string
  */
 export function reconnectOnDisconnect(uri: string): void {
-    mongoose.connection.on('disconnected', () => void connect(uri));
+    mongoose.connection.once('disconnected', () => void connect(uri));
 }

@@ -34,5 +34,6 @@ WORKDIR /project/
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
 ENTRYPOINT [ "/project/entrypoint.sh" ]
+ENV DISABLE_VANGUARDS=
 ENV SOCKS_PORT=9050
 EXPOSE "${SOCKS_PORT}"

@@ -110,23 +110,30 @@ stat -c %u:%g ./src/mongo/secrets/keyFile.pem # Should print 999:999
 
 #### tor
 
-If you don't have an onion domain, run the following in the project directory
-to generate one:
+**If you don't have an onion domain**, run the following command in the
+project root to generate one:
 
 ```shell
-docker compose -f ./src/tor/docker-compose.yml up -d
-docker compose -f ./src/tor/docker-compose.yml down
+npm run generate-onion
 ```
+
+Then, [`src/tor/secrets/`](./src/tor/secrets) should be populated almost
+instantly. In more formal terms, terminate the process once you see the
+following output:
+
+```log
+[notice] Bootstrapped 0% (starting): Starting
+```
+
+From here, the container will attempt to publish your website to the tor
+network. It will fail indefinitely. At this point, the credentials have been
+generated, so it's safe to shut it down.
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in
-[`src/tor/secrets/`](./src/tor/secrets).
-If you don't, one will automatically be generated for you in the aforementioned
-directory. Your website domain will be found in `src/tor/secrets/hostname`,
-abiding by the following regex: (Onion v3 address)
+[`src/tor/secrets/`](./src/tor/secrets) instead.
 
-`[a-z0-9]{56}\.onion`
-
+Your website domain will be found in `src/tor/secrets/hostname`.
 This domain should also be specified in `src/onionprobe/config.yml`
 where the placeholder onion address is present.
 
@@ -135,7 +142,7 @@ where the placeholder onion address is present.
 ### Production
 
 For production mode, run **one** of the following equivalent commands
-in the project directory:
+in the project root:
 
 ```shell
 npm start
@@ -146,7 +153,7 @@ npm run start:prod
 ### Development
 
 To attach all debugging containers intended for development-only use,
-run the following command in the project directory:
+run the following command in the project root:
 
 ```shell
 npm run start:dev
@@ -158,7 +165,7 @@ as they collectively depend on all production containers unrelated to tor.
 ### Shutdown
 
 To stop the website, run **one** of the following equivalent commands
-in the project directory:
+in the project root:
 
 ```shell
 npm stop
@@ -167,7 +174,7 @@ npm run stop
 
 ### Updating
 
-To update the website, run the following command in the project directory:
+To update the website, run the following command in the project root:
 
 ```shell
 # Pull base images and build compose project
@@ -208,16 +215,23 @@ npm test --workspace=./src/express
 
 Separately, a smoke test builds the compose project, generates a throwaway
 onion address and waits for tor to confirm the site answers over it.
-It may take several minutes.
+Tor joins only a private Tor network that the test starts in a container,
+so the address is never published. It may take several minutes.
 
 > [!WARNING]
 > Never run a smoke test on a configured deployment, always on a throwaway
 > checkout. This overwrites any secret with example credentials, so it refuses
-> to run once a configured `.env` file exists.
+> to run once a configured `.env` file exists, or while any container or
+> network of the `website` compose project exists. The second command below
+> removes the containers, networks and volumes a smoke test leaves behind,
+> and would delete a deployment's volumes just the same.
 
 ```shell
-npm run test:smoke
-docker compose --profile production down --volumes
+npm run test:smoke:start
+
+# If successful, do some stuff on the test network
+
+npm run test:smoke:stop
 ```
 
 ### OnionScan
