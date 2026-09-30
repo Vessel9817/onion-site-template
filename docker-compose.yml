@@ -78,6 +78,7 @@ services:
     networks:
       nginx:
         ipv4_address: 10.5.0.254
+      debug:
   express:
     extends:
       file: ./src/docker-compose.yml
@@ -112,6 +113,7 @@ services:
     networks:
       express:
         ipv4_address: 10.5.2.254
+      debug:
   mongo-init:
     extends:
       file: ./src/docker-compose.yml
@@ -363,16 +365,19 @@ networks:
         - subnet: 10.5.3.0/24
           gateway: 10.5.3.1
   nginx:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.0.0/24
           gateway: 10.5.0.1
   express:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.2.0/24
           gateway: 10.5.2.1
   mongo:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.1.0/24
@@ -382,3 +387,9 @@ networks:
       config:
         - subnet: 10.5.4.0/24
           gateway: 10.5.4.1
+  # Docker publishes the forwarders' ports only through a network that isn't internal
+  debug:
+    ipam:
+      config:
+        - subnet: 10.5.5.0/24
+          gateway: 10.5.5.1
