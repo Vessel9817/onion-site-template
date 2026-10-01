@@ -47,8 +47,11 @@ openssl rand -base64 756 > src/mongo/secrets/keyFile.pem
 chmod 0400 src/mongo/secrets/keyFile.pem
 # mongod reads the keyfile as its own user, so the file takes that owner,
 # as the README asks. A container does the chown so no sudo is needed.
-docker run --rm -v "${PWD}/src/mongo/secrets/keyFile.pem:/keyFile.pem" \
-    mongo:8 chown 999:999 /keyFile.pem
+# Taking the Dockerfile's image, the one Renovate keeps current
+mongo_image=$(sed -n 's/^ARG MONGO_VERSION=//p' src/mongo/Dockerfile)
+docker run --rm --user 0 --entrypoint chown \
+    -v "${PWD}/src/mongo/secrets/keyFile.pem:/keyFile.pem" \
+    "${mongo_image}" 999:999 /keyFile.pem
 
 # Failing unless the network has no route off the host
 internal() {
