@@ -149,6 +149,21 @@ void describe('routes', () => {
         assert.match(body, /id="send-name" [^>]*value="ann"/);
     });
 
+    void it('shows the board for a post without a form body', async (t: TestContext) => {
+        stubAggregate(t, []);
+
+        const res = await fetch(base + '/chat/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: 'name=ann',
+            redirect: 'manual'
+        });
+        const body = await res.text();
+
+        assert.equal(res.status, http.codes.BAD_REQUEST);
+        assert.match(body, /Please enter your display name/);
+    });
+
     void it('shows a rejected delete on the board', async (t: TestContext) => {
         stubAggregate(t, []);
         t.mock.method(MsgModel, 'exists',
