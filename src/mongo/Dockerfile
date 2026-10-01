@@ -1,6 +1,6 @@
 ARG NODE_VERSION=node:lts-alpine
 # No major tag exists, so this pins a series, which Renovate bumps
-ARG MONGO_VERSION=mongodb/mongodb-community-server:8.3-ubi9-slim
+ARG MONGO_VERSION=mongodb/mongodb-community-server:9.0-ubi9-slim
 
 # Installs dependencies
 FROM ${NODE_VERSION} AS build
