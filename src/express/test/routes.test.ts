@@ -331,6 +331,7 @@ void describe('routes', () => {
         const res = await post('/chat/send', { name: 'ann', content: 'a'.repeat(150_000) });
 
         assert.equal(res.status, http.codes.CONTENT_TOO_LARGE);
+        assert.equal(res.headers.get('X-Frame-Options'), 'DENY');
         assert.match(await res.text(), /413 /);
     });
 
