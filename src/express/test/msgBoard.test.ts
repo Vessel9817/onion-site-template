@@ -7,6 +7,7 @@ import {
     editMsg,
     getMsgs,
     MsgModel,
+    MsgSchema,
     type HydratedMsg,
     type StoredMsg
 } from '../db/msgBoard';
@@ -91,6 +92,22 @@ void describe('msgBoard', () => {
 
         assert.deepEqual(stages.at(1), { $skip: 20 });
         assert.deepEqual(msgs.at(0), oldest);
+    });
+
+    void it('breaks ties in the rounded timestamps on the random index', async (t: TestContext) => {
+        const aggregate = stubAggregate(t, []);
+
+        await getMsgs(2);
+
+        const stages = pipelineOf(aggregate.mock.calls[0]);
+
+        assert.deepEqual(stages.at(0), { $sort: { lastModified: -1, index: -1 } });
+    });
+
+    void it('indexes the fields a page is sorted on', () => {
+        const sorts = MsgSchema.indexes().map(([fields]) => JSON.stringify(fields));
+
+        assert.ok(sorts.includes(JSON.stringify({ lastModified: -1, index: -1 })));
     });
 
     void it('leaves the ObjectId out of the query result', async (t: TestContext) => {
