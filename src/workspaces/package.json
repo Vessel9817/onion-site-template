@@ -17,7 +17,8 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "start": "tsx index.ts"
+        "start": "tsx index.ts",
+        "fix": "tsx index.ts --fix"
     },
     "devDependencies": {
         "tsx": "^4.23.15"

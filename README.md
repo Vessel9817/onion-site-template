@@ -271,6 +271,40 @@ npm run eslint
 npm run eslint:fix
 ```
 
+### Dependencies
+
+Dependabot updates npm packages in the root `package-lock.json`.
+Renovate updates base images, GitHub Actions and the other pinned versions.
+
+The express and mongo images install from their workspace's own
+`package-lock.json`, which Dependabot version updates leave alone. After any change to the root
+lockfile, copy its versions into the workspace lockfiles:
+
+```shell
+# Lists workspace lockfile entries that differ from the root
+npm run workspaces
+
+# Rewrites them from the root lockfile
+npm run workspaces:fix
+```
+
+On a Dependabot pull request, check out its branch, run the second command
+and push the result. If a workspace lockfile holds a newer version than the
+root, as after a security update to that lockfile only, the command leaves it
+unchanged and says how to update the root first.
+
+CI also runs `npm ls --all --package-lock-only`, because `npm ci` accepts a
+root lockfile whose versions break a dependency's range. If it reports an
+invalid dependency, copy the entry npm expects from a workspace lockfile that
+has it, then run the fix above. `npm dedupe --package-lock-only` also clears
+it, but can move or lower unrelated versions, which the fix may then refuse.
+
+> [!WARNING]
+> Run npm commands that change dependencies from the project root,
+> e.g, `npm install -w ./src/mongo dotenv@latest`. Inside a workspace,
+> npm updates the root lockfile rather than the workspace's own, unless given
+> `--workspaces=false` on the command line.
+
 ## Credits
 
 - [OnionProbe][onionprobe]

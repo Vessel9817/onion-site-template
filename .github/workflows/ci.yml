@@ -164,7 +164,7 @@ jobs:
       - name: Install node modules
         run: npm ci -w ./src/workspaces --no-fund
       - name: Check workspace lockfile synchronization
-        run: npm -w ./src/workspaces start
+        run: npm run workspaces
   # Runs unit and integration tests with coverage
   test:
     permissions:
