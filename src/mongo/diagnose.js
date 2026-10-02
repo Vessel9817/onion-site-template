@@ -18,7 +18,7 @@ try {
      * @returns {string}
      */
     function readFile(file) {
-        return fs.readFileSync(file).toString().trim();
+        return fs.readFileSync(file, 'utf8').trim();
     }
 
     /**
