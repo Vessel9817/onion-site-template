@@ -16,14 +16,14 @@ const dbName = process.env.MONGO_INITDB_DATABASE ?? 'test';
 const localUsernameFile = process.env.USERNAME_FILE;
 assert.ok(localUsernameFile, 'USERNAME_FILE is missing from env');
 assert.ok(fs.existsSync(localUsernameFile), "USERNAME_FILE doesn't exist");
-const localUsername = fs.readFileSync(localUsernameFile).toString();
+const localUsername = fs.readFileSync(localUsernameFile, 'utf8');
 assert.ok(localUsername, 'Local username is missing');
 
 // Local password
 const localPasswordFile = process.env.PASSWORD_FILE;
 assert.ok(localPasswordFile, 'PASSWORD_FILE is missing from env');
 assert.ok(fs.existsSync(localPasswordFile), "PASSWORD_FILE doesn't exist");
-const localPassword = fs.readFileSync(localPasswordFile).toString();
+const localPassword = fs.readFileSync(localPasswordFile, 'utf8');
 assert.ok(localPassword, 'Local password is missing');
 
 module.exports = {
