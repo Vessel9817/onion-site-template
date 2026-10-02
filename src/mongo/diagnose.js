@@ -8,7 +8,7 @@
 try {
     disableTelemetry();
 
-    // Bundling external dependencies will require extended build functionality
+    // Bundling external dependencies will require extended build functionality (e.g, Webpack)
     const fs = require('node:fs'); // mongosh behaves weirdly with promises
     const os = require('node:os');
 
@@ -38,6 +38,9 @@ try {
         return true;
     }
 
+    /**
+     * Diagnoses potential causes of TCMalloc warnings
+     */
     function diagnoseTcmalloc() {
         /*
          * Can be changed in the container or by Docker
@@ -106,6 +109,9 @@ try {
         }
     }
 
+    /**
+     * Diagnoses potential causes of storage engine warnings
+     */
     function diagnoseEngine() {
         /*
          * Currently can't change these settings within a container, see:
