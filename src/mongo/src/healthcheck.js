@@ -22,7 +22,7 @@ try {
     const replicas = /** @type {typeof import('./replicas')} */ (require(`${__dirname}/replicas`));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const config = /** @type {import('../global').RsInitiateConfig} */ (
-        JSON.parse(fs.readFileSync('/docker-entrypoint-initdb.d/replicas.json').toString())
+        JSON.parse(fs.readFileSync('/docker-entrypoint-initdb.d/replicas.json', 'utf8'))
     );
 
     /**

@@ -204,4 +204,4 @@ jobs:
         if: failure()
         run: >-
           docker compose --profile production -f docker-compose.yml
-          -f .github/smoke/testnet.yml logs
+          -f .github/smoke/docker-compose.yml logs
