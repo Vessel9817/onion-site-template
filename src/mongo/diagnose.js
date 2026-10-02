@@ -5,6 +5,9 @@
  * Logs script errors at error level.
  */
 
+// Note: Sysctls that can be set in the container:
+// https://docs.docker.com/reference/cli/docker/container/run/#currently-supported-sysctls
+
 try {
     disableTelemetry();
 
@@ -39,47 +42,86 @@ try {
     }
 
     /**
+     * Asserts string equality. Logs errors without terminating.
+     * @param {string} path The file path
+     * @param {string} expected The expected value
+     * @returns {boolean} `true` if the file's contents match, otherwise `false`
+     */
+    function assertSysctlEqual(path, expected) {
+        return assertEqual(readFile(path), expected, path);
+    }
+
+    /**
      * Diagnoses potential causes of TCMalloc warnings
+     * @returns {string[]} Instructions for fixing identified issues
      */
     function diagnoseTcmalloc() {
-        /*
-         * Can be changed in the container or by Docker
-         */
-
+        /** @type {string[]} */
+        const fixes = [];
         const glicbTunables = process.env.GLIBC_TUNABLES ?? '';
 
-        /*
-         * Currently can't change these settings within a container, see:
-         * https://docs.docker.com/reference/cli/docker/container/run/#currently-supported-sysctls
-         */
-
-        const enabled = readFile('/sys/kernel/mm/transparent_hugepage/enabled');
-        const defrag = readFile('/sys/kernel/mm/transparent_hugepage/defrag');
-        const maxPtesNone = readFile('/sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none');
+        // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance
+        if (!assertEqual(glicbTunables, 'glibc.pthread.rseq=0', 'GLIBC_TUNABLES')) {
+            fixes.push(
+                'In the container/image, set the enviroment variable:\n'
+                + "GLIBC_TUNABLES='glibc.pthread.rseq=0"
+            );
+        }
+        if (!assertSysctlEqual(
+            '/sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none',
+            '0'
+        )) {
+            fixes.push(
+                'On the host, run:\n'
+                + `sudo sh -c 'echo "0" > /sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none'\n`
+                + 'This setting will not persist across boots.'
+            );
+        }
+        if (!assertSysctlEqual(
+            '/sys/kernel/mm/transparent_hugepage/enabled',
+            'always' // MongoDB 8.0+, x86_64 and ARM64 only. Otherwise, 'disabled'
+        )) {
+            fixes.push(
+                'On the host, run:\n'
+                + `sudo sh -c 'echo "always" > /sys/kernel/mm/transparent_hugepage/enabled'\n`
+                + 'This setting will not persist across boots.'
+            );
+        }
+        if (!assertSysctlEqual(
+            '/sys/kernel/mm/transparent_hugepage/defrag',
+            'defer+madvise'
+        )) {
+            fixes.push(
+                'On the host, run:\n'
+                + `sudo sh -c 'echo "defer+madvise" > /sys/kernel/mm/transparent_hugepage/defrag'\n`
+                + 'This setting will not persist across boots.'
+            );
+        }
 
         // https://stackoverflow.com/questions/48685667/what-does-docker-mean-when-it-says-memory-limited-without-swap
-        const swappiness = readFile('/proc/sys/vm/swappiness');
+        if (!assertSysctlEqual('/proc/sys/vm/swappiness', '1')) {
+            fixes.push(
+                'On the host, run:\n'
+                + 'sudo sysctl -w vm.swappiness=1'
+            );
+        }
 
         // https://forums.docker.com/t/how-to-set-the-vm-overcommit-memory-parameter-when-running-docker-desktop-on-macos/139029
-        const overcommitMemory = readFile('/proc/sys/vm/overcommit_memory');
-
-        // https://www.mongodb.com/docs/manual/administration/tcmalloc-performance
-        assertEqual(glicbTunables, 'glibc.pthread.rseq=0', 'GLIBC_TUNABLES');
-        assertEqual(
-            maxPtesNone,
-            '0',
-            'mm.transparent_hugepage.khugepaged.max_ptes_none'
-        );
-        assertEqual(enabled, 'always', 'mm.transparent_hugepage.enabled');
-        assertEqual(defrag, 'defer+madvise', 'mm.transparent_hugepage.defrag');
-        assertEqual(swappiness, '1', 'vm.swappiness');
-        assertEqual(overcommitMemory, '1', 'vm.overcommit_memory');
+        if (!assertSysctlEqual('/proc/sys/vm/overcommit_memory', '1')) {
+            fixes.push(
+                'On the host, run:\n'
+                + 'sudo sysctl -w vm.overcommit_memory=1'
+            );
+        }
 
         const stats = db.serverStatus({ tcmalloc: 1 });
 
         if (stats.ok !== 1) {
-            console.error(`Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`);
-            return;
+            console.error(
+                'Mongosh failed to connect to the database. Got response:\n'
+                + JSON.stringify(stats, null, 2)
+            );
+            return fixes;
         }
 
         const MIN_KERNEL_MAJOR_VER = 4;
@@ -107,28 +149,26 @@ try {
                 console.warn(`Linux kernel: expected version ${MIN_KERNEL_MAJOR_VER.toString()}.${MIN_KERNEL_MINOR_VER.toString()} or later, got: ${kernelVerStr}`);
             }
         }
+
+        return fixes;
     }
 
     /**
      * Diagnoses potential causes of storage engine warnings
+     * @returns {string[]} Instructions for fixing identified issues
      */
     function diagnoseEngine() {
-        /*
-         * Currently can't change these settings within a container, see:
-         * https://docs.docker.com/reference/cli/docker/container/run/#currently-supported-sysctls
-         */
-
+        /** @type {string[]} */
+        const fixes = [];
         const fsPath = '/proc/mounts';
         const mounts = readFile(fsPath);
 
-        // https://stackoverflow.com/questions/78473427/mongodb-docker-vm-max-map-count-is-too-low-even-if-set-to-524288
         const maxMapCount = readFile('/proc/sys/vm/max_map_count');
-
         const stats = db.serverStatus({});
 
         if (stats.ok !== 1) {
             console.error(`Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`);
-            return;
+            return fixes;
         }
 
         const mongoEngine = /** @type {string} */ (stats.storageEngine?.name);
@@ -160,17 +200,33 @@ try {
             }
         }
 
-        // http://dochub.mongodb.org/core/prodnotes-filesystem
+        // https://dochub.mongodb.org/core/prodnotes-filesystem
         if (fsType === undefined) {
             console.error(`Could not determine file system type from ${fsPath}`);
         }
-        else if (mongoEngine === 'wiredTiger' || Number.parseInt(maxMapCount, 10) >= 2 * maxConnections) {
-            assertEqual(fsType, 'xfs', 'File system type');
+        else if (mongoEngine === 'wiredTiger') {
+            if (!assertEqual(fsType, 'xfs', 'File system type')) {
+                fixes.push('Format your host file system to use XFS');
+            }
         }
+        else if (Number.parseInt(maxMapCount, 10) >= 2 * maxConnections) {
+            // Alternatively, reduce the process's RLIMIT_NOFILE value:
+            // https://www.mongodb.com/docs/manual/reference/configuration-options/#mongodb-setting-net.maxIncomingConnections
+
+            // MongoDB recommends a value of 131060 in production
+            // https://stackoverflow.com/questions/78473427/mongodb-docker-vm-max-map-count-is-too-low-even-if-set-to-524288
+            fixes.push(
+                'On the host, run:\n'
+                + `sudo sysctl -w vm.max_map_count=${(2 * maxConnections).toFixed()}`
+            );
+        }
+
+        return fixes;
     }
 
     /**
-     * Runs diagnostics. Logs any issues. Resolution may not always be possible.
+     * Runs diagnostics. Logs any identfied issues and resolution steps, if any.
+     * Should only be run once, at the end of a script.
      */
     function diagnose() {
         // serverStatus needs a login now that the keyfile turns authorization on
@@ -179,8 +235,24 @@ try {
 
         db.getSiblingDB('admin').auth(root.username, root.password);
 
-        diagnoseTcmalloc();
-        diagnoseEngine();
+        const fixes = [
+            ...diagnoseTcmalloc(),
+            ...diagnoseEngine()
+        ];
+
+        if (fixes.length < 1) {
+            fixes.push('None');
+        }
+        else {
+            process.exitCode = 1;
+        }
+
+        console.log('\nResolvable issues:');
+
+        for (const fix of fixes) {
+            // Indenting list
+            console.log(`- ${fix.replaceAll('\n', '\n  ')}`);
+        }
     }
 
     // Running diagnostics
