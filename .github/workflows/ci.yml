@@ -23,7 +23,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -38,10 +37,10 @@ jobs:
         uses: docker/setup-compose-action@v2
         with:
           version: ${{ env.DOCKER_COMPOSE_VERSION }}
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: './src/**/package-lock.json'
       - name: Build Compose stack
@@ -54,16 +53,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
         workspace: ['.', './src/express', './src/license-report', './src/mongo']
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
       - name: Check dependency tree
@@ -104,15 +102,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: './package-lock.json'
       - name: Install node modules
@@ -127,15 +124,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: './package-lock.json'
       - name: Install node modules
@@ -150,15 +146,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: './src/workspaces/package-lock.json'
       - name: Install node modules
@@ -173,15 +168,14 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        node-version: [24.x]
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
           cache: 'npm'
           cache-dependency-path: './package-lock.json'
       - name: Install node modules
