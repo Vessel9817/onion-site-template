@@ -1,0 +1,11 @@
+# pnpm does not read the "workspaces" field of package.json; keep both in step
+packages:
+  - ./src/express
+  - ./src/license-report
+  - ./src/mongo
+  - ./src/workspaces
+allowBuilds:
+  esbuild: false
+  unrs-resolver: false
+# package-lock.json decides the versions, and Dependabot already waits before updating
+minimumReleaseAge: 0

@@ -15,6 +15,17 @@ in the *source code* with an equivalent Node CLI command.
 (I.e, `npm run ABC` is equivalent to `node --run=ABC`)
 For ease of use, *documentation* still uses npm.
 
+pnpm can install and run this project. Its lockfile is not committed;
+generate it from `package-lock.json`:
+
+```shell
+pnpm import
+pnpm install --frozen-lockfile
+```
+
+Use npm to add, remove or update dependencies.
+The Docker images always install with `npm ci`.
+
 ## Licensing
 
 This project is licensed under the [MIT](./LICENSE.md) license.
