@@ -67,7 +67,15 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
       - name: Check dependency tree
-        run: cd '${{ matrix.workspace }}' && npm i --package-lock-only --dry-run
+        if: matrix.workspace == '.'
+        run: npm i --package-lock-only --dry-run
+      # Inside a workspace, npm acts on the root unless workspaces are off
+      - name: Check workspace lockfile
+        if: matrix.workspace != '.'
+        working-directory: ${{ matrix.workspace }}
+        run: >-
+          npm i --package-lock-only --dry-run --workspaces=false
+          && npm ci --dry-run --ignore-scripts --workspaces=false
       # `npm ci` accepts a lockfile whose versions break a dependency's range
       - name: Check root lockfile
         if: matrix.workspace == '.'
