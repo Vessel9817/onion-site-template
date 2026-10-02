@@ -10,7 +10,7 @@ set -eu
 TOR_NETWORK='website_tor'
 NGINX_NETWORK='website_nginx'
 TOR_COMPOSE='src/tor/docker-compose.yml'
-TESTNET_COMPOSE='.github/smoke/testnet.yml'
+TESTNET_COMPOSE='.github/smoke/docker-compose.yml'
 
 # Materialising the examples would destroy a configured deployment.
 for configured in src/express/secrets/.env src/mongo/secrets/.env; do
