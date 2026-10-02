@@ -68,6 +68,10 @@ jobs:
           cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
       - name: Check dependency tree
         run: cd '${{ matrix.workspace }}' && npm i --package-lock-only --dry-run
+      # `npm ci` accepts a lockfile whose versions break a dependency's range
+      - name: Check root lockfile
+        if: matrix.workspace == '.'
+        run: npm ls --all --package-lock-only
   # Runs a markdown linting check
   markdownlint:
     permissions:
