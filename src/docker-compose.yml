@@ -82,7 +82,7 @@ services:
     restart: always
   grafana:
     container_name: grafana
-    image: grafana/grafana-oss:13.0.1-security-01
+    image: grafana/grafana:13.0.1-security-01
     restart: always
     environment:
       # No anonymous usage statistics
