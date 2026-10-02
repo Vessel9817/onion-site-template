@@ -12,6 +12,19 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Gixy release; its two checksums must be updated by hand from the release's checksums.txt",
+      "managerFilePatterns": [
+        "/^src/nginx/download-gixy\\.sh$/"
+      ],
+      "matchStrings": [
+        "DEFAULT_VERSION='(?<currentValue>v[^']+)'"
+      ],
+      "depNameTemplate": "gixy",
+      "packageNameTemplate": "dvershinin/gixy",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
       "description": "Docker Engine version used by CI",
       "managerFilePatterns": [
         "/^\\.github/workflows/ci\\.yml$/"
