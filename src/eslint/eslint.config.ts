@@ -1,6 +1,5 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import * as tsParser from '@typescript-eslint/parser';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import { type Config, defineConfig } from 'eslint/config';
@@ -79,7 +78,7 @@ const DEFAULT_JS_CONFIGS = defineConfig([
     importX.flatConfigs.typescript,
     {
         languageOptions: {
-            parser: tsParser,
+            parser: tseslint.parser,
             // https://typescript-eslint.io/getting-started/typed-linting/
             parserOptions: {
                 tsconfigRootDir: path.resolve(
