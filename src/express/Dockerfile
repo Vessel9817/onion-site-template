@@ -29,5 +29,6 @@ USER node
 EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \
     CMD [ "curl", "-f", "localhost:3000" ]
-CMD [ "--env-file=./secrets/.env", "index.cjs" ]
+# Above nginx's 4 x 8k header buffers, so nginx refuses first
+CMD [ "--max-http-header-size=65536", "--env-file=./secrets/.env", "index.cjs" ]
 ENV PROJECT_ROOT="."

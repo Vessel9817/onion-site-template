@@ -1,18 +1,26 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-go/master/schema/compose-spec.json
 
+# The local driver rotates each container's logs; Docker's default, json-file, doesn't
+x-logging: &logging
+  driver: local
+
 services:
   tor:
     container_name: tor
+    restart: always
     build:
       context: ./tor
       dockerfile: ./Dockerfile
       target: run
+    logging: *logging
   nginx:
     container_name: nginx
+    restart: always
     build:
       context: ./nginx
       dockerfile: ./Dockerfile
       target: openresty-gixy
+    logging: *logging
   express:
     container_name: express
     restart: on-failure
@@ -20,6 +28,7 @@ services:
       context: ./express
       dockerfile: ./Dockerfile
       target: run
+    logging: *logging
   mongo-init:
     extends: mongo
     restart: on-failure
@@ -58,28 +67,18 @@ services:
         target: /run/secrets/express/username.txt
       - source: mongo-password
         target: /run/secrets/express/password.txt
-  mongo-debug:
-    container_name: mongo-debug
-    restart: on-failure
-    image: mongo-express@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64
-    secrets:
-      - source: mongo-root-username
-        target: /run/secrets/root/username.txt
-      - source: mongo-root-password
-        target: /run/secrets/root/password.txt
-      - source: mongo-dev-username
-        target: /run/secrets/dev/username.txt
-      - source: mongo-dev-password
-        target: /run/secrets/dev/password.txt
+    logging: *logging
   onionprobe:
     container_name: onionprobe
     build:
       context: ./onionprobe/onionprobe
       dockerfile: ./containers/onionprobe/Dockerfile
+    logging: *logging
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v3-distroless
     restart: always
+    logging: *logging
   grafana:
     container_name: grafana
     image: grafana/grafana-oss:13.0.1-security-01
@@ -94,6 +93,7 @@ services:
       GF_ANALYTICS_CHECK_FOR_UPDATES: false
       GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: false
       GF_PLUGINS_PREINSTALL_DISABLED: true
+    logging: *logging
   onionscan:
     container_name: onionscan
     restart: on-failure
@@ -104,6 +104,7 @@ services:
     secrets:
       - source: tor-hostname
         target: /run/secrets/hostname
+    logging: *logging
   onionscan-ui:
     container_name: onionscan-ui
     restart: on-failure
@@ -115,6 +116,7 @@ services:
       "--verbose",
       "--mode", "analysis"
     ]
+    logging: *logging
   license-report:
     container_name: license-report
     build:
@@ -123,10 +125,12 @@ services:
     # If we have node modules installed, inspect them.
     # If we don't, only inspect package.json
     working_dir: /project/packages/
+    logging: *logging
   container-link:
     build:
       context: ./container-link
       dockerfile: ./Dockerfile
+    logging: *logging
 configs:
   mongo-replicas:
     file: ./mongo/replicas.json
@@ -145,7 +149,3 @@ secrets:
     file: ./mongo/secrets/express/username.txt
   mongo-password:
     file: ./mongo/secrets/express/password.txt
-  mongo-dev-username:
-    file: ./mongo/secrets/dev/username.txt
-  mongo-dev-password:
-    file: ./mongo/secrets/dev/password.txt

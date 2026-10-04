@@ -99,7 +99,7 @@ export const getChat: RequestHandler = async (req, res) => {
  * @param res The response
  */
 export const sendMsg: RequestHandler = async (req, res) => {
-    const params = req.body as {
+    const params = (req.body ?? {}) as {
         name: string;
         content: string;
     };
@@ -130,7 +130,7 @@ export const sendMsg: RequestHandler = async (req, res) => {
  * @param res The response
  */
 export const editMsg: RequestHandler = async (req, res) => {
-    const params = req.body as {
+    const params = (req.body ?? {}) as {
         name: string;
         content: string;
         id: string;
@@ -162,7 +162,7 @@ export const editMsg: RequestHandler = async (req, res) => {
  * @param res The response
  */
 export const deleteMsg: RequestHandler = async (req, res) => {
-    const params = req.body as { id: string };
+    const params = (req.body ?? {}) as { id: string };
 
     if (!validationResult(req).isEmpty()) {
         res.status(http.codes.BAD_REQUEST);

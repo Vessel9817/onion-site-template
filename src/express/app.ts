@@ -11,9 +11,10 @@ app.disable('x-powered-by');
 app.disable('etag');
 
 // Setting global app middleware
+// Before the body parsers, so the errors they raise get its headers too
+app.use(csp); // Restricts application permissions
 app.use(express.json()); // Parse Content-Type: json
 app.use(express.urlencoded({ extended: false })); // Encodes special characters in URLs
-app.use(csp); // Restricts application permissions
 app.use('/', appRouter); // Serves app
 app.use('/', notFoundRouter); // Catches 404 errors
 app.use('/', errorHandler); // Catches errors, preventing stack trace leaks
