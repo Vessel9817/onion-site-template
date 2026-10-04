@@ -78,6 +78,7 @@ services:
     networks:
       nginx:
         ipv4_address: 10.5.0.254
+      debug:
   express:
     extends:
       file: ./src/docker-compose.yml
@@ -112,6 +113,7 @@ services:
     networks:
       express:
         ipv4_address: 10.5.2.254
+      debug:
   mongo-init:
     extends:
       file: ./src/docker-compose.yml
@@ -192,40 +194,6 @@ services:
     env_file: ./src/mongo/secrets/.env
     networks:
       - mongo
-  mongo-debug:
-    extends:
-      file: ./src/docker-compose.yml
-      service: mongo-debug
-    profiles:
-      - development
-    depends_on:
-      mongo-init:
-        condition: service_completed_successfully
-    ports:
-      - 127.0.0.1::8081
-    environment:
-      # Standard configuration details
-      - ME_CONFIG_BASICAUTH_ENABLED=true
-      # mongo-express uses a URL as given, without the credentials below, so
-      # the members are listed and it builds the URL itself. The image's
-      # entrypoint still reads the URL to decide what to wait for, and skips
-      # the wait when the URL lists more than one member
-      - ME_CONFIG_MONGODB_SERVER=mongo-1,mongo-2,mongo-3
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
-      - ME_CONFIG_MONGODB_URL=mongodb://mongo-1:27017,mongo-2:27017,mongo-3:27017
-      # Administrator credentials
-      - ME_CONFIG_MONGODB_ADMINUSERNAME_FILE=/run/secrets/root/username.txt
-      - ME_CONFIG_MONGODB_ADMINPASSWORD_FILE=/run/secrets/root/password.txt
-      # Dev credentials used to log into the web UI
-      - ME_CONFIG_BASICAUTH_USERNAME_FILE=/run/secrets/dev/username.txt
-      - ME_CONFIG_BASICAUTH_PASSWORD_FILE=/run/secrets/dev/password.txt
-      # Theme demo:
-      # https://codemirror.com/5/demo/theme.html#tomorrow-night-bright
-      - ME_CONFIG_OPTIONS_EDITORTHEME=tomorrow-night-bright
-    networks:
-      mongo:
-        ipv4_address: 10.5.1.254
   onionprobe:
     extends:
       file: ./src/docker-compose.yml
@@ -383,10 +351,6 @@ secrets:
     file: ./src/mongo/secrets/express/username.txt
   mongo-password:
     file: ./src/mongo/secrets/express/password.txt
-  mongo-dev-username:
-    file: ./src/mongo/secrets/dev/username.txt
-  mongo-dev-password:
-    file: ./src/mongo/secrets/dev/password.txt
   grafana-admin-username:
     file: ./src/grafana/secrets/username.txt
   grafana-admin-password:
@@ -401,16 +365,19 @@ networks:
         - subnet: 10.5.3.0/24
           gateway: 10.5.3.1
   nginx:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.0.0/24
           gateway: 10.5.0.1
   express:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.2.0/24
           gateway: 10.5.2.1
   mongo:
+    internal: true
     ipam:
       config:
         - subnet: 10.5.1.0/24
@@ -420,3 +387,9 @@ networks:
       config:
         - subnet: 10.5.4.0/24
           gateway: 10.5.4.1
+  # Docker publishes the forwarders' ports only through a network that isn't internal
+  debug:
+    ipam:
+      config:
+        - subnet: 10.5.5.0/24
+          gateway: 10.5.5.1

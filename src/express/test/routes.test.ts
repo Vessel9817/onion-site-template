@@ -149,6 +149,37 @@ void describe('routes', () => {
         assert.match(body, /id="send-name" [^>]*value="ann"/);
     });
 
+    void it('shows the board for a post without a form body', async (t: TestContext) => {
+        stubAggregate(t, []);
+
+        const res = await fetch(base + '/chat/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: 'name=ann',
+            redirect: 'manual'
+        });
+        const body = await res.text();
+
+        assert.equal(res.status, http.codes.BAD_REQUEST);
+        assert.match(body, /Please enter your display name/);
+    });
+
+    void it('shows the board for an edit or delete without a form body', async (t: TestContext) => {
+        stubAggregate(t, []);
+
+        for (const path of ['/chat/delete', '/chat/edit']) {
+            const res = await fetch(base + path, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'id=' + MSG_INDEX,
+                redirect: 'manual'
+            });
+
+            assert.equal(res.status, http.codes.BAD_REQUEST);
+            assert.match(await res.text(), /Invalid id/);
+        }
+    });
+
     void it('shows a rejected delete on the board', async (t: TestContext) => {
         stubAggregate(t, []);
         t.mock.method(MsgModel, 'exists',
@@ -331,6 +362,7 @@ void describe('routes', () => {
         const res = await post('/chat/send', { name: 'ann', content: 'a'.repeat(150_000) });
 
         assert.equal(res.status, http.codes.CONTENT_TOO_LARGE);
+        assert.equal(res.headers.get('X-Frame-Options'), 'DENY');
         assert.match(await res.text(), /413 /);
     });
 

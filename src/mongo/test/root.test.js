@@ -52,6 +52,23 @@ void describe('root', () => {
         assert.equal(root.password, 'hunter2');
     });
 
+    void it('drops the newline an editor leaves at the end', () => {
+        process.env.ROOT_USERNAME_FILE = secret('u', 'admin\n');
+        process.env.ROOT_PASSWORD_FILE = secret('p', 'hunter2\n');
+
+        const root = load();
+
+        assert.equal(root.username, 'admin');
+        assert.equal(root.password, 'hunter2');
+    });
+
+    void it('refuses a credential that is only a newline', () => {
+        process.env.ROOT_USERNAME_FILE = secret('u', '\n');
+        process.env.ROOT_PASSWORD_FILE = secret('p', 'hunter2');
+
+        assert.throws(load, /username is missing/);
+    });
+
     void it('refuses an empty credential', () => {
         process.env.ROOT_USERNAME_FILE = secret('u', '');
         process.env.ROOT_PASSWORD_FILE = secret('p', 'hunter2');
