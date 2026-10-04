@@ -16,6 +16,16 @@ try {
     const os = require('node:os');
 
     /**
+     * Outputs the given error message and sets the process exit code
+     * @param {any[]} data Arguments to be passed to `console.error``
+     */
+    function error(...data) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        console.error(...data);
+        process.exitCode = 1;
+    }
+
+    /**
      * Reads the given file and returns its contents
      * @param {string} file The file path
      * @returns {string}
@@ -74,27 +84,27 @@ try {
             fixes.push(
                 'On the host, run:\n'
                 + `sudo sh -c 'echo "0" > /sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none'\n`
-                + 'This setting will not persist across boots.'
+                + 'This setting will not persist on reboot.'
             );
         }
         if (!assertSysctlEqual(
             '/sys/kernel/mm/transparent_hugepage/enabled',
-            'always' // MongoDB 8.0+, x86_64 and ARM64 only. Otherwise, 'disabled'
+            '[always] madvise never' // MongoDB 8.0+, x86_64 and ARM64 only. Otherwise, 'disabled'
         )) {
             fixes.push(
                 'On the host, run:\n'
                 + `sudo sh -c 'echo "always" > /sys/kernel/mm/transparent_hugepage/enabled'\n`
-                + 'This setting will not persist across boots.'
+                + 'This setting will not persist on reboot.'
             );
         }
         if (!assertSysctlEqual(
             '/sys/kernel/mm/transparent_hugepage/defrag',
-            'defer+madvise'
+            'always defer [defer+madvise] madvise never'
         )) {
             fixes.push(
                 'On the host, run:\n'
                 + `sudo sh -c 'echo "defer+madvise" > /sys/kernel/mm/transparent_hugepage/defrag'\n`
-                + 'This setting will not persist across boots.'
+                + 'This setting will not persist on reboot.'
             );
         }
 
@@ -117,7 +127,7 @@ try {
         const stats = db.serverStatus({ tcmalloc: 1 });
 
         if (stats.ok !== 1) {
-            console.error(
+            error(
                 'Mongosh failed to connect to the database. Got response:\n'
                 + JSON.stringify(stats, null, 2)
             );
@@ -138,7 +148,7 @@ try {
             }
         }
         else if (kernelVer == null) {
-            console.error(`Unable to parse kernel version: ${kernelVerStr}`);
+            error(`Unable to parse kernel version: ${kernelVerStr}`);
         }
         else {
             const kernelMajorVer = Number.parseInt(kernelVer[1]);
@@ -147,6 +157,7 @@ try {
 
             if (kernelMajorVer < MIN_KERNEL_MAJOR_VER || (kernelMajorVer === MIN_KERNEL_MAJOR_VER && kernelMinorVer < MIN_KERNEL_MINOR_VER)) {
                 console.warn(`Linux kernel: expected version ${MIN_KERNEL_MAJOR_VER.toString()}.${MIN_KERNEL_MINOR_VER.toString()} or later, got: ${kernelVerStr}`);
+                fixes.push(`Upgrade your Linux kernel to at least version ${MIN_KERNEL_MAJOR_VER.toFixed()}.${MIN_KERNEL_MINOR_VER.toFixed()}`);
             }
         }
 
@@ -167,7 +178,7 @@ try {
         const stats = db.serverStatus({});
 
         if (stats.ok !== 1) {
-            console.error(`Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`);
+            error(`Mongosh failed to connect to the database. Got response: ${JSON.stringify(stats)}`);
             return fixes;
         }
 
@@ -202,7 +213,7 @@ try {
 
         // https://dochub.mongodb.org/core/prodnotes-filesystem
         if (fsType === undefined) {
-            console.error(`Could not determine file system type from ${fsPath}`);
+            error(`Could not determine file system type from ${fsPath}`);
         }
         else if (mongoEngine === 'wiredTiger') {
             if (!assertEqual(fsType, 'xfs', 'File system type')) {
