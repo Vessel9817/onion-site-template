@@ -23,6 +23,7 @@ export const MsgSchema = new Schema({
     lastModified: Number,
     index: { type: String, required: true, unique: true }
 });
+MsgSchema.index({ lastModified: -1, index: -1 });
 
 export const MsgModel = mongoose.model('messages', MsgSchema);
 
@@ -67,7 +68,8 @@ export async function idExists(index: string): Promise<boolean> {
 export async function getMsgs(page: number): Promise<StoredMsg[]> {
     const skip = MSG_PAGE_SIZE * (page - 1);
     const rawPipeline: (PipelineStage | null)[] = [
-        { $sort: { lastModified: -1 } },
+        // Timestamps are rounded, so the random index breaks ties; _id would give away the order of posts
+        { $sort: { lastModified: -1, index: -1 } },
         // This is O(m+n), where m is the page size and n is the total documents skipped.
         // There is supposedly a better method that achieves O(m)
         skip <= 0 ? null : { $skip: skip },

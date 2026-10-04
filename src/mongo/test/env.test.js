@@ -64,6 +64,13 @@ void describe('mongo env', () => {
         assert.equal(env.dbName, 'test');
     });
 
+    void it('drops the newline an editor leaves at the end', () => {
+        process.env.USERNAME_FILE = secret('username', 'app\n');
+        process.env.PASSWORD_FILE = secret('password', 'apppw\n');
+
+        assert.deepEqual(load().user, { username: 'app', password: 'apppw' });
+    });
+
     void it('uses the configured database name', () => {
         process.env.MONGO_INITDB_DATABASE = 'msg_board';
 
@@ -78,6 +85,12 @@ void describe('mongo env', () => {
 
     void it('rejects a credential file that is empty', () => {
         process.env.PASSWORD_FILE = secret('empty', '');
+
+        assert.throws(load, { message: /password is missing/ });
+    });
+
+    void it('rejects a credential file that is only a newline', () => {
+        process.env.PASSWORD_FILE = secret('newline', '\n');
 
         assert.throws(load, { message: /password is missing/ });
     });

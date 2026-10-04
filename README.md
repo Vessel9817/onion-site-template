@@ -70,8 +70,6 @@ Rename the following files to remove the `.example` postfix:
 
 The same goes with these files, except that these values should be memorable:
 
-- [src/mongo/secrets/dev/username.txt.example](./src/mongo/secrets/dev/username.txt.example)
-- [src/mongo/secrets/dev/password.txt.example](./src/mongo/secrets/dev/password.txt.example)
 - [src/grafana/secrets/username.txt.example](./src/grafana/secrets/username.txt.example)
 - [src/grafana/secrets/password.txt.example](./src/grafana/secrets/password.txt.example)
 - [src/grafana/secrets/email.txt.example](./src/grafana/secrets/email.txt.example)
@@ -172,6 +170,16 @@ npm run start:dev
 
 This can be done before or after starting production mode,
 as they collectively depend on all production containers unrelated to tor.
+
+### Database shell
+
+To open `mongosh` on the replica set, logged in as the administrator from
+[`src/mongo/secrets/root/`](./src/mongo/secrets/root), run the following
+command in the project root while the website is running:
+
+```shell
+npm run mongosh
+```
 
 ### Shutdown
 
