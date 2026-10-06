@@ -31,4 +31,3 @@ HEALTHCHECK --interval=5s --timeout=1s --start-period=10s --retries=3 \
     CMD [ "curl", "-f", "localhost:3000" ]
 # Above nginx's 4 x 8k header buffers, so nginx refuses first
 CMD [ "--max-http-header-size=65536", "--env-file=./secrets/.env", "index.cjs" ]
-ENV PROJECT_ROOT="."
