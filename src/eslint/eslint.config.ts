@@ -126,7 +126,14 @@ const JS_CONFIG: Config = {
         ],
         // https://typescript-eslint.io/rules/no-namespace
         '@typescript-eslint/no-namespace': ['off'],
-        // https://typescript-eslint.io/rules/restrict-template-expressions/
+        // https://typescript-eslint.io/rules/no-unnecessary-condition
+        '@typescript-eslint/no-unnecessary-condition': [
+            'error',
+            {
+                allowConstantLoopConditions: 'only-allowed-literals'
+            }
+        ],
+        // https://typescript-eslint.io/rules/restrict-template-expressions
         '@typescript-eslint/restrict-template-expressions': ['error'],
 
         // https://eslint.style/rules/js/indent
