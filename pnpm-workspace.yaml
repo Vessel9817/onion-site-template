@@ -4,6 +4,7 @@ packages:
   - ./src/license-report
   - ./src/mongo
   - ./src/workspaces
+# Ignoring unused optional dependencies
 allowBuilds:
   esbuild: false
   unrs-resolver: false
