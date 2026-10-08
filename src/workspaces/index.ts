@@ -6,6 +6,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import * as semver from 'semver';
 
 type Entry = Record<string, unknown>;
 type Packages = Record<string, Entry>;
@@ -60,7 +61,7 @@ function packagesOf(file: string): Packages {
 }
 
 /**
- * @param slot An install location, like node_modules/a/node_modules/b
+ * @param slot An install location, like `node_modules/a/node_modules/b`
  * @param entry The entry installed there
  * @returns The name the package was published under
  */
@@ -71,40 +72,6 @@ function nameOf(slot: string, entry: Entry): string {
     assert.ok(typeof name === 'string', `${slot} name should be a string`);
 
     return name;
-}
-
-/**
- * @param version A version, like 1.2.3 or 1.2.3-rc.1
- * @returns Its numbers, and its pre-release part if any
- */
-function splitVersion(version: string): [number[], string | undefined] {
-    const dash = version.indexOf('-');
-    const release = dash === -1 ? version : version.slice(0, dash);
-
-    return [release.split('.').map(Number), dash === -1 ? undefined : version.slice(dash + 1)];
-}
-
-/**
- * @param a A version, like 1.2.3 or 1.2.3-rc.1
- * @param b Another version
- * @returns Whether a is a later release than b
- */
-function isNewer(a: string, b: string): boolean {
-    const [partsA, preA] = splitVersion(a);
-    const [partsB, preB] = splitVersion(b);
-
-    for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
-        const diff = (partsA[i] ?? 0) - (partsB[i] ?? 0);
-
-        if (diff !== 0) {
-            return diff > 0;
-        }
-    }
-
-    // A release is later than its pre-releases
-    return preA === undefined
-        ? preB !== undefined
-        : preB !== undefined && preA.localeCompare(preB, 'en', { numeric: true }) > 0;
 }
 
 /**
@@ -169,7 +136,7 @@ function workspaceDirs(): string[] {
 function resolve(packages: Packages, from: string, name: string): string | undefined {
     let base = from;
 
-    for (;;) {
+    while (true) {
         const slot = base === '' ? PREFIX + name : `${base}/${PREFIX}${name}`;
 
         if (slot in packages) {
@@ -335,7 +302,7 @@ function aheadOfRoot(walk: Walk, name: string, here: string | undefined, source:
     const current = String(walk.packages[here].version);
     const wanted = source.version as string;
 
-    if (!isNewer(current, wanted) || walk.versions.get(nameOf(here, walk.packages[here]))?.has(current) === true) {
+    if (!semver.gt(current, wanted) || walk.versions.get(nameOf(here, walk.packages[here]))?.has(current) === true) {
         return undefined;
     }
 
