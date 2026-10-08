@@ -1,5 +1,5 @@
-import app from './app';
 import mongoose from 'mongoose';
+import app from './app';
 import { connect } from './db/connection';
 import { msgBoard } from './env';
 
@@ -42,7 +42,10 @@ function stop(signal: NodeJS.Signals): void {
     setTimeout(() => process.exit(1), STOP_TIMEOUT_MS);
     // Finishes in-flight requests first
     server.close(() => {
-        mongoose.disconnect().then(() => process.exit(0), () => process.exit(1));
+        mongoose.disconnect().then(
+            () => process.exit(0),
+            () => process.exit(1)
+        );
     });
 }
 
