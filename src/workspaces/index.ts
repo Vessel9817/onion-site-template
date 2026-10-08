@@ -16,7 +16,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const PREFIX = 'node_modules/'; // Not ideal in the general case, but OK for npm
 const FIX = process.argv.includes('--fix');
 // Set from how the workspace reaches an entry, never copied from the root
-const FLAGS = ['dev', 'optional', 'devOptional'];
+const FLAGS = new Set(['dev', 'optional', 'devOptional']);
 // The order npm writes lockfile keys in, ahead of the rest
 const KEY_ORDER = ['name', 'version', 'lockfileVersion', 'resolved', 'integrity', 'requires', 'packages', 'dependencies'];
 // Copied from package.json into the lockfile's own entry, as npm does
@@ -264,7 +264,7 @@ function flag(packages: Packages): void {
  * @returns The root entry, with the workspace's flags
  */
 function adopt(source: Entry, flags: Entry): Entry {
-    const entry = Object.fromEntries(Object.entries(source).filter(([key]) => !FLAGS.includes(key)));
+    const entry = Object.fromEntries(Object.entries(source).filter(([key]) => !FLAGS.has(key)));
 
     for (const flag of FLAGS) {
         if (flags[flag] === true) {
