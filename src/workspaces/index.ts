@@ -23,6 +23,7 @@ const KEY_ORDER = ['name', 'version', 'lockfileVersion', 'resolved', 'integrity'
 const MANIFEST_FIELDS = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies'];
 // Ends a problem that --fix leaves for a person
 const BY_HAND = 'fix by hand';
+const LOCKFILE_NAME = 'package-lock.json';
 
 /**
  * @param value The value to narrow
@@ -411,7 +412,7 @@ function follow(walk: Walk, slot: string, name: string): [string, string] | unde
  * @returns The lockfile's new text
  */
 function sync(workspace: string, root: Packages, versions: Map<string, Set<string>>, problems: string[]): string {
-    const lockfile = path.join(workspace, 'package-lock.json');
+    const lockfile = path.join(workspace, LOCKFILE_NAME);
     const text = fs.readFileSync(path.join(PROJECT_ROOT, lockfile), 'utf8');
     const parsed = asObject(JSON.parse(text), lockfile);
     const packages = asObject(parsed.packages, `${lockfile} packages`) as Packages;
@@ -466,7 +467,7 @@ function sync(workspace: string, root: Packages, versions: Map<string, Set<strin
 function unknownVersions(workspace: string, root: Map<string, Set<string>>): string[] {
     const problems: string[] = [];
 
-    for (const [pkg, versions] of versionsOf(path.join(workspace, 'package-lock.json'))) {
+    for (const [pkg, versions] of versionsOf(path.join(workspace, LOCKFILE_NAME))) {
         const known = root.get(pkg) ?? new Set();
         const held = known.size > 0 ? [...known].join(', ') : 'nothing';
 
@@ -486,7 +487,7 @@ function unknownVersions(workspace: string, root: Map<string, Set<string>>): str
  * @returns Whether the lockfile agrees with the root
  */
 function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<string, Set<string>>): boolean {
-    const lockfile = path.join(PROJECT_ROOT, workspace, 'package-lock.json');
+    const lockfile = path.join(PROJECT_ROOT, workspace, LOCKFILE_NAME);
     const problems: string[] = [];
     const text = sync(workspace, root, rootVersions, problems);
     const byHand = problems.filter((problem) => problem.endsWith(BY_HAND));
@@ -520,15 +521,15 @@ function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<str
  * @returns Whether every workspace lockfile agrees with the root
  */
 function check(): boolean {
-    const root = packagesOf('package-lock.json');
-    const rootVersions = versionsOf('package-lock.json');
+    const root = packagesOf(LOCKFILE_NAME);
+    const rootVersions = versionsOf(LOCKFILE_NAME);
     let synced = true;
 
     for (const workspace of workspaceDirs()) {
         if (!fs.existsSync(path.join(PROJECT_ROOT, workspace))) {
             console.warn(`${workspace}: no such workspace`);
         }
-        else if (fs.existsSync(path.join(PROJECT_ROOT, workspace, 'package-lock.json'))) {
+        else if (fs.existsSync(path.join(PROJECT_ROOT, workspace, LOCKFILE_NAME))) {
             synced = checkWorkspace(workspace, root, rootVersions) && synced;
         }
     }
