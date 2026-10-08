@@ -80,7 +80,8 @@ jobs:
       - name: Check root lockfile
         if: matrix.workspace == '.'
         run: npm ls --all --package-lock-only
-  # Checks that the project installs and tests under pnpm
+  # Checks that the project installs and tests under pnpm.
+  # Failure in the `tsc` or `test` workflows should cause a failure here
   pnpm:
     permissions:
       contents: read
