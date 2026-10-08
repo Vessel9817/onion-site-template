@@ -457,11 +457,11 @@ function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<str
     const lockfile = path.join(PROJECT_ROOT, workspace, LOCKFILE_NAME);
     const problems: string[] = [];
     const text = sync(workspace, root, rootVersions, problems);
-    const byHand = problems.filter((problem) => problem.endsWith(BY_HAND));
+    const byHand = new Set(problems.filter((problem) => problem.endsWith(BY_HAND)));
 
     // The rest of the rewrite follows from these, so it is neither written nor listed
-    if (byHand.length > 0) {
-        for (const problem of new Set(byHand)) {
+    if (byHand.size > 0) {
+        for (const problem of byHand) {
             console.error(problem);
         }
 
