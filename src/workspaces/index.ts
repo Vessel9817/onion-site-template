@@ -1,21 +1,22 @@
 // Keeps each workspace lockfile in step with the root lockfile, which npm and
 // Dependabot update. The express and mongo images install from their own
 // lockfile, so it must pin what the root pins and miss nothing.
-// Usage: tsx index.ts [--fix]
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
-import process from 'node:process';
 import * as semver from 'semver';
 
 type Entry = Record<string, unknown>;
 type Packages = Record<string, Entry>;
 type Kind = 'prod' | 'dev' | 'optional';
 
+export interface Options {
+    fix?: boolean;
+}
+
 const __dirname = import.meta.dirname;
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const PREFIX = 'node_modules/'; // Not ideal in the general case, but OK for npm
-const FIX = process.argv.includes('--fix');
 // Set from how the workspace reaches an entry, never copied from the root
 const FLAGS = new Set(['dev', 'optional', 'devOptional']);
 // The order npm writes lockfile keys in, ahead of the rest
@@ -447,13 +448,14 @@ function unknownVersions(workspace: string, root: Map<string, Set<string>>): str
 }
 
 /**
- * Checks, or with --fix rewrites, one workspace lockfile
+ * Checks, or with `fix` rewrites, one workspace lockfile
  * @param workspace The workspace directory, relative to the project root
  * @param root The root lockfile's entries
  * @param rootVersions Every version each package resolves to in the root
+ * @param fix Whether to rewrite the lockfile
  * @returns Whether the lockfile agrees with the root
  */
-function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<string, Set<string>>): boolean {
+function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<string, Set<string>>, fix: boolean): boolean {
     const lockfile = path.join(PROJECT_ROOT, workspace, LOCKFILE_NAME);
     const problems: string[] = [];
     const text = sync(workspace, root, rootVersions, problems);
@@ -467,27 +469,29 @@ function checkWorkspace(workspace: string, root: Packages, rootVersions: Map<str
 
         return false;
     }
-    if (FIX) {
+    if (fix) {
         fs.writeFileSync(lockfile, text);
     }
     else if (text !== fs.readFileSync(lockfile, 'utf8').replaceAll('\r\n', '\n')) {
         problems.push(`${workspace}: the lockfile differs from what \`npm run workspaces:fix\` writes`);
     }
 
-    // What the rewrite could not settle stays an error after --fix
+    // What the rewrite could not settle stays an error after a fix
     const unknown = unknownVersions(workspace, rootVersions);
 
     for (const problem of new Set([...problems, ...unknown])) {
         console.error(problem);
     }
 
-    return FIX ? unknown.length === 0 : problems.length === 0 && unknown.length === 0;
+    return fix ? unknown.length === 0 : problems.length === 0 && unknown.length === 0;
 }
 
 /**
+ * Checks, or with `fix` rewrites, every workspace lockfile
+ * @param options What to do
  * @returns Whether every workspace lockfile agrees with the root
  */
-function check(): boolean {
+export function check({ fix = false }: Options = {}): boolean {
     const root = packagesOf(LOCKFILE_NAME);
     const rootVersions = versionsOf(LOCKFILE_NAME);
     let synced = true;
@@ -497,13 +501,9 @@ function check(): boolean {
             console.warn(`${workspace}: no such workspace`);
         }
         else if (fs.existsSync(path.join(PROJECT_ROOT, workspace, LOCKFILE_NAME))) {
-            synced = checkWorkspace(workspace, root, rootVersions) && synced;
+            synced = checkWorkspace(workspace, root, rootVersions, fix) && synced;
         }
     }
 
     return synced;
-}
-
-if (!check()) {
-    process.exitCode = 1;
 }
