@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { type Express } from 'express';
 import { csp, errorHandler } from './middleware';
 import { appRouter, notFoundRouter } from './routes';
 
-const app = express();
+const app: Express = express();
 
 app.set('view engine', 'ejs');
 
