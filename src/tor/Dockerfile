@@ -1,7 +1,7 @@
 # Using current stable version of Python
-# EOL: Oct 2030
+# EOL: Oct 2031
 # https://devguide.python.org/versions/
-ARG PYTHON_VERSION=python:3.14-slim
+ARG PYTHON_VERSION=python:3.15-slim
 
 FROM ${PYTHON_VERSION} AS vanguards
 
