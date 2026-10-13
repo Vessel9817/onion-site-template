@@ -17,9 +17,15 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "start": "tsx index.ts"
+        "start": "tsx cli.ts",
+        "fix": "tsx cli.ts --fix"
+    },
+    "dependencies": {
+        "commander": "^15.0.0",
+        "semver": "^7.8.5"
     },
     "devDependencies": {
+        "@types/semver": "^7.8.0",
         "tsx": "^4.23.15"
     }
 }
