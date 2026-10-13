@@ -5,5 +5,63 @@
   ],
   "npm": {
     "enabled": false
-  }
+  },
+  "git-submodules": {
+    "enabled": true
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Gixy release; its two checksums must be updated by hand from the release's checksums.txt",
+      "managerFilePatterns": [
+        "/^src/nginx/download-gixy\\.sh$/"
+      ],
+      "matchStrings": [
+        "DEFAULT_VERSION='(?<currentValue>v[^']+)'"
+      ],
+      "depNameTemplate": "gixy",
+      "packageNameTemplate": "dvershinin/gixy",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "Docker Engine version used by CI",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/ci\\.yml$/"
+      ],
+      "matchStrings": [
+        "DOCKER_VERSION: (?<currentValue>v\\S+)"
+      ],
+      "depNameTemplate": "docker",
+      "packageNameTemplate": "moby/moby",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^docker-(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Docker Compose version used by CI",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/ci\\.yml$/"
+      ],
+      "matchStrings": [
+        "DOCKER_COMPOSE_VERSION: (?<currentValue>v\\S+)"
+      ],
+      "depNameTemplate": "docker/compose",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "OnionScan commit installed with go install",
+      "managerFilePatterns": [
+        "/^src/onionscan/Dockerfile$/"
+      ],
+      "matchStrings": [
+        "go install github\\.com/harr1424/onionscan@(?<currentDigest>[0-9a-f]{40})"
+      ],
+      "depNameTemplate": "onionscan",
+      "packageNameTemplate": "https://github.com/harr1424/onionscan",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs"
+    }
+  ]
 }

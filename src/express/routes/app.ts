@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { type Router } from 'express';
 import { ChatController, HomeController } from '../controllers';
 import { Chat, errorHandler } from '../middleware';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Building home routes
 router.get('/', HomeController.getHome, errorHandler);

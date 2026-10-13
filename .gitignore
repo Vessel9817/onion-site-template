@@ -8,6 +8,8 @@
 # Dependencies
 **/node_modules
 **/bower_components
+# Generated from package-lock.json, see the README
+pnpm-lock.yaml
 
 # Secrets
 **/.git
