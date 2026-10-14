@@ -19,6 +19,6 @@
         "start": "./index.sh"
     },
     "dependencies": {
-        "license-report": "^6.8.5"
+        "license-report": "^6.8.6"
     }
 }
