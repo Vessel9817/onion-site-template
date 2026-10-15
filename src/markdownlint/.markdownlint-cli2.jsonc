@@ -5,9 +5,9 @@
         "no-hard-tabs": true
     },
     "globs": [
-        "**/*.md",
+        "../../**/*.{md,markdown}",
         "!**/node_modules",
-        "!src/onionprobe/onionprobe",
+        "!../../src/onionprobe/onionprobe",
         // Ignore LICENSE files, because they shouldn't be modified
         "!**/LICENSE*",
         "!**/*.license"

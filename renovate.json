@@ -67,7 +67,7 @@
       "customType": "regex",
       "description": "markdownlint-cli2 version used by CI",
       "managerFilePatterns": [
-        "/^\\.markdownlint-cli2\\.jsonc$/"
+        "/^src/markdownlint/\\.markdownlint-cli2\\.jsonc$/"
       ],
       "matchStrings": [
         "https://raw\\.githubusercontent\\.com/DavidAnson/markdownlint-cli2/(?<currentValue>v\\S+)/schema/markdownlint-cli2-config-schema\\.json"
