@@ -62,6 +62,18 @@
       "packageNameTemplate": "https://github.com/harr1424/onionscan",
       "currentValueTemplate": "master",
       "datasourceTemplate": "git-refs"
+    },
+    {
+      "customType": "regex",
+      "description": "markdownlint-cli2 version used by CI",
+      "managerFilePatterns": [
+        "/^\\.markdownlint-cli2\\.jsonc$/"
+      ],
+      "matchStrings": [
+        "https://raw\\.githubusercontent\\.com/DavidAnson/markdownlint-cli2/(?<currentValue>v\\S+)/schema/markdownlint-cli2-config-schema\\.json"
+      ],
+      "depNameTemplate": "DavidAnson/markdownlint-cli2",
+      "datasourceTemplate": "github-tags"
     }
   ]
 }
