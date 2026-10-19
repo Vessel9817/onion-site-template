@@ -10,8 +10,8 @@ import {
     MsgSchema,
     type HydratedMsg,
     type StoredMsg
-} from '../db/msgBoard';
-import { MSG_INDEX, stubAggregate } from './support';
+} from '../../db/msgBoard';
+import { MSG_INDEX, stubAggregate } from '../support';
 
 function pipelineOf(call: { arguments: unknown[] }): PipelineStage[] {
     return call.arguments[0] as PipelineStage[];

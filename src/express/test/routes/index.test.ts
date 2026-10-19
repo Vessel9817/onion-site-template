@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { type Server } from 'node:http';
 import { after, before, describe, it, type TestContext } from 'node:test';
-import { MsgModel } from '../db/msgBoard';
-import { http } from '../utils';
-import { post as _post, mockEnv, MSG_INDEX, stubAggregate } from './support';
+import { MsgModel } from '../../db/msgBoard';
+import { http } from '../../utils';
+import { post as _post, mockEnv, MSG_INDEX, stubAggregate } from '../support';
 
 void describe('routes', () => {
     let server: Server;
@@ -19,7 +19,7 @@ void describe('routes', () => {
     before(async () => {
         mockEnv();
 
-        const app = (await import('../app')).default;
+        const app = (await import('../../app')).default;
 
         await new Promise<void>((resolve) => {
             server = app.listen(0, () => {
