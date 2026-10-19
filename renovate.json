@@ -65,7 +65,7 @@
     },
     {
       "customType": "regex",
-      "description": "markdownlint-cli2 version used by CI",
+      "description": "markdownlint-cli2 schema version",
       "managerFilePatterns": [
         "/^src/markdownlint/\\.markdownlint-cli2\\.jsonc$/"
       ],
