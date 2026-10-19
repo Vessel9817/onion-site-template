@@ -17,13 +17,13 @@
         "url": "https://github.com/Vessel9817/onion-site-template/issues"
     },
     "scripts": {
-        "test": "tsx --test \"./test/*.test.ts\"",
+        "test": "tsx --experimental-test-module-mocks --test \"./test/*.test.ts\"",
         "start": "node --env-file=./secrets/.env ./dist/index.cjs",
         "build": "node --run=build:prod",
         "build:prod": "cross-env NODE_ENV=\"production\" tsx ./webpack/index.ts",
         "build:dev": "cross-env NODE_ENV=\"development\" tsx ./webpack/index.ts",
         "tsc": "tsc --noEmit",
-        "test:coverage": "tsx --experimental-test-coverage --test-coverage-exclude=\"test/**\" --test-coverage-exclude=\"webpack/**\" --test \"./test/*.test.ts\""
+        "test:coverage": "tsx --experimental-test-module-mocks --experimental-test-coverage --test-coverage-exclude=\"test/**\" --test-coverage-exclude=\"webpack/**\" --test \"./test/*.test.ts\""
     },
     "dependencies": {
         "ejs": "^7.0.1",

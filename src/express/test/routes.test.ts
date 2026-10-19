@@ -1,53 +1,54 @@
 import assert from 'node:assert/strict';
 import { type Server } from 'node:http';
 import { after, before, describe, it, type TestContext } from 'node:test';
-import app from '../app';
 import { MsgModel } from '../db/msgBoard';
 import { http } from '../utils';
-import { MSG_INDEX, stubAggregate } from './support';
-
-let server: Server;
-let base: string;
-
-function post(path: string, fields: Record<string, string>) {
-    return fetch(base + path, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(fields),
-        redirect: 'manual'
-    });
-}
-
-before(async () => {
-    await new Promise<void>((resolve) => {
-        server = app.listen(0, () => {
-            resolve();
-        });
-    });
-
-    const address = server.address();
-
-    if (address === null || typeof address === 'string') {
-        throw new Error('expected a TCP address');
-    }
-
-    base = `http://127.0.0.1:${address.port.toString()}`;
-});
-
-after(async () => {
-    await new Promise<void>((resolve, reject) => {
-        server.close((err) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve();
-            }
-        });
-    });
-});
+import { post as _post, mockEnv, MSG_INDEX, stubAggregate } from './support';
 
 void describe('routes', () => {
+    let server: Server;
+    let base: string;
+
+    function post(
+        path: string,
+        fields: Record<string, string>
+    ): Promise<Response> {
+        return _post(base + path, fields);
+    }
+
+    before(async () => {
+        mockEnv();
+
+        const app = (await import('../app')).default;
+
+        await new Promise<void>((resolve) => {
+            server = app.listen(0, () => {
+                resolve();
+            });
+        });
+
+        const address = server.address();
+
+        if (address === null || typeof address === 'string') {
+            throw new Error('expected a TCP address');
+        }
+
+        base = `http://127.0.0.1:${address.port.toString()}`;
+    });
+
+    after(async () => {
+        await new Promise<void>((resolve, reject) => {
+            server.close((err) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve();
+                }
+            });
+        });
+    });
+
     void it('serves the home page', async () => {
         const res = await fetch(base + '/');
 

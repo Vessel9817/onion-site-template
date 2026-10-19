@@ -46,6 +46,7 @@ assert.ok(
 );
 
 export {
-    dbRetryIntervalMs, forceShutdownTimeoutMs,
+    dbRetryIntervalMs,
+    forceShutdownTimeoutMs,
     msgBoard
 };
