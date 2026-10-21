@@ -2,7 +2,7 @@
 
 # https://github.com/dvershinin/gixy/releases
 # Renovate bumps the version; copy both checksums from that release's checksums.txt
-DEFAULT_VERSION='v0.2.55'
+DEFAULT_VERSION='v0.2.57'
 DEFAULT_LINUX_AARCH64_CHECKSUM='f8279a8f1412aff746da3f45cf7cc20f7c92c1293a2eb1e20d6f918f0f06ee06'
 DEFAULT_LINUX_X86_64_CHECKSUM='3e1f7f5e70cb4ab74d4526fbf4a5dc4dd75ed9929dd5ac1fcc1cfb6c4e679c0c'
 
