@@ -19,7 +19,7 @@
         "fix": "markdownlint-cli2 --fix"
     },
     "dependencies": {
-        "markdownlint-cli2": "^0.23.3"
+        "markdownlint-cli2": "^0.24.0"
     },
     "overrides": {
         "smol-toml": "1.9.0",
