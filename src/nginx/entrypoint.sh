@@ -7,4 +7,4 @@ if [ -z "$NGINX_VERSION" ]; then
 fi
 
 '/project/gixy' "$@" --nginx-version="$NGINX_VERSION" \
-    && exec openresty -g "daemon off;"
+    && exec nginx -g 'daemon off;'
