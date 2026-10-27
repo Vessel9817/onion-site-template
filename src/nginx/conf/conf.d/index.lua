@@ -24,7 +24,7 @@ function _M.trim_all(s)
 end
 
 function _M.get_proxy_address()
-    return trim_all(os.getenv('PROXY_ADDRESS'))
+    return _M.trim_all(os.getenv('PROXY_ADDRESS'))
 end
 
 -- Requires elevated privileges to read the hostname file
@@ -38,7 +38,7 @@ function _M.get_onion_hostname()
         return ''
     end
 
-    local hostname = string.lower(trim_all(file:read()))
+    local hostname = string.lower(_M.trim_all(file:read()))
 
     io.close(file)
 
@@ -56,8 +56,8 @@ end
 
 -- Should be called before workers fork to instantiate the shared config
 function _M.set_onion_location()
-    if to_boolean(os.getenv('USE_ONION_LOCATION')) then
-        ngx.shared.onion_domain = get_onion_hostname()
+    if _M.to_boolean(os.getenv('USE_ONION_LOCATION')) then
+        ngx.shared.onion_domain = _M.get_onion_hostname()
     else
         ngx.shared.onion_domain = ''
     end
@@ -77,3 +77,5 @@ function _M.get_onion_location()
 
     return string.format('%s%s', ngx.shared.onion_domain, ngx.var.request_uri)
 end
+
+return _M
