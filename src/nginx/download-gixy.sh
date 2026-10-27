@@ -36,7 +36,7 @@ fi
 # Installing Gixy
 wget "$GIXY_URL" -qO '/project/gixy' || echo "[ERR] Failed to download Gixy from: ${GIXY_URL}" >&2
 
-if ! echo "${GIXY_CHECKSUM} /project/gixy" | sha256sum --strict -c - > /dev/null; then
+if ! echo "${GIXY_CHECKSUM} /project/gixy" | sha256sum -c - > /dev/null; then
     echo '[ERR] Computed SHA256 checksum didn'"'"'t match GIXY_CHECKSUM' >&2
     exit 1
 fi
