@@ -10,13 +10,21 @@ function _M.to_boolean(v)
     end
 end
 
+-- Removes leading and trailing whitespace.
 function _M.trim(s)
     -- https://stackoverflow.com/a/51181334
     return string.gsub(s, '^%s*(.-)%s*$', '%1')
 end
 
+-- Removes ALL whitespace. Prevents HTTP-Splitting.
+-- https://gixy.getpagespeed.com/checks/http-splitting/
+function _M.trim_all(s)
+    -- https://stackoverflow.com/a/10460780
+    string.gsub(s, '%s+', '')
+end
+
 function _M.get_proxy_address()
-    return trim(os.getenv('PROXY_ADDRESS'))
+    return trim_all(os.getenv('PROXY_ADDRESS'))
 end
 
 -- Requires elevated privileges to read the hostname file
@@ -30,7 +38,7 @@ function _M.get_onion_hostname()
         return ''
     end
 
-    local hostname = string.lower(trim(file:read()))
+    local hostname = string.lower(trim_all(file:read()))
 
     io.close(file)
 
