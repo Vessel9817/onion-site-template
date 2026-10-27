@@ -83,7 +83,7 @@ services:
     logging: *logging
   grafana:
     container_name: grafana
-    image: grafana/grafana:13.2.4
+    image: grafana/grafana:13.3.0
     restart: always
     environment:
       # No anonymous usage statistics
