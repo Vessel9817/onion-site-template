@@ -1,5 +1,4 @@
 ARG GO_VERSION=golang:1-alpine
-ARG NODE_VERSION=node:lts-alpine
 
 FROM ${GO_VERSION} AS onionscan
 
