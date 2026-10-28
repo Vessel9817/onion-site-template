@@ -22,7 +22,7 @@ RUN \
 # Configuring nginx to run after Gixy
 COPY --link --chmod="+x" [ "./entrypoint.sh", "./" ]
 
-# From nginx image; we fill it in, since OpenResty doesn't use it
+# From nginx image; we fill it in, since OpenResty doesn't set it
 ENV NGINX_VERSION="${NGINX_VERSION:-}"
 
 # Depends on PROXY_ADDRESS env var
