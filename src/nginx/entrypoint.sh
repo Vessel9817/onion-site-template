@@ -6,5 +6,6 @@ if [ -z "$NGINX_VERSION" ]; then
     NGINX_VERSION="$(nginx -v 2>&1 | sed -r 's#[^0-9]*([0-9]+(\.[0-9]+){0,2}).*#\1#')"
 fi
 
-'/project/gixy' "$@" --nginx-version="$NGINX_VERSION" \
-    && exec nginx -g 'daemon off;'
+# Gixy may return false positives
+'/project/gixy' "$@" --nginx-version="$NGINX_VERSION"
+exec nginx -g 'daemon off;'
