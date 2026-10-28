@@ -1,4 +1,4 @@
-ARG NODE_VERSION=node:lts-alpine
+ARG NODE_VERSION=node:26-alpine
 # No major tag exists, so this pins a series, which Renovate bumps
 ARG MONGO_VERSION=mongodb/mongodb-community-server:9.0-ubi9-slim
 
