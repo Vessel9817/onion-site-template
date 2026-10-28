@@ -1,4 +1,4 @@
-ARG NODE_VERSION=node:lts-alpine
+ARG NODE_VERSION=node:26-alpine
 
 FROM ${NODE_VERSION}
 
