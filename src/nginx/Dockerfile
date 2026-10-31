@@ -27,4 +27,4 @@ ENV NGINX_VERSION="${NGINX_VERSION:-}"
 
 # Depends on PROXY_ADDRESS env var
 ENTRYPOINT [ "/project/entrypoint.sh" ]
-CMD [ "--deep", "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]
+CMD [ "--deep", "--nginx-version=auto", "--fix", "/usr/local/openresty/nginx/conf/nginx.conf" ]
