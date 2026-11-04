@@ -63,7 +63,6 @@
         "typescript-eslint": "^8.72.1"
     },
     "overrides": {
-        "smol-toml": "1.9.0",
         "katex": "0.18.2",
         "re2js": "^2.8.7"
     }
