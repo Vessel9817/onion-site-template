@@ -55,7 +55,7 @@
         "eslint-import-resolver-typescript": "^4.4.5",
         "eslint-plugin-import-x": "^4.17.1",
         "eslint-plugin-sonarjs": "^4.2.1",
-        "globals": "^17.13.0",
+        "globals": "^17.14.0",
         "jiti": "^2.7.0",
         "tslib": "^2.9.1",
         "tsx": "^4.23.15",
@@ -63,6 +63,7 @@
         "typescript-eslint": "^8.72.1"
     },
     "overrides": {
+        "katex": "0.18.2",
         "re2js": "2.9.1"
     }
 }
