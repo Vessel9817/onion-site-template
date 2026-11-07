@@ -7,24 +7,11 @@
 ## Compatibility
 
 This project aims to be OS-agnostic and fully containerized.
-We officially support recent versions of Node and npm
-(consequently also npx) for up-to-date security releases.
-As such, other Node package managers (e.g, yarn, pnpm)
-may not be supported. Where possible, package manager commands are replaced
-in the *source code* with an equivalent Node CLI command.
-(I.e, `npm run ABC` is equivalent to `node --run=ABC`)
-For ease of use, *documentation* still uses npm.
-
-pnpm can install and run this project. Its lockfile is not committed;
-generate it from `package-lock.json`:
-
-```shell
-pnpm import
-pnpm install --frozen-lockfile
-```
-
-Use npm to add, remove or update dependencies.
-The Docker images always install with `npm ci`.
+We officially support LTS versions of Node for up-to-date security releases.
+Where possible, package manager commands are replaced in the source code
+with an equivalent Node CLI command.
+(E.g, `npm run ABC` is equivalent to `node --run=ABC`)
+However, npm is used in some places that use npm-specific functionality.
 
 ## Licensing
 
@@ -46,7 +33,7 @@ the licensing of this repository's various modules and their dependencies.
 
 ### Installing Dependencies
 
-- Install Docker Desktop
+- Install Docker Desktop (for experts, just Docker and Docker Compose)
 - Clone this repository:
 
     ```shell
@@ -335,11 +322,6 @@ it, but can move or lower unrelated versions, which the fix may then refuse.
 ## Issues and Contribution
 
 1. See the [Contributing guidelines](./CONTRIBUTING.md).
-1. Regarding the [compatibility](#compatibility) section, pull requests for adding
-    support for other Node package ecosystems are welcome if you include
-    maintenance steps. (E.g, if we have to synchronize multiple version lock files,
-    we want to know.) It would be greatly appreciated if a minimal
-    [CI workflow](./.github/workflows) were included for verification.
 
 [license-badge]: https://raw.githubusercontent.com/Vessel9817/onion-site-template/refs/heads/main/badge.svg
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
