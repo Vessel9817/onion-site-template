@@ -23,7 +23,7 @@
         "start:prod": "docker compose --profile production up -d grafana",
         "start:dev": "docker compose --profile development up -d",
         "stop": "docker compose --profile production --profile development down --remove-orphans",
-        "onionscan": "docker compose up -d onionscan",
+        "onionscan": "docker compose --profile production up -d onionscan",
         "mongosh": "docker compose exec mongo-1 mongosh --quiet --host dataset/mongo-1,mongo-2,mongo-3 --shell -f /project/src/login.js",
         "tsc": "tsc -b",
         "markdownlint": "npm -w ./src/markdownlint start",
