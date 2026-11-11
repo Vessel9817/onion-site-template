@@ -9,4 +9,4 @@ if [ -z "$DISABLE_VANGUARDS" ]; then
     python3 '/project/vanguards/src/vanguards.py' &
 fi
 
-exec tor -f /etc/tor/torrc User debian-tor "$@"
+exec tor "$@"
