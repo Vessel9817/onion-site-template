@@ -21,7 +21,7 @@
         "fix": "tsx cli.ts --fix"
     },
     "dependencies": {
-        "commander": "^15.0.0",
+        "commander": "^15.1.0",
         "semver": "^7.8.6"
     },
     "devDependencies": {
