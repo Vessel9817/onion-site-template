@@ -78,7 +78,7 @@ services:
     logging: *logging
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3-distroless
+    image: prom/prometheus:v3.16.0-distroless
     restart: always
     logging: *logging
   grafana:
