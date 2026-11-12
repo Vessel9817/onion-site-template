@@ -210,7 +210,7 @@ services:
         read_only: true
     depends_on:
       tor:
-        condition: service_healthy
+        condition: service_started
         required: false
     networks:
       tor:
