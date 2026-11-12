@@ -10,7 +10,7 @@ AddressDisableIPv6 1
 
 # Relaying only: no traffic exits the network and no node opens a SOCKS port
 ExitRelay 0
-SocksPort 0
+/SocksPort
 
 # Using one worker thread; one per CPU let a node's diff cache pass 500 MB
 NumCPUs 1
