@@ -98,7 +98,7 @@ metrics_port: ''
 metrics_port_policy: 'reject *'
 
 # Whether to enable Prometheus exporter functionality
-# Setting it to true automatically enables countinuous run (loop)
+# Setting it to true automatically enables continuous run (loop)
 prometheus_exporter: true
 
 # Prometheus exporter port
