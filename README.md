@@ -54,6 +54,7 @@ Rename the following files to remove the `.example` postfix:
 - [src/express/secrets/.env.example](./src/express/secrets/.env.example)
 - [src/onionscan/.env.example](./src/onionscan/.env.example)
 - [src/onionprobe/config.yml.example](./src/onionprobe/config.yml.example)
+- [src/onionprobe/prometheus-tests.yml.example](./src/onionprobe/prometheus-tests.yml.example)
 
 The same goes with these files, except that these values should be memorable:
 
@@ -131,7 +132,8 @@ the public/private keys and other secrets can be placed in
 
 Your website domain will be found in `src/tor/secrets/hostname`.
 This domain should also be specified in `src/onionprobe/config.yml`
-where the placeholder onion address is present.
+and `src/onionprobe/prometheus-tests.yml` where the placeholder onion address
+`abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion` is present.
 
 ## Running
 

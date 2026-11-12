@@ -240,7 +240,7 @@ services:
         target: /etc/prometheus/prometheus-rules.yml
         read_only: true
       - type: bind
-        source: ./src/onionprobe/onionprobe/configs/prometheus/prometheus-tests.yml
+        source: ./src/onionprobe/prometheus-tests.yml
         target: /etc/prometheus/prometheus-tests.yml
         read_only: true
     networks:
@@ -254,7 +254,7 @@ services:
       - monitor
     depends_on:
       prometheus:
-        condition: service_started
+        condition: service_healthy
         required: false
     ports:
       - '127.0.0.1::3000'
