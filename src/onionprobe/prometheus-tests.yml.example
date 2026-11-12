@@ -1,0 +1,246 @@
+---
+# Based on: https://gitlab.torproject.org/tpo/onion-services/onionprobe/-/blob/4839066693681571127cf5cf7a3c011969c03025/configs/prometheus/prometheus-tests.yml
+#
+# Copyright (C) 2025 The Tor Project, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation, either version 3 of the License,
+# or any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+rule_files:
+  - prometheus-rules.yml
+
+tests:
+  # Onionprobe
+  - interval: 1m
+    # Use for series, one for each Onionprobe state
+    # No two states can be active at the same time.
+    #
+    # Failure happens when the series stales, meaning that Onionprobe became
+    # unreachable.
+    #
+    # These series simulates:
+    #
+    # * Onionprobe being operational for the first 4 minutes.
+    # * Onionprobe becomes unresponsible for 16 minutes.
+    # * A restart in the Onionprobe service making it reachable on minute 20.
+    input_series:
+      - series: 'onionprobe_state{instance="onionprobe:9935", job="onionprobe", onionprobe_state="starting"}'
+        values: 1 0 0 0 _x15 1
+      - series: 'onionprobe_state{instance="onionprobe:9935", job="onionprobe", onionprobe_state="probing"}'
+        values: 0 1 0 0 _x15 0
+      - series: 'onionprobe_state{instance="onionprobe:9935", job="onionprobe", onionprobe_state="sleeping"}'
+        values: 0 0 1 0 _x15 0
+      - series: 'onionprobe_state{instance="onionprobe:9935", job="onionprobe", onionprobe_state="stopping"}'
+        values: 0 0 0 1 _x15 0
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 2m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 4m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+      # In addition to the wait time ("for: 5m") in the alert configuration,
+      # there's also an additional time before the series is marked as stale.
+      #
+      # Hence, this alert should fire 5 minutes after the series is marked as
+      # stale by Prometheus It takes some minutes before stale samples leads to
+      # a staleness:
+      # https://prometheus.io/docs/prometheus/latest/querying/basics/#staleness
+      #
+      # The staleness timeout seems not to be exactly 5 minutes, otherwise
+      # the alert would trigger only on minute 15.
+      - eval_time: 13m
+        alertname: Onionprobe not responding
+        exp_alerts:
+          - exp_labels:
+              severity  : critical
+              alertname : "Onionprobe not responding"
+            exp_annotations:
+              summary: >
+                Onionprobe is unreachable
+              description: >
+                Unable to determine Onionprobe state
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onionprobe-not-responding'
+      - eval_time: 19m
+        alertname: Onionprobe not responding
+        exp_alerts: []
+
+  # General reachability tests
+  - interval: 1m
+    input_series:
+      - series: 'onion_service_reachable{address="abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion", alertname="Onion Service unreachable", instance="onionprobe:9935", job="onionprobe", name="Test", path="/", port="443", protocol="https", severity="critical"}'
+        values: 0x30
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: Onion Service unreachable
+        exp_alerts: []
+      - eval_time: 30m
+        alertname: Onion Service unreachable
+        exp_alerts:
+          - exp_labels:
+              severity  : critical
+              address   : abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              alertname : "Onion Service descriptor unreachable"
+              instance  : onionprobe:9935
+              job       : onionprobe
+              name      : Test
+              path      : /
+              port      : 443
+              protocol  : https
+            exp_annotations:
+              summary: >
+                Onion Service unreachable:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              description: >
+                Onionprobe was unable to connect to the Onion Service:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onion-service-unreachable'
+
+  # Descriptor reachability tests
+  - interval: 1m
+    input_series:
+      - series: 'onion_service_descriptor_reachable{address="abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion", alertname="Onion Service descriptor unreachable", instance="onionprobe:9935", job="onionprobe", name="Test", severity="critical"}'
+        values: 0x30
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: Onion Service descriptor unreachable
+        exp_alerts: []
+      - eval_time: 30m
+        alertname: Onion Service descriptor unreachable
+        exp_alerts:
+          - exp_labels:
+              severity  : critical
+              address   : abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              alertname : "Onion Service descriptor unreachable"
+              instance  : onionprobe:9935
+              job       : onionprobe
+              name      : Test
+            exp_annotations:
+              summary: >
+                Onion Service descriptor unreachable:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              description: >
+                The Onion Service descriptor for
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+                has become unreachable from Onionprobe.
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#onion-service-descriptor-unreachable'
+
+  # Invalid certificate tests
+  - interval: 1m
+    input_series:
+      - series: 'onion_service_valid_certificate{address="abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion", alertname="Invalid certificate for the Onion Service", instance="onionprobe:9935", job="onionprobe", name="Test", path="/", port="443", protocol="https", severity="critical"}'
+        values: 0x30
+    alert_rule_test:
+      - eval_time: 30m
+        alertname: Invalid TLS certificate for the Onion Service
+        exp_alerts:
+          - exp_labels:
+              severity  : critical
+              address   : abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              alertname : "Invalid TLS certificate for the Onion Service"
+              instance  : onionprobe:9935
+              job       : onionprobe
+              name      : Test
+              path      : /
+              port      : 443
+              protocol  : https
+            exp_annotations:
+              summary: >
+                Invalid TLS certificate for the Onion Service:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              description: >
+                The TLS certificate for the Onion Service
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+                is invalid
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#invalid-tls-certificate-for-the-onion-service'
+
+  # Certificate expiration tests
+  - interval: 1m
+    input_series:
+      - series: 'onion_service_certificate_expiry_seconds{address="abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion", alertname="Expiring certificate for the Onion Service", instance="onionprobe:9935", job="onionprobe", name="Test", port="443", severity="page"}'
+        # Series: (86400 * 7)  +  (60 * 10), decrementing 60 seconds every minute, 30 times
+        #          a week         ten minutes
+        #
+        # Series starts with the value for a certificate expiring in one week plus ten minutes.
+        # The alert should fire in eleven minutes.
+        values: 605400-60x30
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: Expiring TLS certificate for the Onion Service
+        exp_alerts: []
+      - eval_time: 11m
+        alertname: Expiring TLS certificate for the Onion Service
+        exp_alerts:
+          - exp_labels:
+              severity  : page
+              address   : abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              alertname : Expiring TLS certificate for the Onion Service
+              instance  : onionprobe:9935
+              job       : onionprobe
+              name      : Test
+              port      : 443
+            exp_annotations:
+              summary: >
+                Expiring TLS certificate for the Onion Service:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              description: >
+                The TLS certificate for the Onion Service
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+                will expire in less than a week.
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#expiring-tls-certificate-for-the-onion-service'
+
+  # Status code tests
+  - interval: 1m
+    input_series:
+      - series: 'onion_service_unexpected_status_code{address="abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion", alertname="Status code", instance="onionprobe:9935", job="onionprobe", name="Test", path="/", port="443", protocol="https", severity="critical"}'
+        values: 1x250
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: Unexpected HTTP status code
+        exp_alerts: []
+      - eval_time: 30m
+        alertname: Unexpected HTTP status code
+        exp_alerts:
+          - exp_labels:
+              severity  : critical
+              address   : abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              alertname : "Unexpected HTTP status code"
+              instance  : onionprobe:9935
+              job       : onionprobe
+              name      : Test
+              path      : /
+              port      : 443
+              protocol  : https
+            exp_annotations:
+              summary: >
+                Unexpected HTTP status code for Onion Service:
+                abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              description: >
+                Onionprobe got an unexpected HTTP status code when trying to
+                connect to abcdefghabcdefghabcdefghabcdefghabcdefghabcdefghabcdefgh.onion
+              troubleshooting: 'https://onionservices.torproject.org/apps/web/onionprobe/troubleshooting/#unexpected-http-status-code'

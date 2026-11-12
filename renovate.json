@@ -74,6 +74,28 @@
       ],
       "depNameTemplate": "DavidAnson/markdownlint-cli2",
       "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "Prometheus version reported to Grafana's data source, kept in step with the prom/prometheus image",
+      "managerFilePatterns": [
+        "/^src/grafana/datasources\\.yml$/"
+      ],
+      "matchStrings": [
+        "prometheusVersion: (?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "prom/prometheus",
+      "datasourceTemplate": "docker",
+      "extractVersionTemplate": "^v(?<version>\\d+\\.\\d+\\.\\d+)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Bump the Prometheus image and the version in Grafana's data source in one pull request",
+      "matchPackageNames": [
+        "prom/prometheus"
+      ],
+      "groupName": "prometheus"
     }
   ]
 }

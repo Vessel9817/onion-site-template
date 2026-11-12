@@ -75,11 +75,20 @@ services:
     build:
       context: ./onionprobe/onionprobe
       dockerfile: ./containers/onionprobe/Dockerfile
+    restart: always
     logging: *logging
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3-distroless
+    image: prom/prometheus:v3.16.0-distroless
     restart: always
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "/bin/wget http://localhost:9090/-/healthy -q -O - | /bin/grep -q 'Prometheus Server is Healthy'"
+      ]
+      interval: 10s
+      timeout: 30s
+      retries: 50
     logging: *logging
   grafana:
     container_name: grafana

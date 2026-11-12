@@ -18,6 +18,7 @@
 **/secrets/**/*.txt
 **/*.pem
 src/onionprobe/config.yml
+src/onionprobe/prometheus-tests.yml
 !**/*.example
 
 # Development

@@ -13,7 +13,6 @@ datasources:
   - name: Prometheus
     type: prometheus
     prometheusType: Prometheus
-    implementation: prometheus
-    prometheusVersion: 3.10.0
+    prometheusVersion: 3.16.0
     access: proxy
     url: http://prometheus:9090
