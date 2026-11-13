@@ -191,10 +191,6 @@ npm run build:pull
 
 Then, stop and start the website.
 
-When building the `nginx` image with a custom `GIXY_URL`, checksum verification
-is enabled by default. To disable it, build with
-`docker compose build --build-arg GIXY_VERIFY_CHECKSUM=false nginx`.
-
 In general, you should be able to omit the shutdown procedure,
 but some services may not function correctly.
 
