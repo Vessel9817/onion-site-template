@@ -33,12 +33,36 @@ elif [ -z "$GIXY_VERSION" ]; then
     echo "[WARN] GIXY_VERSION is ignored when GIXY_URL is set" >&2
 fi
 
-# Installing Gixy
-wget "$GIXY_URL" -qO '/project/gixy' || echo "[ERR] Failed to download Gixy from: ${GIXY_URL}" >&2
+# Checksum verification defaults to enabled
+if [ -z "$GIXY_VERIFY_CHECKSUM" ]; then
+    GIXY_VERIFY_CHECKSUM='true'
+fi
 
-if ! echo "${GIXY_CHECKSUM} /project/gixy" | sha256sum -c - > /dev/null; then
-    echo '[ERR] Computed SHA256 checksum didn'"'"'t match GIXY_CHECKSUM' >&2
+case "$GIXY_VERIFY_CHECKSUM" in
+    1|true|yes|on)
+        verify_checksum='true'
+        ;;
+    0|false|no|off)
+        verify_checksum='false'
+        echo '[WARN] Gixy checksum verification is disabled' >&2
+        ;;
+    *)
+        echo '[ERR] GIXY_VERIFY_CHECKSUM must be set to true or false' >&2
+        exit 1
+        ;;
+esac
+
+# Installing Gixy
+if ! wget "$GIXY_URL" -qO '/project/gixy'; then
+    echo "[ERR] Failed to download Gixy from: ${GIXY_URL}" >&2
     exit 1
+fi
+
+if [ "$verify_checksum" = 'true' ]; then
+    if ! echo "${GIXY_CHECKSUM} /project/gixy" | sha256sum -c - > /dev/null; then
+        echo '[ERR] Computed SHA256 checksum didn'"'"'t match GIXY_CHECKSUM' >&2
+        exit 1
+    fi
 fi
 
 chmod +x '/project/gixy'
