@@ -33,9 +33,8 @@ elif [ -z "$GIXY_VERSION" ]; then
     echo "[WARN] GIXY_VERSION is ignored when GIXY_URL is set" >&2
 fi
 
-# Checksum verification is enabled unless explicitly disabled.
+# Checksum verification defaults to enabled
 if [ -z "$GIXY_VERIFY_CHECKSUM" ]; then
-    echo '[WARN] GIXY_VERIFY_CHECKSUM is unset; checksum verification is enabled by default' >&2
     GIXY_VERIFY_CHECKSUM='true'
 fi
 
