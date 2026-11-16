@@ -16,6 +16,10 @@ services:
       - type: bind
         source: ./secrets/
         target: /var/lib/tor/website/
+    # Matches top-level network configuration
+    networks:
+      tor:
+        ipv4_address: 10.5.3.2
 networks:
   # Matches top-level network configuration
   tor:
