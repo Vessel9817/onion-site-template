@@ -6,18 +6,18 @@ services:
     extends:
       file: ../docker-compose.yml
       service: tor
+    environment:
+      - DISABLE_VANGUARDS=1
     volumes:
       - type: bind
-        source: ./torrc
+        source: ./keygen.torrc
         target: /etc/tor/torrc
       # Path defined by torrc
       - type: bind
         source: ./secrets/
         target: /var/lib/tor/website/
-    networks:
-      tor:
-        ipv4_address: 10.5.3.2
 networks:
+  # Matches top-level network configuration
   tor:
     internal: true
     ipam:
