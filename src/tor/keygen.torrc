@@ -1,0 +1,11 @@
+# Setting up paths and permissions
+HiddenServiceDir /var/lib/tor/website/
+DataDirectory /var/lib/tor/data/
+User debian-tor
+
+# Disabling all network access
+DisableNetwork 1
+ControlPort 0
+
+# Dummy value required
+HiddenServicePort 80 127.0.0.1:80

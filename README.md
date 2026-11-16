@@ -122,9 +122,7 @@ following output:
 [notice] Bootstrapped 0% (starting): Starting
 ```
 
-From here, the container will attempt to publish your website to the tor
-network. It will fail indefinitely. At this point, the credentials have been
-generated, so it's safe to shut it down.
+At this point, the credentials have been generated, so it's safe to shut down.
 
 If you do have an existing onion domain, such as through [OnionMine][onionmine],
 the public/private keys and other secrets can be placed in

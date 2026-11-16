@@ -6,7 +6,7 @@ name: website
 services:
   tor:
     extends:
-      file: ./src/tor/docker-compose.yml
+      file: ./src/docker-compose.yml
       service: tor
     profiles:
       - production
@@ -22,9 +22,19 @@ services:
       interval: 10s
       timeout: 120s
       start_period: 20s
+    volumes:
+      - type: bind
+        source: ./src/tor/torrc
+        target: /etc/tor/torrc
+      # Path defined by torrc
+      - type: bind
+        source: ./src/tor/secrets/
+        target: /var/lib/tor/website/
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
+      tor:
+        ipv4_address: 10.5.3.2
       nginx:
   nginx:
     extends:
