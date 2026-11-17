@@ -26,6 +26,7 @@ services:
       - type: bind
         source: ./src/tor/torrc
         target: /etc/tor/torrc
+        read_only: true
       # Path defined by torrc
       - type: bind
         source: ./src/tor/secrets/
