@@ -8,6 +8,8 @@ services:
     extends:
       file: ./src/docker-compose.yml
       service: onionbalance
+    profiles:
+      - production
     depends_on:
       tor:
         condition: service_started
