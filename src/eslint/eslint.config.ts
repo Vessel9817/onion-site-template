@@ -1,11 +1,14 @@
 import eslint from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
 import { type Config, defineConfig } from 'eslint/config';
 import globals from 'globals';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import tseslint from 'typescript-eslint';
+
+const require = createRequire(import.meta.url);
+const stylistic = require('@stylistic/eslint-plugin');
 
 const JS_FILE_GLOBS = [
     '**/*.js',
