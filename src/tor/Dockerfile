@@ -10,10 +10,9 @@ RUN apt-get update -qq \
         python3-stem \
     && apt-get clean -qq
 
-# Installing Vanguards with Python 3.12+ support
-# https://github.com/mikeperry-tor/vanguards/pull/105
 WORKDIR /project/
-ADD [ "https://github.com/mikeperry-tor/vanguards.git#183d24775521feb3ed61b681088347279c3fc84c", "./vanguards/" ]
+ARG VANGUARDS_URL=https://github.com/mikeperry-tor/vanguards.git#6aea6ce32b06098a597f4203ec3fbb06a0859bab
+ADD [ "$VANGUARDS_URL", "./vanguards/" ]
 WORKDIR /project/vanguards/
 RUN pip install -r "./requirements.txt"
 
