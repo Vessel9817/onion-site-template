@@ -5,9 +5,14 @@ HiddenServiceDir /var/lib/tor/website/
 HiddenServicePort 80 10.5.0.2:80
 
 # Configuring Vanguards
-ControlPort 9051
+ControlPort 10.5.3.2:9051
 CookieAuthentication 1
 DataDirectory /var/lib/tor/data/
+
+# Configuring OnionBalance
+CookieAuthFile /var/lib/tor/data/control_auth_cookie
+CookieAuthFileGroupReadable 1
+HiddenServiceOnionbalanceInstance 1
 
 # Configuring OnionScan
 SocksPort 10.5.3.2:9050
@@ -24,10 +29,6 @@ AvoidDiskWrites 1
 # Reducing fingerprintability at the cost of bandwidth
 ConnectionPadding 1
 ReducedConnectionPadding 0
-
-# Introducing proof-of-work defenses
-# https://github.com/Vessel9817/onion-site-template/issues/113#issuecomment-5379475420
-HiddenServicePoWDefensesEnabled 1
 
 # Running tor with minimal privileges
 User debian-tor
