@@ -108,7 +108,7 @@ const JS_CONFIG: Config = {
     rules: {
         // https://eslint.org/docs/latest/rules/prefer-const
         'prefer-const': ['warn'],
-        // https://eslint.style/rules/js/no-unexpected-multiline
+        // https://eslint.org/docs/latest/rules/no-unexpected-multiline
         'no-unexpected-multiline': ['error'],
 
         // https://typescript-eslint.io/rules/no-non-null-assertion
@@ -139,9 +139,9 @@ const JS_CONFIG: Config = {
         // https://typescript-eslint.io/rules/restrict-template-expressions
         '@typescript-eslint/restrict-template-expressions': ['error'],
 
-        // https://eslint.style/rules/js/indent
+        // https://eslint.style/rules/indent
         '@stylistic/indent': ['warn', 4],
-        // https://eslint.style/rules/js/semi
+        // https://eslint.style/rules/semi
         '@stylistic/semi': [
             'warn',
             'always',
@@ -150,15 +150,15 @@ const JS_CONFIG: Config = {
                 omitLastInOneLineClassBody: true,
             },
         ],
-        // https://eslint.style/rules/js/no-extra-semi
+        // https://eslint.style/rules/no-extra-semi
         '@stylistic/no-extra-semi': ['warn'],
         // https://eslint.style/rules/operator-linebreak
         '@stylistic/operator-linebreak': ['error', 'before'],
-        // https://eslint.style/rules/js/comma-dangle
+        // https://eslint.style/rules/comma-dangle
         '@stylistic/comma-dangle': ['off'],
-        // https://eslint.style/rules/js/arrow-parens
+        // https://eslint.style/rules/arrow-parens
         '@stylistic/arrow-parens': ['warn', 'always'],
-        // https://eslint.style/rules/js/member-delimiter-style
+        // https://eslint.style/rules/member-delimiter-style
         '@stylistic/member-delimiter-style': [
             'error',
             {
@@ -172,7 +172,7 @@ const JS_CONFIG: Config = {
                 },
             },
         ],
-        // https://eslint.style/rules/js/quotes
+        // https://eslint.style/rules/quotes
         '@stylistic/quotes': [
             'warn',
             'single',
@@ -181,7 +181,7 @@ const JS_CONFIG: Config = {
                 allowTemplateLiterals: 'always',
             },
         ],
-        // https://eslint.style/rules/js/jsx-quotes
+        // https://eslint.style/rules/jsx-quotes
         '@stylistic/jsx-quotes': ['warn', 'prefer-single'],
         // https://eslint.style/rules/jsx/jsx-indent-props
         '@stylistic/jsx-indent-props': ['off'],
