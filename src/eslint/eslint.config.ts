@@ -7,8 +7,14 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import tseslint from 'typescript-eslint';
 
+interface RecommendedConfigs {
+    configs: {
+        recommended: Config[];
+    };
+}
+
 const require = createRequire(import.meta.url);
-const stylistic = require('@stylistic/eslint-plugin');
+const stylistic = require('@stylistic/eslint-plugin') as RecommendedConfigs;
 
 const JS_FILE_GLOBS = [
     '**/*.js',
@@ -141,6 +147,8 @@ const JS_CONFIG: Config = {
 
         // https://eslint.style/rules/indent
         '@stylistic/indent': ['warn', 4],
+        // https://eslint.style/rules/list-style
+        '@stylistic/list-style': ['off'],
         // https://eslint.style/rules/semi
         '@stylistic/semi': [
             'warn',
