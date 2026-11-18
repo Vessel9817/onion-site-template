@@ -1,7 +1,7 @@
 import eslint from '@eslint/js';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
-import { type Config, defineConfig } from 'eslint/config';
+import { type ConfigObject, defineConfig } from 'eslint/config';
 import globals from 'globals';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import tseslint from 'typescript-eslint';
 
 interface RecommendedConfigs {
     configs: {
-        recommended: Config[];
+        recommended: ConfigObject[];
     };
 }
 
@@ -32,7 +32,7 @@ const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.cts',
 ];
 
-const IGNORE_FILE_CONFIG: Config = {
+const IGNORE_FILE_CONFIG: ConfigObject = {
     ignores: [
         // Development
         '**/coverage/**',
@@ -78,7 +78,7 @@ const IGNORE_FILE_CONFIG: Config = {
 
 // https://typescript-eslint.io/users/configs/
 const DEFAULT_JS_CONFIGS = defineConfig([
-    sonarjs.configs!.recommended as Config,
+    sonarjs.configs!.recommended as ConfigObject,
     eslint.configs.recommended,
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
@@ -109,7 +109,7 @@ const DEFAULT_JS_CONFIGS = defineConfig([
     },
 ]);
 
-const JS_CONFIG: Config = {
+const JS_CONFIG: ConfigObject = {
     files: JS_FILE_GLOBS,
     rules: {
         // https://eslint.org/docs/latest/rules/prefer-const
@@ -206,7 +206,7 @@ const JS_CONFIG: Config = {
     },
 };
 
-const MONGO_JS_CONFIG: Config = {
+const MONGO_JS_CONFIG: ConfigObject = {
     files: MONGO_JS_FILE_GLOBS,
     languageOptions: {
         globals: {
@@ -219,7 +219,7 @@ const MONGO_JS_CONFIG: Config = {
     },
 };
 
-const CONFIG: Config[] = [
+const CONFIG: ConfigObject[] = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
     JS_CONFIG,
