@@ -1,11 +1,20 @@
 import eslint from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
 import { importX } from 'eslint-plugin-import-x';
 import sonarjs from 'eslint-plugin-sonarjs';
-import { type Config, defineConfig } from 'eslint/config';
+import { type ConfigObject, defineConfig } from 'eslint/config';
 import globals from 'globals';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import tseslint from 'typescript-eslint';
+
+interface RecommendedConfigs {
+    configs: {
+        recommended: ConfigObject[];
+    };
+}
+
+const require = createRequire(import.meta.url);
+const stylistic = require('@stylistic/eslint-plugin') as RecommendedConfigs;
 
 const JS_FILE_GLOBS = [
     '**/*.js',
@@ -23,7 +32,7 @@ const MONGO_JS_FILE_GLOBS = [
     '**/mongo/**/*.cts',
 ];
 
-const IGNORE_FILE_CONFIG: Config = {
+const IGNORE_FILE_CONFIG: ConfigObject = {
     ignores: [
         // Development
         '**/coverage/**',
@@ -69,7 +78,7 @@ const IGNORE_FILE_CONFIG: Config = {
 
 // https://typescript-eslint.io/users/configs/
 const DEFAULT_JS_CONFIGS = defineConfig([
-    sonarjs.configs!.recommended as Config,
+    sonarjs.configs!.recommended as ConfigObject,
     eslint.configs.recommended,
     stylistic.configs.recommended,
     tseslint.configs.strictTypeChecked,
@@ -100,12 +109,12 @@ const DEFAULT_JS_CONFIGS = defineConfig([
     },
 ]);
 
-const JS_CONFIG: Config = {
+const JS_CONFIG: ConfigObject = {
     files: JS_FILE_GLOBS,
     rules: {
         // https://eslint.org/docs/latest/rules/prefer-const
         'prefer-const': ['warn'],
-        // https://eslint.style/rules/js/no-unexpected-multiline
+        // https://eslint.org/docs/latest/rules/no-unexpected-multiline
         'no-unexpected-multiline': ['error'],
 
         // https://typescript-eslint.io/rules/no-non-null-assertion
@@ -136,9 +145,11 @@ const JS_CONFIG: Config = {
         // https://typescript-eslint.io/rules/restrict-template-expressions
         '@typescript-eslint/restrict-template-expressions': ['error'],
 
-        // https://eslint.style/rules/js/indent
+        // https://eslint.style/rules/indent
         '@stylistic/indent': ['warn', 4],
-        // https://eslint.style/rules/js/semi
+        // https://eslint.style/rules/list-style
+        '@stylistic/list-style': ['off'],
+        // https://eslint.style/rules/semi
         '@stylistic/semi': [
             'warn',
             'always',
@@ -147,15 +158,15 @@ const JS_CONFIG: Config = {
                 omitLastInOneLineClassBody: true,
             },
         ],
-        // https://eslint.style/rules/js/no-extra-semi
+        // https://eslint.style/rules/no-extra-semi
         '@stylistic/no-extra-semi': ['warn'],
         // https://eslint.style/rules/operator-linebreak
         '@stylistic/operator-linebreak': ['error', 'before'],
-        // https://eslint.style/rules/js/comma-dangle
+        // https://eslint.style/rules/comma-dangle
         '@stylistic/comma-dangle': ['off'],
-        // https://eslint.style/rules/js/arrow-parens
+        // https://eslint.style/rules/arrow-parens
         '@stylistic/arrow-parens': ['warn', 'always'],
-        // https://eslint.style/rules/js/member-delimiter-style
+        // https://eslint.style/rules/member-delimiter-style
         '@stylistic/member-delimiter-style': [
             'error',
             {
@@ -169,7 +180,7 @@ const JS_CONFIG: Config = {
                 },
             },
         ],
-        // https://eslint.style/rules/js/quotes
+        // https://eslint.style/rules/quotes
         '@stylistic/quotes': [
             'warn',
             'single',
@@ -178,7 +189,7 @@ const JS_CONFIG: Config = {
                 allowTemplateLiterals: 'always',
             },
         ],
-        // https://eslint.style/rules/js/jsx-quotes
+        // https://eslint.style/rules/jsx-quotes
         '@stylistic/jsx-quotes': ['warn', 'prefer-single'],
         // https://eslint.style/rules/jsx/jsx-indent-props
         '@stylistic/jsx-indent-props': ['off'],
@@ -195,7 +206,7 @@ const JS_CONFIG: Config = {
     },
 };
 
-const MONGO_JS_CONFIG: Config = {
+const MONGO_JS_CONFIG: ConfigObject = {
     files: MONGO_JS_FILE_GLOBS,
     languageOptions: {
         globals: {
@@ -208,7 +219,7 @@ const MONGO_JS_CONFIG: Config = {
     },
 };
 
-const CONFIG: Config[] = [
+const CONFIG: ConfigObject[] = [
     IGNORE_FILE_CONFIG,
     ...DEFAULT_JS_CONFIGS,
     JS_CONFIG,
