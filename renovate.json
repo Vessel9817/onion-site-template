@@ -86,7 +86,7 @@
       ],
       "depNameTemplate": "prom/prometheus",
       "datasourceTemplate": "docker",
-      "extractVersionTemplate": "^v(?<version>\\d+\\.\\d+\\.\\d+)$"
+      "extractVersionTemplate": "^v(?<version>\\d+(?:\\.\\d+){0,2})$"
     }
   ],
   "packageRules": [
