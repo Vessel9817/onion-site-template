@@ -87,6 +87,20 @@
       "depNameTemplate": "prom/prometheus",
       "datasourceTemplate": "docker",
       "extractVersionTemplate": "^v(?<version>\\d+(?:\\.\\d+){0,2})$"
+    },
+    {
+      "customType": "regex",
+      "description": "Vanguards git commit",
+      "managerFilePatterns": [
+        "/^src/tor/Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG VANGUARDS_URL=https://github.com/mikeperry-tor/vanguards.git#(?<currentDigest>[0-9a-f]{40})"
+      ],
+      "depNameTemplate": "mikeperry-tor/vanguards",
+      "packageNameTemplate": "https://github.com/mikeperry-tor/vanguards",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs"
     }
   ],
   "packageRules": [
