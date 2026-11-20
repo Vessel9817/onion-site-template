@@ -54,7 +54,8 @@ jobs:
         os: [ubuntu-24.04]
         workspace: ['.', './src/express', './src/license-report', './src/mongo']
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -66,15 +67,15 @@ jobs:
       - name: Check dependency tree
         if: matrix.workspace == '.'
         run: >-
-          npm i --package-lock-only --dry-run
-          && npm ci --dry-run --ignore-scripts
+          npm i --package-lock-only --dry-run --no-fund
+          && npm ci --dry-run --ignore-scripts --no-fund
       # Inside a workspace, npm acts on the root unless workspaces are off
       - name: Check workspace lockfile
         if: matrix.workspace != '.'
         working-directory: ${{ matrix.workspace }}
         run: >-
-          npm i --package-lock-only --dry-run --workspaces=false
-          && npm ci --dry-run --ignore-scripts --workspaces=false
+          npm i --package-lock-only --dry-run --workspaces=false --no-fund
+          && npm ci --dry-run --ignore-scripts --workspaces=false --no-fund
       # `npm ci` accepts a lockfile whose versions break a dependency's range
       - name: Check root lockfile
         if: matrix.workspace == '.'
@@ -88,7 +89,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -99,7 +101,7 @@ jobs:
           cache-dependency-path: './src/markdownlint/package-lock.json'
       - name: Install node modules
         run: npm ci -w ./src/markdownlint --no-fund
-      - name: Check workspace lockfile synchronization
+      - name: Lint markdown files
         run: npm run markdownlint
   # Runs a script linting check
   eslint:
@@ -110,7 +112,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -121,7 +124,7 @@ jobs:
           cache-dependency-path: './package-lock.json'
       - name: Install node modules
         run: npm ci --no-fund
-      - name: Run eslint
+      - name: Lint TypeScript files
         run: npm run eslint
   # Runs a TypeScript type check
   tsc:
@@ -132,7 +135,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -143,7 +147,7 @@ jobs:
           cache-dependency-path: './package-lock.json'
       - name: Install node modules
         run: npm ci --no-fund
-      - name: Run tsc
+      - name: Lint TypeScript types
         run: npm run tsc
   # Checks that npm workspaces are synchronized with the top-level lockfile
   workspaces:
@@ -154,7 +158,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -176,7 +181,8 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Use Node.js
@@ -211,7 +217,7 @@ jobs:
         uses: docker/setup-compose-action@v2
         with:
           version: ${{ env.DOCKER_COMPOSE_VERSION }}
-      - name: Serve the onion
+      - name: Smoke test hidden service
         run: npm run test:smoke:start
       - name: Collect logs
         if: failure()
