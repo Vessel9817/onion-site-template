@@ -35,7 +35,8 @@
       "depNameTemplate": "docker",
       "packageNameTemplate": "moby/moby",
       "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^docker-(?<version>.+)$"
+      "extractVersionTemplate": "^docker-(?<version>.+)$",
+      "depTypeTemplate": "deps-dev"
     },
     {
       "customType": "regex",
@@ -47,7 +48,8 @@
         "DOCKER_COMPOSE_VERSION: (?<currentValue>v\\S+)"
       ],
       "depNameTemplate": "docker/compose",
-      "datasourceTemplate": "github-releases"
+      "datasourceTemplate": "github-releases",
+      "depTypeTemplate": "deps-dev"
     },
     {
       "customType": "regex",
@@ -73,7 +75,8 @@
         "https://raw\\.githubusercontent\\.com/DavidAnson/markdownlint-cli2/(?<currentValue>v\\S+)/schema/markdownlint-cli2-config-schema\\.json"
       ],
       "depNameTemplate": "DavidAnson/markdownlint-cli2",
-      "datasourceTemplate": "github-tags"
+      "datasourceTemplate": "github-tags",
+      "depTypeTemplate": "deps-dev"
     },
     {
       "customType": "regex",
