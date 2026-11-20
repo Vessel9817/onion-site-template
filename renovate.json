@@ -3,13 +3,25 @@
   "extends": [
     "config:recommended"
   ],
-  "npm": {
-    "enabled": false
-  },
   "git-submodules": {
     "enabled": true
   },
   "customManagers": [
+    {
+      "matchDatasources": ["npm"],
+      "postUpgradeTasks": [
+        {
+          "commands": [
+            "npm run workspaces:fix",
+            "npm i --no-fund --no-scripts"
+          ],
+          "installTools": {
+            "node": {}
+          },
+          "executionMode": "branch"
+        }
+      ]
+    },
     {
       "customType": "regex",
       "description": "Gixy release; its two checksums must be updated by hand from the release's checksums.txt",
