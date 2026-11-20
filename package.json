@@ -60,7 +60,7 @@
         "tslib": "^2.9.1",
         "tsx": "^4.23.15",
         "typescript": "npm:@typescript/typescript6@^6.0.2",
-        "typescript-eslint": "^8.73.0"
+        "typescript-eslint": "^8.72.1"
     },
     "overrides": {
         "katex": "0.18.2",
