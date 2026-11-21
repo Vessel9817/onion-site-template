@@ -4,6 +4,32 @@
 # https://en.wikipedia.org/wiki/Reserved_IP_addresses
 name: website
 services:
+  onionbalance:
+    extends:
+      file: ./src/docker-compose.yml
+      service: onionbalance
+    profiles:
+      - production
+    depends_on:
+      tor:
+        condition: service_started
+    command: [
+      "-i", "10.5.3.2",
+      "-p", "9051"
+    ]
+    volumes:
+      - type: volume
+        source: tor-tmp-data
+        target: /var/lib/tor/data/
+      # Should ideally be mounted as a secret to protect sensitive credentials
+      - type: bind
+        source: ./src/onionbalance/config/ # Example path containing config file and key(s)
+        target: /etc/onionbalance/
+        read_only: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    networks:
+      tor:
   tor:
     extends:
       file: ./src/docker-compose.yml
@@ -22,15 +48,19 @@ services:
       interval: 10s
       timeout: 120s
       start_period: 20s
+    environment:
+      - DISABLE_VANGUARDS=1
     volumes:
       - type: bind
         source: ./src/tor/torrc
         target: /etc/tor/torrc
         read_only: true
-      # Path defined by torrc
       - type: bind
         source: ./src/tor/secrets/
-        target: /var/lib/tor/website/
+        target: /var/lib/tor/website/ # Path defined by torrc
+      - type: volume
+        source: tor-tmp-data
+        target: /var/lib/tor/data/ # Path defined by torrc
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
@@ -333,6 +363,7 @@ configs:
   mongo-replicas:
     file: ./src/mongo/replicas.json
 volumes:
+  tor-tmp-data:
   mongo-configdb-init:
   mongo-configdb-1:
   mongo-configdb-2:
