@@ -8,21 +8,6 @@
   },
   "customManagers": [
     {
-      "matchDatasources": ["npm"],
-      "postUpgradeTasks": [
-        {
-          "commands": [
-            "npm run workspaces:fix",
-            "npm i --no-fund --no-scripts"
-          ],
-          "installTools": {
-            "node": {}
-          },
-          "executionMode": "branch"
-        }
-      ]
-    },
-    {
       "customType": "regex",
       "description": "Gixy release; its two checksums must be updated by hand from the release's checksums.txt",
       "managerFilePatterns": [
@@ -119,6 +104,19 @@
     }
   ],
   "packageRules": [
+    {
+      "matchDatasources": ["npm"],
+      "postUpgradeTasks": {
+        "commands": [
+          "npm run workspaces:fix",
+          "npm i --no-fund --no-scripts"
+        ],
+        "installTools": {
+          "node": {}
+        },
+        "executionMode": "branch"
+      }
+    },
     {
       "description": "Bump the Prometheus image and the version in Grafana's data source in one pull request",
       "matchPackageNames": [
