@@ -71,7 +71,7 @@
       "matchStrings": [
         "https://raw\\.githubusercontent\\.com/DavidAnson/markdownlint-cli2/(?<currentValue>v\\S+)/schema/markdownlint-cli2-config-schema\\.json"
       ],
-      "depNameTemplate": "markdownlint-cli2",
+      "depNameTemplate": "DavidAnson/markdownlint-cli2",
       "datasourceTemplate": "github-tags",
       "depTypeTemplate": "deps-dev"
     },
@@ -127,7 +127,8 @@
     {
       "description": "Bump markdownlint-cli2 and its schema version",
       "matchPackageNames": [
-        "markdownlint-cli2"
+        "markdownlint-cli2",
+        "DavidAnson/markdownlint-cli2"
       ],
       "groupName": "markdownlint-cli2"
     }
