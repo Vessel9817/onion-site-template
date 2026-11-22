@@ -111,6 +111,10 @@
           "npm run workspaces:fix",
           "npm i --no-fund --no-scripts"
         ],
+        "fileFilters": [
+          "**/package.json",
+          "**/package-lock.json"
+        ],
         "installTools": {
           "node": {}
         },
