@@ -41,6 +41,6 @@
         "tslib": "^2.9.1",
         "tsx": "^4.23.15",
         "typescript": "npm:@typescript/typescript6@^6.0.2",
-        "webpack": "^5.112.2"
+        "webpack": "^5.113.0"
     }
 }
