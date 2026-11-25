@@ -9,6 +9,8 @@ on:
 jobs:
   # Runs Renovate
   renovate:
+    permissions:
+      contents: read
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
