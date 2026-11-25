@@ -6,6 +6,7 @@
   "git-submodules": {
     "enabled": true
   },
+  "automergeStrategy": "squash",
   "customManagers": [
     {
       "customType": "regex",
