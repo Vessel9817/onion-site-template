@@ -19,7 +19,7 @@
         "fix": "markdownlint-cli2 --fix"
     },
     "dependencies": {
-        "markdownlint-cli2": "^0.24.1"
+        "markdownlint-cli2": "^0.24.2"
     },
     "overrides": {
         "katex": "0.18.2",
