@@ -1,6 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-global-schema.json",
-    "onboarding": false,
+    "platform": "github",
+    "repository": "Vessel9817/onion-site-template",
     "allowedCommands": [
         "npm run workspaces:fix",
         "npm i --no-fund --no-scripts"
