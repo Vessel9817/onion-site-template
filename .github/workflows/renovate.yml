@@ -4,7 +4,7 @@ name: Renovate
 
 on:
   schedule:
-    - cron: '0/15 * * * *' # Every 15 minutes
+    - cron: '20 * * * *' # Every hour with a 20 minute offset
 
 jobs:
   # Runs Renovate
