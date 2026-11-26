@@ -6,7 +6,7 @@
             "repository": "Vessel9817/onion-site-template",
             "allowedCommands": [
                 "npm run workspaces:fix",
-                "npm i --no-fund --no-scripts"
+                "npm i --no-fund --ignore-scripts"
             ]
         }
     ]

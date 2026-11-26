@@ -110,7 +110,7 @@
       "postUpgradeTasks": {
         "commands": [
           "npm run workspaces:fix",
-          "npm i --no-fund --no-scripts"
+          "npm i --no-fund --ignore-scripts"
         ],
         "fileFilters": [
           "**/package.json",
