@@ -22,7 +22,7 @@
         "markdownlint-cli2": "^0.24.1"
     },
     "overrides": {
-        "katex": "0.18.2",
+        "katex": "0.19.1",
         "re2js": "2.9.1"
     }
 }
