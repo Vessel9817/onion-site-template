@@ -3,8 +3,8 @@
 # https://github.com/dvershinin/gixy/releases
 # Renovate bumps the version; copy both checksums from that release's checksums.txt
 DEFAULT_VERSION='v0.2.64'
-DEFAULT_LINUX_AARCH64_CHECKSUM='bbf00ec685f7822dbf98150ef65dc6fe4ecd4955a2fc97c12f6f3bf91188594b'
-DEFAULT_LINUX_X86_64_CHECKSUM='81b692eadabac764c0314cc296fe34a4966aa8448482844289c3c4e9ba11d399'
+DEFAULT_LINUX_AARCH64_CHECKSUM='41e3d18b8b743a5e673fbd0840db4395298d301bab8cb7e2b5721acaafc76e78'
+DEFAULT_LINUX_X86_64_CHECKSUM='b3392115f59127decd152b602ff7ffefe109d8dbe8143590286b6505bd4c85c9'
 
 # Setting defaults
 if [ -z "$GIXY_URL" ]; then
