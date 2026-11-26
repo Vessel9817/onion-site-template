@@ -3,6 +3,7 @@
 name: Renovate
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '20 * * * *' # Every hour with a 20 minute offset
 
