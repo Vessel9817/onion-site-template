@@ -228,7 +228,7 @@ npm stop
 
 ## Issues and Contribution
 
-1. See the [Contributing guidelines](./CONTRIBUTING.md).
+See the [Contributing guidelines](./CONTRIBUTING.md).
 
 [license-badge]: https://raw.githubusercontent.com/Vessel9817/onion-site-template/refs/heads/main/badge.svg
 [ci-workflow]: https://github.com/Vessel9817/onion-site-template/actions/workflows/ci.yml
