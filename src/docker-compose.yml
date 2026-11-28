@@ -5,6 +5,16 @@ x-logging: &logging
   driver: local
 
 services:
+  onionbalance:
+    container_name: onionbalance
+    restart: always
+    build:
+      context: ./onionbalance/onionbalance
+      dockerfile: ../Dockerfile
+    environment:
+      - ONIONBALANCE_CONFIG=/etc/onionbalance/config.yaml
+      - ONIONBALANCE_STATUS_SOCKET_LOCATION=/var/run/onionbalance/control
+    logging: *logging
   tor:
     container_name: tor
     restart: always

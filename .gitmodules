@@ -1,3 +1,6 @@
 [submodule "src/onionprobe/onionprobe"]
 	path = src/onionprobe/onionprobe
 	url = https://gitlab.torproject.org/tpo/onion-services/onionprobe.git
+[submodule "src/onionbalance/onionbalance"]
+	path = src/onionbalance/onionbalance
+	url = https://gitlab.torproject.org/tpo/onion-services/onionbalance.git
